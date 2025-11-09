@@ -60,6 +60,7 @@ public class MatrixOperations {
         return copy;
     }
 
+    //removes row/line when blocks fills it up
     public static ClearRow checkRemoving(final int[][] matrix) {
         int[][] tmp = new int[matrix.length][matrix[0].length];
         Deque<int[]> newRows = new ArrayDeque<>();

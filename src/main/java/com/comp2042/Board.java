@@ -23,4 +23,7 @@ public interface Board {
     Score getScore();
 
     void newGame();
+
+    //gets y pos of where curr brick would land (shadow position)
+    int getShadowYPosition();
 }

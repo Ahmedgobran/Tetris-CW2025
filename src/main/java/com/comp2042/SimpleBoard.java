@@ -95,9 +95,8 @@ public class SimpleBoard implements Board {
     }
 
     @Override
-    public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0));
-    }
+    public ViewData getViewData() { // added getShadowYPosition
+        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0), getShadowYPosition());    }
 
     @Override
     public void mergeBrickToBackground() {
@@ -123,5 +122,24 @@ public class SimpleBoard implements Board {
         currentGameMatrix = new int[width][height];
         score.reset();
         createNewBrick();
+    }
+
+    @Override
+    public int getShadowYPosition() {
+        int shadowY = (int) currentOffset.getY();
+        int[][] currentShape = brickRotator.getCurrentShape();
+        int currentX = (int) currentOffset.getX();
+
+        // simulate dropping the brick until it hits something
+        while (true) {
+            int testY = shadowY + 1;
+            int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
+            boolean conflict = MatrixOperations.intersect(currentMatrix, currentShape, currentX, testY);
+            if (conflict) {
+                break; // if found the landing position
+            }
+            shadowY = testY;
+        }
+        return shadowY;
     }
 }
