@@ -10,6 +10,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.effect.Reflection;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -37,6 +39,18 @@ public class GuiController implements Initializable {
     private GridPane brickPanel;
 
     @FXML
+    private GridPane nextPiecePanel;
+
+    @FXML
+    private Label scoreLabel;
+
+    @FXML
+    private Button pauseButton;
+
+    @FXML
+    private Button restartButton;
+
+    @FXML
     private GameOverPanel gameOverPanel;
 
     private Rectangle[][] displayMatrix;
@@ -44,6 +58,8 @@ public class GuiController implements Initializable {
     private InputEventListener eventListener;
 
     private Rectangle[][] rectangles;
+
+    private Rectangle[][] nextPieceRectangles;
 
     private Group shadowGroup;
 
@@ -82,6 +98,10 @@ public class GuiController implements Initializable {
                 if (keyEvent.getCode() == KeyCode.N) {
                     newGame(null);
                 }
+                // add P key for pause
+                if (keyEvent.getCode() == KeyCode.P) {
+                    pauseGame(null);
+                }
             }
         });
         gameOverPanel.setVisible(false);
@@ -116,6 +136,23 @@ public class GuiController implements Initializable {
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
 
         //shadow group instead of panel (simpler & shorter)
+        if (nextPiecePanel != null) {
+            int[][] nextBrickData = brick.getNextBrickData();
+            nextPieceRectangles = new Rectangle[4][4];
+            for (int i = 0; i < 4; i++) {
+                for (int j = 0; j < 4; j++) {
+                    Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
+                    rectangle.setFill(Color.TRANSPARENT);
+                    rectangle.setArcHeight(9);
+                    rectangle.setArcWidth(9);
+                    nextPieceRectangles[i][j] = rectangle;
+                    nextPiecePanel.add(rectangle, j, i);
+                }
+            }
+            updateNextPiecePreview(nextBrickData);
+        }
+
+        // Initialize shadow group
         shadowGroup = new Group();
         shadowGroup.setMouseTransparent(true);
         if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
@@ -130,6 +167,24 @@ public class GuiController implements Initializable {
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
+    }
+
+    private void updateNextPiecePreview(int[][] nextBrickData) {
+        if (nextPieceRectangles == null) return;
+
+
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                nextPieceRectangles[i][j].setFill(Color.TRANSPARENT);
+            }
+        }
+
+        // Fill in the next piece
+        for (int i = 0; i < nextBrickData.length && i < 4; i++) {
+            for (int j = 0; j < nextBrickData[i].length && j < 4; j++) {
+                setRectangleData(nextBrickData[i][j], nextPieceRectangles[i][j]);
+            }
+        }
     }
 
     private Paint getFillColor(int i) {
@@ -177,6 +232,7 @@ public class GuiController implements Initializable {
                 }
             }
             updateShadow(brick);
+            updateNextPiecePreview(brick.getNextBrickData());
         }
     }
 
@@ -281,6 +337,9 @@ public class GuiController implements Initializable {
     }
 
     public void bindScore(IntegerProperty integerProperty) {
+        if (scoreLabel != null) {
+            scoreLabel.textProperty().bind(integerProperty.asString());
+        }
     }
 
     public void gameOver() {
@@ -300,6 +359,19 @@ public class GuiController implements Initializable {
     }
 
     public void pauseGame(ActionEvent actionEvent) {
+        if (isPause.getValue() == Boolean.FALSE) {
+            timeLine.pause();
+            isPause.setValue(Boolean.TRUE);
+            if (pauseButton != null) {
+                pauseButton.setText("RESUME");
+            }
+        } else {
+            timeLine.play();
+            isPause.setValue(Boolean.FALSE);
+            if (pauseButton != null) {
+                pauseButton.setText("PAUSE");
+            }
+        }
         gamePanel.requestFocus();
     }
 }
