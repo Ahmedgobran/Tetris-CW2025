@@ -40,13 +40,15 @@
         <!--right size for panel to show the block coming next -->
         <VBox spacing="8" alignment="CENTER">
             <Label text="NEXT"
-                   style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <Pane style="-fx-background-color: #0a0a0a; -fx-padding: 15;">
+                   style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
+            <VBox style="-fx-background-color: #0a0a0a; -fx-padding: 5;"
+                  prefWidth="50" prefHeight="50"
+                  alignment="CENTER">
                 <GridPane fx:id="nextPiecePanel"
-                          hgap="2" vgap="2"
+                          hgap="1" vgap="1"
                           alignment="CENTER">
                 </GridPane>
-            </Pane>
+            </VBox>
         </VBox>
 
         <!-- Score display -->
