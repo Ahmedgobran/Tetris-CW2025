@@ -79,3 +79,17 @@
     -fx-opacity: 0.9;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 2, 0, 0, 1);
 }
+
+/* hover effect for button class */
+.button-icon:hover {
+    -fx-opacity: 1;                     /* fully visible (from 0.9 to 1) */
+    -fx-scale-x: 1.1;                   /* expand on hover */
+    -fx-scale-y: 1.1;
+}
+
+/* pressed effect */
+.button-icon:pressed {
+    -fx-opacity: 0.8;                   /* slightly dim on click */
+    -fx-scale-x: 0.95;                  /* shrink a bit when pressed */
+    -fx-scale-y: 0.95;
+}
