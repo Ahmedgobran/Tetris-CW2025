@@ -9,7 +9,10 @@
 <HBox fx:controller="com.comp2042.GuiController"
       xmlns:fx="http://javafx.com/fxml"
       spacing="0"
-      style="-fx-background-color: black;">
+      styleClass="root">
+    <stylesheets>
+            <URL value="@window_style.css"/> <!--moved up (was prev below) wasnt refrenced properly-->
+    </stylesheets>
     <Pane prefWidth="260" prefHeight="510">
         <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
         <BorderPane styleClass="gameBoard" fx:id="gameBoard">
@@ -24,9 +27,6 @@
             </VBox>
         </Group>
 
-        <stylesheets>
-            <URL value="@window_style.css"/>
-        </stylesheets>
     </Pane>
 
     <!-- Right side: New info panel -->
@@ -36,16 +36,10 @@
           alignment="TOP_CENTER">
 
         <!--right size for panel to show the block coming next -->
-        <VBox spacing="8" alignment="CENTER">
-            <Label text="NEXT"
-                   style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;"/>
-            <VBox style="-fx-background-color: #0a0a0a; -fx-padding: 5;"
-                  prefWidth="50" prefHeight="50"
-                  alignment="CENTER">
-                <GridPane fx:id="nextPiecePanel"
-                          hgap="1" vgap="1"
-                          alignment="CENTER">
-                </GridPane>
+        <VBox spacing="8" alignment="TOP_CENTER">
+            <Label text="NEXT" styleClass="nextBrickLabel"/>  <!-- refrenced nextBrickLabel & nextBrick from css  -->
+            <VBox styleClass="nextBrick" prefWidth="50" prefHeight="50" alignment="CENTER">
+                <GridPane fx:id="nextPiecePanel" hgap="1" vgap="1" alignment="CENTER"/>
             </VBox>
         </VBox>
 
@@ -53,16 +47,14 @@
         <VBox spacing="8" alignment="CENTER">
             <Label text="SCORE"
                    style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
-            <Label fx:id="scoreLabel" text="0"
-                   style="-fx-text-fill: #00ff00; -fx-font-size: 32px; -fx-font-weight: bold; -fx-font-family: 'digital';"/>
+            <Label fx:id="scoreLabel" text="0" styleClass="scoreClass"/>  <!-- moved the styling to css-->
         </VBox>
 
         <Region VBox.vgrow="ALWAYS"/>
 
         <!-- control buttons -->
         <VBox spacing="12" alignment="CENTER">
-            <Button fx:id="pauseButton" onAction="#pauseGame"
-                    style="-fx-background-color: transparent; -fx-padding: 0; -fx-cursor: hand;">
+            <Button fx:id="pauseButton" onAction="#pauseGame" styleClass="button-icon">
                 <graphic>
                     <ImageView>
                         <image>
@@ -72,8 +64,7 @@
                 </graphic>
             </Button>
 
-            <Button fx:id="restartButton" onAction="#newGame"
-                    style="-fx-background-color: transparent;-fx-border-color: transparent;-fx-cursor: hand;">
+            <Button fx:id="restartButton" onAction="#newGame" styleClass="button-icon">
                 <graphic>
                     <ImageView >
                         <image>
