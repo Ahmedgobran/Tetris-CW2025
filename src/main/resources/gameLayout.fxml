@@ -10,7 +10,7 @@
       xmlns:fx="http://javafx.com/fxml"
       spacing="0"
       style="-fx-background-color: black;">
-    <Pane prefWidth="300" prefHeight="510">
+    <Pane prefWidth="260" prefHeight="510">
         <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
         <BorderPane styleClass="gameBoard" fx:id="gameBoard">
             <center>
