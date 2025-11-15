@@ -68,6 +68,8 @@ public class GuiController implements Initializable {
 
     private Timeline timeLine;
 
+    private ShadowRender shadowRender;
+
     private final BrickColor colorMapper = new BrickColor();
 
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -160,12 +162,19 @@ public class GuiController implements Initializable {
 
         // Initialize shadow group
         shadowGroup = new Group();
-        shadowGroup.setMouseTransparent(true);
         if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
             parent.getChildren().add(shadowGroup);
             shadowGroup.toBack(); //shadow behind brick like earlier
         }
-        updateShadow(brick);
+        // Create ShadowRender and use it
+        shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
+        shadowRender.updateShadow(
+                brick,
+                gamePanel.getLayoutX(),
+                gamePanel.getLayoutY(),
+                brickPanel.getVgap()
+        );
+
 
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
@@ -203,48 +212,12 @@ public class GuiController implements Initializable {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
                 }
             }
-            updateShadow(brick);
+            shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap()); //replaced with updateShadow(brick) (old method)
             updateNextPiecePreview(brick.getNextBrickData());
         }
     }
 
-    private void updateShadow(ViewData brick) {
-        if (shadowGroup == null) {
-            return;
-        }
-
-        shadowGroup.getChildren().clear(); //remove old shadow
-
-        int shadowY = brick.getShadowYPosition();
-        int currentY = brick.getyPosition();
-
-        //only show shadow if diff from current position
-        if (shadowY <= currentY) {
-            shadowGroup.setVisible(false);
-            return;
-        }
-
-        int[][] brickData = brick.getBrickData();
-        double startX = gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE;
-        double startY = -42 + gamePanel.getLayoutY() + shadowY * brickPanel.getHgap() + shadowY * BRICK_SIZE;
-
-
-        for (int i = 0; i < brickData.length; i++) {
-            for (int j = 0; j < brickData[i].length; j++) {
-                if (brickData[i][j] != 0) {
-                    Rectangle rect = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                    rect.setFill(colorMapper.getShadowColor(brickData[i][j])); //changed to colorMapper.getShadowColor() (used Brick color class)
-                    rect.setArcHeight(9);
-                    rect.setArcWidth(9);
-                    rect.setX(startX + j * (BRICK_SIZE + brickPanel.getVgap()));
-                    rect.setY(startY + i * (BRICK_SIZE + brickPanel.getHgap()));
-                    shadowGroup.getChildren().add(rect);
-                }
-            }
-        }
-        shadowGroup.setVisible(true);
-    }
-
+    // deleted old updateShadow() method (now handled by ShadowRender)
 
     public void refreshGameBackground(int[][] board) {
         for (int i = 2; i < board.length; i++) {
