@@ -50,7 +50,7 @@ public class GuiController implements Initializable {
 
     private Rectangle[][] rectangles;
 
-    private Rectangle[][] nextPieceRectangles;
+    private NextPieceRenderer nextPieceRenderer;
 
     private Group shadowGroup;
 
@@ -126,21 +126,10 @@ public class GuiController implements Initializable {
         brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
         brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
 
-        //shadow group instead of panel (simpler & shorter)
+
         if (nextPiecePanel != null) {
-            int[][] nextBrickData = brick.getNextBrickData();
-            nextPieceRectangles = new Rectangle[4][4];
-            for (int i = 0; i < 4; i++) {
-                for (int j = 0; j < 4; j++) {
-                    Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                    rectangle.setFill(Color.TRANSPARENT);
-                    rectangle.setArcHeight(9);
-                    rectangle.setArcWidth(9);
-                    nextPieceRectangles[i][j] = rectangle;
-                    nextPiecePanel.add(rectangle, j, i);
-                }
-            }
-            updateNextPiecePreview(nextBrickData);
+            nextPieceRenderer = new NextPieceRenderer(nextPiecePanel, colorMapper, BRICK_SIZE, 9);
+            nextPieceRenderer.update(brick.getNextBrickData());
         }
 
         // Initialize shadow group
@@ -167,25 +156,6 @@ public class GuiController implements Initializable {
         timeLine.play();
     }
 
-    private void updateNextPiecePreview(int[][] nextBrickData) {
-        if (nextPieceRectangles == null) return;
-
-
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                nextPieceRectangles[i][j].setFill(Color.TRANSPARENT);
-            }
-        }
-
-        // Fill in the next piece
-        for (int i = 0; i < nextBrickData.length && i < 4; i++) {
-            for (int j = 0; j < nextBrickData[i].length && j < 4; j++) {
-                setRectangleData(nextBrickData[i][j], nextPieceRectangles[i][j]);
-            }
-        }
-    }
-
-
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
@@ -196,7 +166,9 @@ public class GuiController implements Initializable {
                 }
             }
             shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap()); //replaced with updateShadow(brick) (old method)
-            updateNextPiecePreview(brick.getNextBrickData());
+            if (nextPieceRenderer != null) {
+                nextPieceRenderer.update(brick.getNextBrickData());
+            }
         }
     }
 
