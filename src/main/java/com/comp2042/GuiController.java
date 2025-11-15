@@ -21,46 +21,26 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class GuiController implements Initializable {
-
     private static final int BRICK_SIZE = 20;
     private static final int BRICK_ARC_SIZE = 9;
 
-    @FXML
-    private GridPane gamePanel;
-
-    @FXML
-    private Group groupNotification;
-
-    @FXML
-    private GridPane brickPanel;
-
-    @FXML
-    private GridPane nextPiecePanel;
-
-    @FXML
-    private Label scoreLabel;
-
-    @FXML
-    private GameOverPanel gameOverPanel;
+    @FXML private GridPane gamePanel;
+    @FXML private Group groupNotification;
+    @FXML private GridPane brickPanel;
+    @FXML private GridPane nextPiecePanel;
+    @FXML private Label scoreLabel;
+    @FXML private GameOverPanel gameOverPanel;
 
     private BoardRender boardRenderer;
-
     private InputEventListener eventListener;
-
     private Rectangle[][] rectangles;
-
     private NextPieceRenderer nextPieceRenderer;
-
     private Group shadowGroup;
-
     private Timeline timeLine;
-
     private ShadowRender shadowRender;
 
     private final BrickColor colorMapper = new BrickColor();
-
     private final BooleanProperty isPause = new SimpleBooleanProperty();
-
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
     @Override
