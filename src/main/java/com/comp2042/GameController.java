@@ -2,7 +2,7 @@ package com.comp2042;
 
 public class GameController implements InputEventListener {
 
-    private Board board = new SimpleBoard(25, 11); //adjust gameboard dimentiones
+    private final Board board = new SimpleBoard(25, 11); //adjust gameboard dimentiones
 
     private final GuiController viewGuiController;
 
@@ -27,10 +27,16 @@ public class GameController implements InputEventListener {
             if (board.createNewBrick()) {
                 viewGuiController.gameOver();
             }
-
             viewGuiController.refreshGameBackground(board.getBoardMatrix());
-
         }
+            else {
+
+                if (event.getEventSource() == EventSource.USER) {
+                    board.getScore().add(1);  // +1 point per row moved down
+                }
+            }
+
+
         return new DownData(clearRow, board.getViewData());
     }
 
