@@ -47,9 +47,6 @@ public class GuiController implements Initializable {
     private Label scoreLabel;
 
     @FXML
-    private Button pauseButton;
-
-    @FXML
     private Button restartButton;
     private ImageView pause_resumeIcon;
 
@@ -79,7 +76,6 @@ public class GuiController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
-        setupButtonIcons();
         gamePanel.setFocusTraversable(true);
         gamePanel.requestFocus();
         gamePanel.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -271,38 +267,7 @@ public class GuiController implements Initializable {
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
     }
-
-    private void setupButtonIcons() {
-        try {
-            // Load pause/resume icon
-            Image pauseResumeImage = new Image(getClass().getClassLoader().getResourceAsStream("pause'resume-button.png"));
-            pause_resumeIcon = new ImageView(pauseResumeImage);
-            pause_resumeIcon.setFitWidth(70);
-            pause_resumeIcon.setFitHeight(70);
-            pause_resumeIcon.setPreserveRatio(true);
-
-            // Load restart icon
-            Image restartImage = new Image(getClass().getClassLoader().getResourceAsStream("restart-button.png"));
-            ImageView restartIcon = new ImageView(restartImage);
-            restartIcon.setFitWidth(70);
-            restartIcon.setFitHeight(70);
-            restartIcon.setPreserveRatio(true);
-
-            // Set icons to buttons
-            if (pauseButton != null) {
-                pauseButton.setGraphic(pause_resumeIcon);
-                pauseButton.setText("");
-            }
-            if (restartButton != null) {
-                restartButton.setGraphic(restartIcon);
-                restartButton.setText("");
-            }
-        } catch (Exception e) { //incase some error happens with loading buttons
-            System.err.println("Could not load button icons: " + e.getMessage());
-            if (pauseButton != null) pauseButton.setText("⏸");
-            if (restartButton != null) restartButton.setText("↻");
-        }
-    }
+//removed setupButtonIcons() method and replaced the logic into gameLayout.fxml
 
     public void pauseGame(ActionEvent actionEvent) {
         if (isPause.getValue() == Boolean.FALSE) {

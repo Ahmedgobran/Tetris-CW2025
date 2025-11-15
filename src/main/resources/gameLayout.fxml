@@ -56,9 +56,10 @@
         <VBox spacing="12" alignment="CENTER">
             <Button fx:id="pauseButton" onAction="#pauseGame" styleClass="button-icon">
                 <graphic>
-                    <ImageView>
+                    <!--moved logic from guicontroller to here since more simple-->
+                    <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
                         <image>
-                            <Image url="pause'resume-button.png"/>
+                            <Image url="@pause'resume-button.png"/>
                         </image>
                     </ImageView>
                 </graphic>
@@ -66,9 +67,10 @@
 
             <Button fx:id="restartButton" onAction="#newGame" styleClass="button-icon">
                 <graphic>
-                    <ImageView >
+                    <!--moved logic from guicontroller to here since more simple-->
+                    <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
                         <image>
-                            <Image url="restart-button.png"/>
+                            <Image url="@restart-button.png"/>
                         </image>
                     </ImageView>
                 </graphic>
