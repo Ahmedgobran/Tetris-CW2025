@@ -68,6 +68,8 @@ public class GuiController implements Initializable {
 
     private Timeline timeLine;
 
+    private final BrickColor colorMapper = new BrickColor();
+
     private final BooleanProperty isPause = new SimpleBooleanProperty();
 
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -131,7 +133,7 @@ public class GuiController implements Initializable {
         for (int i = 0; i < brick.getBrickData().length; i++) {
             for (int j = 0; j < brick.getBrickData()[i].length; j++) {
                 Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(getFillColor(brick.getBrickData()[i][j]));
+                rectangle.setFill(colorMapper.getFillColor(brick.getBrickData()[i][j])); //changed to colorMapper.getFillColor() (used Brick color class)
                 rectangles[i][j] = rectangle;
                 brickPanel.add(rectangle, j, i);
             }
@@ -191,40 +193,6 @@ public class GuiController implements Initializable {
         }
     }
 
-    private Paint getFillColor(int i) {
-        Paint returnPaint;
-        switch (i) {
-            case 0:
-                returnPaint = Color.TRANSPARENT;
-                break;
-            case 1:
-                returnPaint = Color.AQUA;
-                break;
-            case 2:
-                returnPaint = Color.BLUEVIOLET;
-                break;
-            case 3:
-                returnPaint = Color.DARKGREEN;
-                break;
-            case 4:
-                returnPaint = Color.YELLOW;
-                break;
-            case 5:
-                returnPaint = Color.RED;
-                break;
-            case 6:
-                returnPaint = Color.BEIGE;
-                break;
-            case 7:
-                returnPaint = Color.BURLYWOOD;
-                break;
-            default:
-                returnPaint = Color.WHITE;
-                break;
-        }
-        return returnPaint;
-    }
-
 
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
@@ -265,7 +233,7 @@ public class GuiController implements Initializable {
             for (int j = 0; j < brickData[i].length; j++) {
                 if (brickData[i][j] != 0) {
                     Rectangle rect = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                    rect.setFill(getShadowColor(brickData[i][j]));
+                    rect.setFill(colorMapper.getShadowColor(brickData[i][j])); //changed to colorMapper.getShadowColor() (used Brick color class)
                     rect.setArcHeight(9);
                     rect.setArcWidth(9);
                     rect.setX(startX + j * (BRICK_SIZE + brickPanel.getVgap()));
@@ -277,37 +245,6 @@ public class GuiController implements Initializable {
         shadowGroup.setVisible(true);
     }
 
-    private Paint getShadowColor(int colorValue) {
-        //make a semi-transparent version of the block color
-        Color baseColor;
-        switch (colorValue) {
-            case 1:
-                baseColor = Color.AQUA;
-                break;
-            case 2:
-                baseColor = Color.BLUEVIOLET;
-                break;
-            case 3:
-                baseColor = Color.DARKGREEN;
-                break;
-            case 4:
-                baseColor = Color.YELLOW;
-                break;
-            case 5:
-                baseColor = Color.RED;
-                break;
-            case 6:
-                baseColor = Color.BEIGE;
-                break;
-            case 7:
-                baseColor = Color.BURLYWOOD;
-                break;
-            default:
-                baseColor = Color.WHITE;
-                break;
-        }
-        return new Color(baseColor.getRed(), baseColor.getGreen(), baseColor.getBlue(), 0.3);
-    }
 
     public void refreshGameBackground(int[][] board) {
         for (int i = 2; i < board.length; i++) {
@@ -318,7 +255,7 @@ public class GuiController implements Initializable {
     }
 
     private void setRectangleData(int color, Rectangle rectangle) {
-        rectangle.setFill(getFillColor(color));
+        rectangle.setFill(colorMapper.getFillColor(color)); //changed to colorMapper.getFillColor() (used Brick color class)
         rectangle.setArcHeight(9);
         rectangle.setArcWidth(9);
     }
