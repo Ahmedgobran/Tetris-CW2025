@@ -1,4 +1,4 @@
-<?import com.comp2042.GameOverPanel?>
+<?import com.comp2042.ui.GameOverPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -6,7 +6,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.Group?>
 
-<HBox fx:controller="com.comp2042.GuiController"
+<HBox fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml"
       spacing="0"
       styleClass="root">

@@ -1,5 +1,6 @@
-package com.comp2042;
+package com.comp2042.ui;
 
+import com.comp2042.core.ViewData;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 

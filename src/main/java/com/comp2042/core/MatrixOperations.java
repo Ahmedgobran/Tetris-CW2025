@@ -1,4 +1,4 @@
-package com.comp2042;
+package com.comp2042.core;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
