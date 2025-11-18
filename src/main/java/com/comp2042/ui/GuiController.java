@@ -163,11 +163,7 @@ public class GuiController implements Initializable {
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onDownEvent(event);
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
-                groupNotification.getChildren().add(notificationPanel);
-                notificationPanel.showScore(groupNotification.getChildren());
-            }
+            showClearRowNotification(downData.getClearRow());
             refreshBrick(downData.getViewData());
         }
         gamePanel.requestFocus();
@@ -176,17 +172,19 @@ public class GuiController implements Initializable {
     private void hardDrop() {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onHardDropEvent();
-
-            // Show notification for line clears
-            if (downData.getClearRow() != null && downData.getClearRow().getLinesRemoved() > 0) {
-                NotificationPanel notificationPanel = new NotificationPanel("+" + downData.getClearRow().getScoreBonus());
-                groupNotification.getChildren().add(notificationPanel);
-                notificationPanel.showScore(groupNotification.getChildren());
-            }
-
+            showClearRowNotification(downData.getClearRow());
             refreshBrick(downData.getViewData());
         }
         gamePanel.requestFocus();
+    }
+
+    //added this method to prevent bcoz of duplicated code in moveDown() and hardDrop() methods
+    private void showClearRowNotification(ClearRow clearRow) {
+        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
+            NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
+            groupNotification.getChildren().add(notificationPanel);
+            notificationPanel.showScore(groupNotification.getChildren());
+        }
     }
 
     public void setEventListener(InputEventListener eventListener) {
