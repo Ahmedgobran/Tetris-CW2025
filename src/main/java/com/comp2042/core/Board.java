@@ -26,4 +26,6 @@ public interface Board {
 
     //gets y pos of where curr brick would land (shadow position)
     int getShadowYPosition();
+
+    int hardDrop();
 }

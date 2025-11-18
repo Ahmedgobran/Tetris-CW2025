@@ -143,4 +143,13 @@ public class SimpleBoard implements Board {
         }
         return shadowY;
     }
+    
+    @Override
+    public int hardDrop() {
+        int rowsDropped = 0;
+        while (moveBrickDown()) {
+            rowsDropped++;
+        }
+        return rowsDropped;
+    }
 }
