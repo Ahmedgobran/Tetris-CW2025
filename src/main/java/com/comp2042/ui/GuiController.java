@@ -180,7 +180,7 @@ public class GuiController implements Initializable {
 
     //added this method to prevent bcoz of duplicated code in moveDown() and hardDrop() methods
     private void showClearRowNotification(ClearRow clearRow) {
-        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
+        if (clearRow != null && clearRow.getLinesRemoved() > 0) { //only show the score notification to appear if the hard drop actually clears a row
             NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
             groupNotification.getChildren().add(notificationPanel);
             notificationPanel.showScore(groupNotification.getChildren());
