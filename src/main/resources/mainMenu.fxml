@@ -4,7 +4,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
-<?import javafx.scene.text.Font?>
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 <?import javafx.scene.image.Image?>
@@ -23,81 +22,64 @@
     </stylesheets>
 
     <!-- Title -->
-    <ImageView fitWidth="170"  preserveRatio="true">
-        <image>
-            <Image url="@MM-tetris-AG.png"/>
-        </image>
+    <ImageView fitWidth="170" preserveRatio="true">
         <VBox.margin>
             <Insets top="20" bottom="10"/>
         </VBox.margin>
+        <Image url="@MM-tetris-AG.png"/>
     </ImageView>
 
     <!-- Buttons Container -->
     <VBox alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS">
 
         <!-- Play Button -->
-        <Button fx:id="playButton"
-                onAction="#onPlayClicked"
+        <Button onAction="#onPlayClicked"
                 styleClass="image-button">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
-                    <image>
-                        <Image url="@play-button.png"/>
-                    </image>
+                <ImageView fitWidth="180" fitHeight="40">
+                    <Image url="@play-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
 
         <!-- Controls Button -->
-        <Button fx:id="controlsButton"
-                onAction="#onControlsClicked"
+        <Button onAction="#onControlsClicked"
                 styleClass="image-button">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
-                    <image>
-                        <Image url="@controls-button.png"/>
-                    </image>
+                <ImageView fitWidth="180" fitHeight="40">
+                    <Image url="@controls-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
 
         <!-- High Scores Button (disabled for now) -->
-        <Button fx:id="highScoresButton"
-                onAction="#onHighScoresClicked"
+        <Button onAction="#onHighScoresClicked"
                 styleClass="image-button"
                 disable="true">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false" opacity="0.5">
-                    <image>
-                        <Image url="@high_scores-button.png"/>
-                    </image>
+                <ImageView fitWidth="180" fitHeight="40" opacity="0.5">
+                    <Image url="@high_scores-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
 
         <!-- Settings Button (disabled for now) -->
-        <Button fx:id="settingsButton"
-                onAction="#onSettingsClicked"
+        <Button onAction="#onSettingsClicked"
                 styleClass="image-button"
                 disable="true">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false" opacity="0.5">
-                    <image>
-                        <Image url="@settings-button.png"/>
-                    </image>
+                <ImageView fitWidth="180" fitHeight="40" opacity="0.5">
+                    <Image url="@settings-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
 
         <!-- Exit Button -->
-        <Button fx:id="exitButton"
-                onAction="#onExitClicked"
+        <Button onAction="#onExitClicked"
                 styleClass="image-button">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
-                    <image>
-                        <Image url="@exit-button.png"/>
-                    </image>
+                <ImageView fitWidth="180" fitHeight="40">
+                    <Image url="@exit-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -112,8 +94,7 @@
                 prefHeight="280"
                 styleClass="controls-scroll-pane">
 
-        <VBox fx:id="controlsPanel"
-              alignment="TOP_CENTER"
+        <VBox alignment="TOP_CENTER"
               spacing="5"
               styleClass="controls-panel">
 
