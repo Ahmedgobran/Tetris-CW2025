@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -38,12 +39,18 @@ public class MainMenuController implements Initializable {
     @FXML
     private VBox controlsPanel;
 
+    @FXML
+    private ScrollPane controlsScrollPane;
+
     private Stage stage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Hide controls panel initially
-        controlsPanel.setVisible(false);
+        if (controlsScrollPane != null) {
+            controlsScrollPane.setVisible(false);
+            controlsScrollPane.setManaged(false);
+        }
     }
 
     public void setStage(Stage stage) {
@@ -63,8 +70,11 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onControlsClicked(ActionEvent event) {
         // Toggle controls panel visibility
-        boolean isVisible = controlsPanel.isVisible();
-        controlsPanel.setVisible(!isVisible);
+        if (controlsScrollPane != null) {
+            boolean isVisible = controlsScrollPane.isVisible();
+            controlsScrollPane.setVisible(!isVisible);
+            controlsScrollPane.setManaged(!isVisible);
+        }
     }
 
     @FXML
