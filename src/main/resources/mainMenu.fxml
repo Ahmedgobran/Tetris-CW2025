@@ -1,151 +1,152 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.Font?>
+<?import javafx.geometry.Insets?>
 <?import java.net.URL?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
 <VBox fx:controller="com.comp2042.ui.MainMenuController"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
-      spacing="20"
-      style="-fx-background-color: black;">
+      spacing="15"
+      styleClass="menu-container"
+      prefWidth="480"
+      prefHeight="510">
 
     <stylesheets>
         <URL value="@window_style.css"/>
     </stylesheets>
 
     <!-- Title -->
-    <Text fx:id="titleText" text="TETRIS"
-          style="-fx-font-size: 72px; -fx-font-weight: bold; -fx-fill: #00ff00;">
-        <font>
-            <Font name="Let's go Digital" size="72"/>
-        </font>
-    </Text>
+    <ImageView fitWidth="170"  preserveRatio="true">
+        <image>
+            <Image url="@MM-tetris-AG.png"/>
+        </image>
+        <VBox.margin>
+            <Insets top="20" bottom="10"/>
+        </VBox.margin>
+    </ImageView>
 
     <!-- Buttons Container -->
-    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+    <VBox alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS">
 
         <!-- Play Button -->
-        <Button fx:id="playButton" text="PLAY"
+        <Button fx:id="playButton"
                 onAction="#onPlayClicked"
-                prefWidth="200"
-                prefHeight="50"
-                style="-fx-background-color: #00ff00;
-                       -fx-text-fill: black;
-                       -fx-font-size: 18px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 10;
-                       -fx-cursor: hand;"/>
+                styleClass="image-button">
+            <graphic>
+                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
+                    <image>
+                        <Image url="@play-button.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
 
         <!-- Controls Button -->
-        <Button fx:id="controlsButton" text="CONTROLS"
+        <Button fx:id="controlsButton"
                 onAction="#onControlsClicked"
-                prefWidth="200"
-                prefHeight="50"
-                style="-fx-background-color: #4a9eff;
-                       -fx-text-fill: white;
-                       -fx-font-size: 18px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 10;
-                       -fx-cursor: hand;"/>
+                styleClass="image-button">
+            <graphic>
+                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
+                    <image>
+                        <Image url="@controls-button.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
 
         <!-- High Scores Button (disabled for now) -->
-        <Button fx:id="highScoresButton" text="HIGH SCORES"
+        <Button fx:id="highScoresButton"
                 onAction="#onHighScoresClicked"
-                prefWidth="200"
-                prefHeight="50"
-                style="-fx-background-color: #888888;
-                       -fx-text-fill: white;
-                       -fx-font-size: 18px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 10;
-                       -fx-cursor: hand;"
-                disable="true"/>
+                styleClass="image-button"
+                disable="true">
+            <graphic>
+                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false" opacity="0.5">
+                    <image>
+                        <Image url="@high_scores-button.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
 
         <!-- Settings Button (disabled for now) -->
-        <Button fx:id="settingsButton" text="SETTINGS"
+        <Button fx:id="settingsButton"
                 onAction="#onSettingsClicked"
-                prefWidth="200"
-                prefHeight="50"
-                style="-fx-background-color: #888888;
-                       -fx-text-fill: white;
-                       -fx-font-size: 18px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 10;
-                       -fx-cursor: hand;"
-                disable="true"/>
+                styleClass="image-button"
+                disable="true">
+            <graphic>
+                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false" opacity="0.5">
+                    <image>
+                        <Image url="@settings-button.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
 
         <!-- Exit Button -->
-        <Button fx:id="exitButton" text="EXIT"
+        <Button fx:id="exitButton"
                 onAction="#onExitClicked"
-                prefWidth="200"
-                prefHeight="50"
-                style="-fx-background-color: #ff4a4a;
-                       -fx-text-fill: white;
-                       -fx-font-size: 18px;
-                       -fx-font-weight: bold;
-                       -fx-background-radius: 10;
-                       -fx-cursor: hand;"/>
+                styleClass="image-button">
+            <graphic>
+                <ImageView fitWidth="180" fitHeight="40" preserveRatio="false">
+                    <image>
+                        <Image url="@exit-button.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
 
     </VBox>
 
-    <!-- Controls Panel (hidden by default) -->
-    <VBox fx:id="controlsPanel"
-          alignment="TOP_CENTER"
-          spacing="10"
-          style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #4a9eff; -fx-border-width: 2;">
+    <!-- Controls Panel with ScrollPane (hidden by default) -->
+    <ScrollPane fx:id="controlsScrollPane"
+                visible="false"
+                managed="false"
+                fitToWidth="true"
+                prefHeight="280"
+                styleClass="controls-scroll-pane">
 
-        <Text text="CONTROLS"
-              style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #4a9eff;"/>
+        <VBox fx:id="controlsPanel"
+              alignment="TOP_CENTER"
+              spacing="5"
+              styleClass="controls-panel">
 
-        <Text text="LEFT ARROW or A        Move Left"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+            <Text text="CONTROLS" styleClass="controls-header"/>
 
-        <Text text="RIGHT ARROW or D      Move Right"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+            <VBox styleClass="controls-list">
+                <Text text="LEFT ARROW / A      Move Left" styleClass="controls-text"/>
+                <Text text="RIGHT ARROW / D     Move Right" styleClass="controls-text"/>
+                <Text text="UP ARROW / W        Rotate" styleClass="controls-text"/>
+                <Text text="DOWN ARROW / S      Soft Drop" styleClass="controls-text"/>
+                <Text text="SPACE               Hard Drop" styleClass="controls-text"/>
+                <Text text="P                   Pause/Resume" styleClass="controls-text"/>
+                <Text text="N                   New Game" styleClass="controls-text"/>
+            </VBox>
 
-        <Text text="UP ARROW or W          Rotate"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+            <Text text=" " styleClass="controls-section-spacing"/>
 
-        <Text text="DOWN ARROW or S      Soft Drop"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+            <Text text="SCORING" styleClass="scoring-header"/>
 
-        <Text text="SPACE                        Hard Drop"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+            <VBox styleClass="scoring-list">
+                <Text text="Soft Drop (per row):    +1 point" styleClass="scoring-text"/>
+                <Text text="Hard Drop (per row):    +2 points" styleClass="scoring-text"/>
+                <Text text="Clear 1 line:           +50 points" styleClass="scoring-text"/>
+                <Text text="Clear 2 lines:          +200 points" styleClass="scoring-text"/>
+                <Text text="Clear 3 lines:          +450 points" styleClass="scoring-text"/>
+                <Text text="Clear 4 lines (Tetris): +800 points" styleClass="scoring-text"/>
+            </VBox>
 
-        <Text text="P                               Pause/Resume"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
+        </VBox>
+    </ScrollPane>
 
-        <Text text="N                               New Game"
-              style="-fx-font-size: 14px; -fx-fill: white;"/>
-
-        <Text text=" "
-              style="-fx-font-size: 10px;"/>
-
-        <Text text="SCORING:"
-              style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #00ff00;"/>
-
-        <Text text="Soft Drop (per row):    +1 point"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-        <Text text="Hard Drop (per row):    +2 points"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-        <Text text="Clear 1 line:               +50 points"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-        <Text text="Clear 2 lines:             +200 points"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-        <Text text="Clear 3 lines:             +450 points"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-        <Text text="Clear 4 lines (Tetris): +800 points"
-              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
-
-    </VBox>
+    <padding>
+        <Insets top="10" bottom="10" left="20" right="20"/>
+    </padding>
 
 </VBox>
