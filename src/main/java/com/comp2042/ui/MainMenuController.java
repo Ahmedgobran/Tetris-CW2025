@@ -74,6 +74,14 @@ public class MainMenuController implements Initializable {
             boolean isVisible = controlsScrollPane.isVisible();
             controlsScrollPane.setVisible(!isVisible);
             controlsScrollPane.setManaged(!isVisible);
+            // Adjust window size if controls panel is collapsed/expanded
+            if (!isVisible) {
+                // Expanding - make window taller
+                stage.setHeight(670);
+            } else {
+                // Collapsing - restore original size
+                stage.setHeight(550);
+            }
         }
     }
 
