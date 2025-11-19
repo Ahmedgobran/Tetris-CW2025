@@ -70,13 +70,13 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onSettingsClicked(ActionEvent event) {
         // TODO: Implement later
-        System.out.println("Settings clicked - not implemented yet");
+        System.out.println("do later");
     }
 
     @FXML
     private void onHighScoresClicked(ActionEvent event) {
         // TODO: Implement later
-        System.out.println("High Scores clicked - not implemented yet");
+        System.out.println("do later");
     }
 
     @FXML
