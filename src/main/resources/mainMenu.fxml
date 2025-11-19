@@ -22,11 +22,11 @@
     </stylesheets>
 
     <!-- Title -->
-    <ImageView fitWidth="170" preserveRatio="true">
+    <ImageView fitWidth="300" fitHeight="300" preserveRatio="true">
         <VBox.margin>
-            <Insets top="20" bottom="10"/>
+            <Insets top="50" bottom="10"/>
         </VBox.margin>
-        <Image url="@MM-tetris-AG.png"/>
+        <Image url="@tetris-logo.png"/>
     </ImageView>
 
     <!-- Buttons Container -->
