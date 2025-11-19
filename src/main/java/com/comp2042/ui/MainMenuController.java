@@ -3,10 +3,7 @@ package com.comp2042.ui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import com.comp2042.core.GameController;
 import javafx.fxml.FXMLLoader;
@@ -17,27 +14,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class MainMenuController implements Initializable {
-
-    @FXML
-    private Text titleText;
-
-    @FXML
-    private Button playButton;
-
-    @FXML
-    private Button controlsButton;
-
-    @FXML
-    private Button settingsButton;
-
-    @FXML
-    private Button highScoresButton;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private VBox controlsPanel;
 
     @FXML
     private ScrollPane controlsScrollPane;
