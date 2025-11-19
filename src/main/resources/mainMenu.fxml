@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import java.net.URL?>
+
+<VBox fx:controller="com.comp2042.ui.MainMenuController"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="20"
+      style="-fx-background-color: black;">
+
+    <stylesheets>
+        <URL value="@window_style.css"/>
+    </stylesheets>
+
+    <!-- Title -->
+    <Text fx:id="titleText" text="TETRIS"
+          style="-fx-font-size: 72px; -fx-font-weight: bold; -fx-fill: #00ff00;">
+        <font>
+            <Font name="Let's go Digital" size="72"/>
+        </font>
+    </Text>
+
+    <!-- Buttons Container -->
+    <VBox alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+
+        <!-- Play Button -->
+        <Button fx:id="playButton" text="PLAY"
+                onAction="#onPlayClicked"
+                prefWidth="200"
+                prefHeight="50"
+                style="-fx-background-color: #00ff00;
+                       -fx-text-fill: black;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"/>
+
+        <!-- Controls Button -->
+        <Button fx:id="controlsButton" text="CONTROLS"
+                onAction="#onControlsClicked"
+                prefWidth="200"
+                prefHeight="50"
+                style="-fx-background-color: #4a9eff;
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"/>
+
+        <!-- High Scores Button (disabled for now) -->
+        <Button fx:id="highScoresButton" text="HIGH SCORES"
+                onAction="#onHighScoresClicked"
+                prefWidth="200"
+                prefHeight="50"
+                style="-fx-background-color: #888888;
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"
+                disable="true"/>
+
+        <!-- Settings Button (disabled for now) -->
+        <Button fx:id="settingsButton" text="SETTINGS"
+                onAction="#onSettingsClicked"
+                prefWidth="200"
+                prefHeight="50"
+                style="-fx-background-color: #888888;
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"
+                disable="true"/>
+
+        <!-- Exit Button -->
+        <Button fx:id="exitButton" text="EXIT"
+                onAction="#onExitClicked"
+                prefWidth="200"
+                prefHeight="50"
+                style="-fx-background-color: #ff4a4a;
+                       -fx-text-fill: white;
+                       -fx-font-size: 18px;
+                       -fx-font-weight: bold;
+                       -fx-background-radius: 10;
+                       -fx-cursor: hand;"/>
+
+    </VBox>
+
+    <!-- Controls Panel (hidden by default) -->
+    <VBox fx:id="controlsPanel"
+          alignment="TOP_CENTER"
+          spacing="10"
+          style="-fx-background-color: #1a1a1a; -fx-padding: 20; -fx-border-color: #4a9eff; -fx-border-width: 2;">
+
+        <Text text="CONTROLS"
+              style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-fill: #4a9eff;"/>
+
+        <Text text="LEFT ARROW or A        Move Left"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="RIGHT ARROW or D      Move Right"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="UP ARROW or W          Rotate"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="DOWN ARROW or S      Soft Drop"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="SPACE                        Hard Drop"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="P                               Pause/Resume"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text="N                               New Game"
+              style="-fx-font-size: 14px; -fx-fill: white;"/>
+
+        <Text text=" "
+              style="-fx-font-size: 10px;"/>
+
+        <Text text="SCORING:"
+              style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #00ff00;"/>
+
+        <Text text="Soft Drop (per row):    +1 point"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+        <Text text="Hard Drop (per row):    +2 points"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+        <Text text="Clear 1 line:               +50 points"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+        <Text text="Clear 2 lines:             +200 points"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+        <Text text="Clear 3 lines:             +450 points"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+        <Text text="Clear 4 lines (Tetris): +800 points"
+              style="-fx-font-size: 12px; -fx-fill: #00ff00;"/>
+
+    </VBox>
+
+</VBox>
