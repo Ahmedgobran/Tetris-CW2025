@@ -23,7 +23,7 @@ public class Main extends Application {
         menuController.setStage(primaryStage);
 
         primaryStage.setTitle("Tetris - Main Menu");
-        Scene scene = new Scene(root, 435, 510); //adjusts window size when launched
+        Scene scene = new Scene(root, 480, 510); //adjusts window size of main menu when launched
         primaryStage.setScene(scene);
         primaryStage.show();
     }

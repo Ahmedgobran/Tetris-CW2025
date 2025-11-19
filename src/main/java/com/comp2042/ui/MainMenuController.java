@@ -104,7 +104,7 @@ public class MainMenuController implements Initializable {
         GuiController guiController = fxmlLoader.getController();
 
         stage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 480, 510);
+        Scene scene = new Scene(root, 435, 510); //adjusts window size of game when launched
         stage.setScene(scene);
         stage.show();
 
