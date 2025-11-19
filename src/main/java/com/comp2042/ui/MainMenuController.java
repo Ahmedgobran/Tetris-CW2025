@@ -1,0 +1,103 @@
+package com.comp2042.ui;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import com.comp2042.core.GameController;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class MainMenuController implements Initializable {
+
+    @FXML
+    private Text titleText;
+
+    @FXML
+    private Button playButton;
+
+    @FXML
+    private Button controlsButton;
+
+    @FXML
+    private Button settingsButton;
+
+    @FXML
+    private Button highScoresButton;
+
+    @FXML
+    private Button exitButton;
+
+    @FXML
+    private VBox controlsPanel;
+
+    private Stage stage;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Hide controls panel initially
+        controlsPanel.setVisible(false);
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    @FXML
+    private void onPlayClicked(ActionEvent event) {
+        try {
+            startGame();
+        } catch (Exception e) {
+            System.err.println("Error starting game: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void onControlsClicked(ActionEvent event) {
+        // Toggle controls panel visibility
+        boolean isVisible = controlsPanel.isVisible();
+        controlsPanel.setVisible(!isVisible);
+    }
+
+    @FXML
+    private void onSettingsClicked(ActionEvent event) {
+        // TODO: Implement later
+        System.out.println("Settings clicked - not implemented yet");
+    }
+
+    @FXML
+    private void onHighScoresClicked(ActionEvent event) {
+        // TODO: Implement later
+        System.out.println("High Scores clicked - not implemented yet");
+    }
+
+    @FXML
+    private void onExitClicked(ActionEvent event) {
+        // Close the application
+        stage.close();
+        System.exit(0);
+    }
+
+    private void startGame() throws Exception {
+        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+        ResourceBundle resources = null;
+        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
+        Parent root = fxmlLoader.load();
+        GuiController guiController = fxmlLoader.getController();
+
+        stage.setTitle("TetrisJFX");
+        Scene scene = new Scene(root, 480, 510);
+        stage.setScene(scene);
+        stage.show();
+
+        new GameController(guiController);
+    }
+}
