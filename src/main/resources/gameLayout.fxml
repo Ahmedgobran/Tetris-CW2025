@@ -1,21 +1,19 @@
 <?import com.comp2042.ui.GameOverPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import java.net.URL?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.Group?>
 
 <HBox fx:controller="com.comp2042.ui.GuiController"
       xmlns:fx="http://javafx.com/fxml"
-      spacing="0"
       styleClass="root">
     <stylesheets>
             <URL value="@window_style.css"/> <!--moved up (was prev below) wasnt refrenced properly-->
     </stylesheets>
     <Pane prefWidth="260" prefHeight="510">
         <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-        <BorderPane styleClass="gameBoard" fx:id="gameBoard">
+        <BorderPane styleClass="gameBoard" >
             <center>
                 <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
             </center>
@@ -54,24 +52,20 @@
 
         <!-- control buttons -->
         <VBox spacing="12" alignment="CENTER">
-            <Button fx:id="pauseButton" onAction="#pauseGame" styleClass="button-icon">
+            <Button onAction="#pauseGame" styleClass="button-icon">
                 <graphic>
                     <!--moved logic from guicontroller to here since more simple-->
                     <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
-                        <image>
-                            <Image url="@pause'resume-button.png"/>
-                        </image>
+                        <Image url="@pause'resume-button.png"/>
                     </ImageView>
                 </graphic>
             </Button>
 
-            <Button fx:id="restartButton" onAction="#newGame" styleClass="button-icon">
+            <Button onAction="#newGame" styleClass="button-icon">
                 <graphic>
                     <!--moved logic from guicontroller to here since more simple-->
                     <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
-                        <image>
-                            <Image url="@restart-button.png"/>
-                        </image>
+                        <Image url="@restart-button.png"/>
                     </ImageView>
                 </graphic>
             </Button>
