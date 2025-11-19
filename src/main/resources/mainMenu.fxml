@@ -19,7 +19,7 @@
       prefHeight="510">
 
     <stylesheets>
-        <URL value="@window_style.css"/>
+        <URL value="@menu_style.css"/>
     </stylesheets>
 
     <!-- Title -->

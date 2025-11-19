@@ -1,0 +1,97 @@
+/* MAIN MENU STYLES */
+/*moved here from window_style*/
+
+.menu-container {
+    -fx-background-image: url("main-menu-bg.png");
+    -fx-background-size: cover;
+}
+.menu-button {
+    -fx-pref-width: 180;
+    -fx-pref-height: 40;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 2);
+}
+
+.menu-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0, 0, 3);
+}
+
+.menu-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+
+.controls-scroll-pane {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
+
+.controls-panel {
+    -fx-background-color: #1a1a1a;
+    -fx-padding: 15;
+    -fx-border-color: #4a9eff;
+    -fx-border-width: 2;
+}
+
+.controls-header {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-fill: #4a9eff;
+}
+
+.controls-text {
+    -fx-font-size: 11px;
+    -fx-fill: white;
+}
+
+.controls-section-spacing {
+    -fx-font-size: 5px;
+}
+
+.scoring-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-fill: #00ff00;
+}
+
+.scoring-text {
+    -fx-font-size: 10px;
+    -fx-fill: #00ff00;
+}
+
+.controls-list {
+    -fx-spacing: 3;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 20;
+}
+
+.scoring-list {
+    -fx-spacing: 2;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 20;
+}
+
+.image-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 2);
+}
+
+.image-button:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 6, 0, 0, 3);
+}
+
+.image-button:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+    -fx-opacity: 0.9;
+}
