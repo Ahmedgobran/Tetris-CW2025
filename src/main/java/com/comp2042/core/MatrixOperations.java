@@ -15,11 +15,11 @@ public class MatrixOperations {
     }
 
     public static boolean intersect(final int[][] matrix, final int[][] brick, int x, int y) {
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
-                int targetX = x + i;
-                int targetY = y + j;
-                if (brick[j][i] != 0 && (checkOutOfBound(matrix, targetX, targetY) || matrix[targetY][targetX] != 0)) {
+        for (int row = 0; row < brick.length; row++) {
+            for (int column = 0; column < brick[row].length; column++) {
+                int targetX = x + column;
+                int targetY = y + row;
+                if (brick[row][column] != 0 && (checkOutOfBound(matrix, targetX, targetY) || matrix[targetY][targetX] != 0)) {
                     return true;
                 }
             }
@@ -27,14 +27,13 @@ public class MatrixOperations {
         return false;
     }
 
+    //simplified method & fixed potential error of bricks goign above board
     private static boolean checkOutOfBound(int[][] matrix, int targetX, int targetY) {
-        boolean returnValue = true;
-        if (targetX >= 0 && targetY < matrix.length && targetX < matrix[targetY].length) {
-            returnValue = false;
-        }
-        return returnValue;
+        //fixed: Added targetY < 0 check
+        return targetX < 0 || targetY < 0 || targetY >= matrix.length || targetX >= matrix[targetY].length;
     }
 
+    //creates a deep copy of a 2D array
     public static int[][] copy(int[][] original) {
         int[][] myInt = new int[original.length][];
         for (int i = 0; i < original.length; i++) {
@@ -48,12 +47,12 @@ public class MatrixOperations {
 
     public static int[][] merge(int[][] filledFields, int[][] brick, int x, int y) {
         int[][] copy = copy(filledFields);
-        for (int i = 0; i < brick.length; i++) {
-            for (int j = 0; j < brick[i].length; j++) {
-                int targetX = x + i;
-                int targetY = y + j;
-                if (brick[j][i] != 0) {
-                    copy[targetY][targetX] = brick[j][i];
+        for (int row = 0; row < brick.length; row++) {
+            for (int column = 0; column < brick[row].length; column++) {
+                int targetX = x + column;
+                int targetY = y + row;
+                if (brick[row][column] != 0) {
+                    copy[targetY][targetX] = brick[row][column];
                 }
             }
         }
@@ -66,6 +65,7 @@ public class MatrixOperations {
         Deque<int[]> newRows = new ArrayDeque<>();
         List<Integer> clearedRows = new ArrayList<>();
 
+        //identify the rows to clear
         for (int i = 0; i < matrix.length; i++) {
             int[] tmpRow = new int[matrix[i].length];
             boolean rowToClear = true;
@@ -81,18 +81,22 @@ public class MatrixOperations {
                 newRows.add(tmpRow);
             }
         }
-        for (int i = matrix.length - 1; i >= 0; i--) {
-            int[] row = newRows.pollLast();
-            if (row != null) {
-                tmp[i] = row;
-            } else {
-                break;
-            }
+        //Properly handle row shifting (fixed)
+        int targetRow = matrix.length - 1;
+
+        // added while loop fill from bottom with non-cleared rows
+        while (!newRows.isEmpty()) {
+            tmp[targetRow--] = newRows.pollLast();
+        }
+        //fill top rows with empty rows (zeros)
+        for (int i = 0; i <= targetRow; i++) {
+            tmp[i] = new int[matrix[0].length];
         }
         int scoreBonus = 50 * clearedRows.size() * clearedRows.size();
         return new ClearRow(clearedRows.size(), tmp, scoreBonus);
     }
 
+    //creates the list for the deep copy of 2D arrays
     public static List<int[][]> deepCopyList(List<int[][]> list){
         return list.stream().map(MatrixOperations::copy).collect(Collectors.toList());
     }
