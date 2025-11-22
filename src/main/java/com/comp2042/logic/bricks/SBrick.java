@@ -11,15 +11,15 @@ final class SBrick implements Brick {
 
     public SBrick() {
         brickMatrix.add(new int[][]{
-                {0, 0, 0, 0},
                 {0, 5, 5, 0},
                 {5, 5, 0, 0},
+                {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
-                {5, 0, 0, 0},
-                {5, 5, 0, 0},
                 {0, 5, 0, 0},
+                {0, 5, 5, 0},
+                {0, 0, 5, 0},
                 {0, 0, 0, 0}
         });
     }
