@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+
+<VBox fx:controller="com.comp2042.ui.SettingsController"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="20"
+      styleClass="settings-container">
+
+    <stylesheets>
+        <URL value="@menu_style.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" bottom="20" left="30" right="30"/>
+    </padding>
+
+    <!-- Title -->
+    <Text text="SETTINGS" styleClass="settings-title"/>
+
+    <!-- Audio Section -->
+    <VBox spacing="15" styleClass="settings-section">
+        <Text text="AUDIO" styleClass="settings-section-title"/>
+
+        <!-- Music Volume -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="musicEnabledCheckbox" styleClass="settings-checkbox"/>
+            <Label text="Music" styleClass="settings-label" prefWidth="80"/>
+            <Slider fx:id="musicVolumeSlider"
+                    max="1" value="0.5"
+                    prefWidth="180"
+                    styleClass="settings-slider"/>
+            <Label fx:id="musicVolumeLabel" text="50%" styleClass="settings-value" prefWidth="40"/>
+        </HBox>
+
+        <!-- SFX Volume -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="sfxEnabledCheckbox" styleClass="settings-checkbox"/>
+            <Label text="SFX" styleClass="settings-label" prefWidth="80"/>
+            <Slider fx:id="sfxVolumeSlider"
+                    max="1" value="0.7"
+                    prefWidth="180"
+                    styleClass="settings-slider"/>
+            <Label fx:id="sfxVolumeLabel" text="70%" styleClass="settings-value" prefWidth="40"/>
+        </HBox>
+    </VBox>
+
+    <!-- Game Section -->
+    <VBox spacing="15" styleClass="settings-section">
+        <Text text="GAME" styleClass="settings-section-title"/>
+
+        <!-- Ghost Piece Toggle -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="ghostPieceCheckbox" styleClass="settings-checkbox"/>
+            <Label text="Show Ghost Piece" styleClass="settings-label"/>
+        </HBox>
+    </VBox>
+
+    <!-- Buttons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="SAVE"
+                onAction="#onSaveClicked"
+                styleClass="menu-button"
+                prefWidth="100" prefHeight="35"/>
+        <Button text="BACK"
+                onAction="#onBackClicked"
+                styleClass="menu-button"
+                prefWidth="100" prefHeight="35"/>
+    </HBox>
+
+</VBox>
