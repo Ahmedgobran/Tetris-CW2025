@@ -155,7 +155,7 @@ public class GuiController implements Initializable {
             if (GameSettings.getInstance().isGhostPieceEnabled()) {
                 shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
             } else {
-                shadowRender.hideShadow(); // Hide the shadow
+                shadowRender.hide(); // Hide the shadow
             }
             if (nextPieceRenderer != null) {
                 nextPieceRenderer.update(brick.getNextBrickData());

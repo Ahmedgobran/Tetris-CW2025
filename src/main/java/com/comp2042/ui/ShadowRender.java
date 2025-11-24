@@ -54,9 +54,6 @@ public class ShadowRender {
         shadowGroup.setVisible(true);
     }
     // method to hide shadow
-    public void hideShadow() {
-        shadowGroup.getChildren().clear();
-    }
     public void hide() {
         shadowGroup.setVisible(false);
     }
