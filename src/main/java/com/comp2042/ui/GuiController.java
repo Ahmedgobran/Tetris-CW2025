@@ -1,5 +1,6 @@
 package com.comp2042.ui;
 
+import com.comp2042.ui.GameSettings;
 import com.comp2042.core.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -116,6 +117,15 @@ public class GuiController implements Initializable {
         }
         // Create ShadowRender and use it
         shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
+        // check if ghost piece enabled before showing shadow
+        if (GameSettings.getInstance().isGhostPieceEnabled()) {
+            shadowRender.updateShadow(
+                    brick,
+                    gamePanel.getLayoutX(),
+                    gamePanel.getLayoutY(),
+                    brickPanel.getVgap()
+            );
+        }
         shadowRender.updateShadow(
                 brick,
                 gamePanel.getLayoutX(),
@@ -141,7 +151,12 @@ public class GuiController implements Initializable {
                     setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
                 }
             }
-            shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap()); //replaced with updateShadow(brick) (old method)
+            // check if ghost piece enabled
+            if (GameSettings.getInstance().isGhostPieceEnabled()) {
+                shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
+            } else {
+                shadowRender.hideShadow(); // Hide the shadow
+            }
             if (nextPieceRenderer != null) {
                 nextPieceRenderer.update(brick.getNextBrickData());
             }
