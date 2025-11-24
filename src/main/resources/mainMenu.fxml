@@ -63,12 +63,11 @@
             </graphic>
         </Button>
 
-        <!-- Settings Button (disabled for now) -->
+        <!-- Settings Button -->
         <Button onAction="#onSettingsClicked"
-                styleClass="image-button"
-                disable="true">
+                styleClass="image-button">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" opacity="0.5">
+                <ImageView fitWidth="180" fitHeight="40" >
                     <Image url="@settings-button.png"/>
                 </ImageView>
             </graphic>
