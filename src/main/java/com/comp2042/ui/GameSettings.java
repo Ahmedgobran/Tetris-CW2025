@@ -20,8 +20,6 @@ public class GameSettings {
     // Visual settings
     private final BooleanProperty ghostPieceEnabled = new SimpleBooleanProperty(true);
 
-    // Game settings
-    private final DoubleProperty gameSpeed = new SimpleDoubleProperty(400);  // milliseconds per tick
 
     private GameSettings() {
         // Bind audio settings to AudioManager
@@ -52,9 +50,6 @@ public class GameSettings {
 
     // Audio Properties
 
-    public DoubleProperty musicVolumeProperty() {
-        return musicVolume;
-    }
 
     public double getMusicVolume() {
         return musicVolume.get();
@@ -62,10 +57,6 @@ public class GameSettings {
 
     public void setMusicVolume(double value) {
         musicVolume.set(value);
-    }
-
-    public DoubleProperty sfxVolumeProperty() {
-        return sfxVolume;
     }
 
     public double getSfxVolume() {
@@ -76,20 +67,12 @@ public class GameSettings {
         sfxVolume.set(value);
     }
 
-    public BooleanProperty musicEnabledProperty() {
-        return musicEnabled;
-    }
-
     public boolean isMusicEnabled() {
         return musicEnabled.get();
     }
 
     public void setMusicEnabled(boolean value) {
         musicEnabled.set(value);
-    }
-
-    public BooleanProperty sfxEnabledProperty() {
-        return sfxEnabled;
     }
 
     public boolean isSfxEnabled() {
@@ -102,9 +85,6 @@ public class GameSettings {
 
     // Visual Properties
 
-    public BooleanProperty ghostPieceEnabledProperty() {
-        return ghostPieceEnabled;
-    }
 
     public boolean isGhostPieceEnabled() {
         return ghostPieceEnabled.get();
