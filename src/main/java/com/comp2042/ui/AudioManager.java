@@ -87,27 +87,6 @@ public class AudioManager {
         }
     }
 
-    // Stop sound effects
-    public void stopSFX() {
-        if (sfxPlayer != null) {
-            sfxPlayer.stop();
-            sfxPlayer.dispose();
-            sfxPlayer = null;
-        }
-    }
-      //Pause background music
-    public void pauseMusic() {
-        if (musicPlayer != null && musicEnabled) {
-            musicPlayer.pause();
-        }
-    }
-
-    // Resume background music
-    public void resumeMusic() {
-        if (musicPlayer != null && musicEnabled) {
-            musicPlayer.play();
-        }
-    }
 
     // Volume Controls
 
@@ -118,17 +97,11 @@ public class AudioManager {
         }
     }
 
-    public double getMusicVolume() {
-        return musicVolume;
-    }
 
     public void setSfxVolume(double volume) {
         this.sfxVolume = Math.max(0.0, Math.min(1.0, volume));
     }
 
-    public double getSfxVolume() {
-        return sfxVolume;
-    }
 
     //Enable/Disable
 
@@ -143,15 +116,15 @@ public class AudioManager {
         }
     }
 
-    public boolean isMusicEnabled() {
-        return musicEnabled;
-    }
-
     public void setSfxEnabled(boolean enabled) {
         this.sfxEnabled = enabled;
     }
 
-    public boolean isSfxEnabled() {
-        return sfxEnabled;
+    public void playButtonPress() {
+        playSFX("/sfx/button-press.mp3");
+    }
+
+    public void playPlayPress() {
+        playSFX("/sfx/play-press.mp3");
     }
 }
