@@ -113,18 +113,4 @@ public class GameSettings {
     public void setGhostPieceEnabled(boolean value) {
         ghostPieceEnabled.set(value);
     }
-
-    // game Properties
-
-    public DoubleProperty gameSpeedProperty() {
-        return gameSpeed;
-    }
-
-    public double getGameSpeed() {
-        return gameSpeed.get();
-    }
-
-    public void setGameSpeed(double value) {
-        gameSpeed.set(value);
-    }
 }
