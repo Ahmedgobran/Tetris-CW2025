@@ -192,10 +192,11 @@ public class GuiController implements Initializable {
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             // Get the cleared row indices before the board updates
             List<Integer> clearedRows = clearRow.getClearedRowIndices();
+            // play line clear sound effect
+            AudioManager.getInstance().playSFX("/sfx/line-cleared.mp3");
             // Play animation on current board state
             lineClearAnimation.animateClearedRows(clearedRows, () -> {
                 refreshGameBackground(eventListener.getBoard());
-
                 //only show the score notification to appear if the hard drop actually clears a row
                 NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
