@@ -17,28 +17,47 @@ public class GameController implements InputEventListener {
     }
 
     @Override
+    public int[][] getBoard() {
+        return board.getBoardMatrix();
+    }
+
+    @Override
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
-        ClearRow clearRow = null;
         if (!canMove) {
-            board.mergeBrickToBackground();
-            clearRow = board.clearRows();
-            if (clearRow.getLinesRemoved() > 0) {
-                board.getScore().add(clearRow.getScoreBonus());
+            return processBrickLanding(); // use helper method
+        } else {
+            if (event.getEventSource() == EventSource.USER) {
+                board.getScore().add(1);
             }
-            if (board.createNewBrick()) {
-                viewGuiController.gameOver();
-            }
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            return new DownData(null, board.getViewData());
         }
-            else {
+    }
 
-                if (event.getEventSource() == EventSource.USER) {
-                    board.getScore().add(1);  // +1 point per row moved down
-                }
-            }
+    @Override
+    public DownData onHardDropEvent() {
+        int rowsDropped = board.hardDrop();
+        if (rowsDropped > 0) {
+            board.getScore().add(rowsDropped * 2);
+        }
+        return processBrickLanding(); //
+    }
 
+    // added this helper method due to code duplication in onDownEvent() and onHardDropEvent()
+    private DownData processBrickLanding() {
+        board.mergeBrickToBackground();
+        ClearRow clearRow = board.clearRows();
 
+        if (clearRow.getLinesRemoved() > 0) {
+            board.getScore().add(clearRow.getScoreBonus());
+        }
+
+        // This logic was duplicated in both methods
+        if (board.createNewBrick()) {
+            viewGuiController.gameOver();
+        }
+
+        viewGuiController.refreshGameBackground(board.getBoardMatrix());
         return new DownData(clearRow, board.getViewData());
     }
 
@@ -67,27 +86,4 @@ public class GameController implements InputEventListener {
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
     }
 
-    @Override
-    public DownData onHardDropEvent() {
-        // Perform hard drop and get number of rows dropped
-        int rowsDropped = board.hardDrop();
-
-        // give 2 points per row for hard drop
-        if (rowsDropped > 0) {
-            board.getScore().add(rowsDropped * 2);
-        }
-        // Now the brick is at the bottom, merge it
-        board.mergeBrickToBackground();
-        ClearRow clearRow = board.clearRows();
-
-        // Award bonus for line clears
-        if (clearRow.getLinesRemoved() > 0) {
-            board.getScore().add(clearRow.getScoreBonus());
-        }
-        if (board.createNewBrick()) {
-            viewGuiController.gameOver();
-        }
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        return new DownData(clearRow, board.getViewData());
-    }
 }
