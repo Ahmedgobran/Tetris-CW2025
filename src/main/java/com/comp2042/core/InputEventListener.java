@@ -13,4 +13,6 @@ public interface InputEventListener {
     void createNewGame();
 
     DownData onHardDropEvent();
+
+    int[][] getBoard();
 }

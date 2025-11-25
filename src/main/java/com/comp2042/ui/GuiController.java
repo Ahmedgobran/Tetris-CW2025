@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class GuiController implements Initializable {
@@ -39,6 +40,7 @@ public class GuiController implements Initializable {
     private Group shadowGroup;
     private Timeline timeLine;
     private ShadowRender shadowRender;
+    private LineClearAnimation lineClearAnimation;
 
     private final BrickColor colorMapper = new BrickColor();
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -89,6 +91,7 @@ public class GuiController implements Initializable {
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         boardRenderer = new BoardRender(gamePanel, boardMatrix, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
+        lineClearAnimation = new LineClearAnimation(gamePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
 
         rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
         for (int i = 0; i < brick.getBrickData().length; i++) {
@@ -125,14 +128,6 @@ public class GuiController implements Initializable {
                     brickPanel.getVgap()
             );
         }
-        shadowRender.updateShadow(
-                brick,
-                gamePanel.getLayoutX(),
-                gamePanel.getLayoutY(),
-                brickPanel.getVgap()
-        );
-
-
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
                 ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
@@ -194,10 +189,18 @@ public class GuiController implements Initializable {
 
     //added this method to prevent bcoz of duplicated code in moveDown() and hardDrop() methods
     private void showClearRowNotification(ClearRow clearRow) {
-        if (clearRow != null && clearRow.getLinesRemoved() > 0) { //only show the score notification to appear if the hard drop actually clears a row
-            NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
-            groupNotification.getChildren().add(notificationPanel);
-            notificationPanel.showScore(groupNotification.getChildren());
+        if (clearRow != null && clearRow.getLinesRemoved() > 0) {
+            // Get the cleared row indices before the board updates
+            List<Integer> clearedRows = clearRow.getClearedRowIndices();
+            // Play animation on current board state
+            lineClearAnimation.animateClearedRows(clearedRows, () -> {
+                refreshGameBackground(eventListener.getBoard());
+
+                //only show the score notification to appear if the hard drop actually clears a row
+                NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
+                groupNotification.getChildren().add(notificationPanel);
+                notificationPanel.showScore(groupNotification.getChildren());
+            });
         }
     }
 

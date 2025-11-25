@@ -93,7 +93,7 @@ public class MatrixOperations {
             tmp[i] = new int[matrix[0].length];
         }
         int scoreBonus = 50 * clearedRows.size() * clearedRows.size();
-        return new ClearRow(clearedRows.size(), tmp, scoreBonus);
+        return new ClearRow(clearedRows.size(), tmp, scoreBonus,clearedRows);
     }
 
     //creates the list for the deep copy of 2D arrays

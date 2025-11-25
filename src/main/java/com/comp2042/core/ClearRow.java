@@ -1,19 +1,21 @@
 package com.comp2042.core;
 
+import java.util.List;
+
 public final class ClearRow {
 
-    private final int linesRemoved;
     private final int[][] newMatrix;
     private final int scoreBonus;
+    private final List<Integer> clearedRowIndices;
 
-    public ClearRow(int linesRemoved, int[][] newMatrix, int scoreBonus) {
-        this.linesRemoved = linesRemoved;
+    public ClearRow(int linesRemoved, int[][] newMatrix, int scoreBonus, List<Integer> clearedRows) {
         this.newMatrix = newMatrix;
         this.scoreBonus = scoreBonus;
-    }
+        this.clearedRowIndices = clearedRows;
 
+    }
     public int getLinesRemoved() {
-        return linesRemoved;
+        return clearedRowIndices == null ? 0 : clearedRowIndices.size();
     }
 
     public int[][] getNewMatrix() {
@@ -23,4 +25,6 @@ public final class ClearRow {
     public int getScoreBonus() {
         return scoreBonus;
     }
+
+    public List<Integer> getClearedRowIndices() {return clearedRowIndices;}
 }
