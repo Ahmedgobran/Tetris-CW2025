@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<VBox fx:controller="com.comp2042.ui.LevelSelectionController"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="30"
+      styleClass="level-selection-container">
+
+    <stylesheets>
+        <URL value="@menu_style.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" bottom="20" left="30" right="30"/>
+    </padding>
+
+    <Text text="SELECT LEVEL" styleClass="settings-title"/>
+
+    <VBox spacing="10" styleClass="level-option-normal" alignment="CENTER">
+        <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
+            <image>
+                <Image url="@Normal-mode.png"/>
+            </image>
+        </ImageView>
+        <Label text="Classic Tetris Experience" styleClass="level-option-description"/>
+        <Button fx:id="normalButton"
+                text="SELECT"
+                onAction="#onNormalClicked"
+                styleClass="menu-button"/>
+    </VBox>
+
+    <VBox spacing="10" styleClass="level-option-challenge" alignment="CENTER">
+        <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
+            <image>
+                <Image url="@Challenge-mode.png"/>
+            </image>
+        </ImageView>
+        <Label text="Coming Soon!" styleClass="level-option-description"/>
+        <Button fx:id="specialButton"
+                text="SELECT"
+                onAction="#onSpecialClicked"
+                styleClass="menu-button"/>
+    </VBox>
+
+    <Button fx:id="backButton"
+            text="BACK"
+            onAction="#onBackClicked"
+            styleClass="menu-button"/>
+
+</VBox>
