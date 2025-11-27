@@ -159,3 +159,42 @@
 .settings-slider .thumb:hover {
     -fx-background-color: #6ab8ff;
 }
+
+/* LEVEL SELECTION STYLES */
+
+.level-selection-container {
+    -fx-background-image: url("main-menu-bg.png");
+    -fx-background-size: cover;
+}
+
+
+.level-option-normal,
+.level-option-challenge {
+    -fx-border-width: 8;
+    -fx-spacing: 10;
+    -fx-alignment: CENTER;
+    -fx-background-color: rgba(103, 100, 100, 0.47);
+    -fx-padding: 15;
+    -fx-background-radius: 10;
+}
+
+.level-option-normal {
+    -fx-border-color: #06b517;
+}
+
+.level-option-challenge {
+    -fx-border-color: #FF69B4;
+}
+
+.level-option-title-image {
+    -fx-alignment: CENTER;
+}
+
+.level-option-description {
+    -fx-font-family: "Let's go Digital";
+    -fx-text-fill: #000000;
+    -fx-font-size: 12;
+    -fx-wrap-text: true;
+    -fx-font-weight: bold;
+
+}

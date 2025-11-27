@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
-import com.comp2042.core.GameController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -56,9 +55,9 @@ public class MainMenuController implements Initializable {
     private void onPlayClicked(ActionEvent event) {
         AudioManager.getInstance().playPlayPress();
         try {
-            startGame();
+            openLevelSelection();
         } catch (Exception e) {
-            System.err.println("Error starting game: " + e.getMessage());
+            System.err.println("Error opening level selection: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -105,18 +104,24 @@ public class MainMenuController implements Initializable {
         System.exit(0);
     }
 
-    private void startGame() throws Exception {
-        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+    private void openLevelSelection() throws Exception {
+        URL location = getClass().getClassLoader().getResource("levelSelection.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
-        GuiController guiController = fxmlLoader.getController();
+        LevelSelectionController levelSelectionController = fxmlLoader.getController();
 
-        stage.setTitle("TetrisJFX");
-        Scene scene = new Scene(root, 435, 510); //adjusts window size of game when launched
-        stage.setScene(scene);
-        stage.show();
+        // Save current scene to return to
+        Scene currentScene = stage.getScene();
 
-        new GameController(guiController);
+        // Set callback to return to menu
+        levelSelectionController.setOnBackCallback(() -> {
+            stage.setScene(currentScene);
+        });
+
+        levelSelectionController.setStage(stage);
+
+        Scene levelSelectionScene = new Scene(root, 455, 540);
+        stage.setScene(levelSelectionScene);
     }
 
     private void openSettings() throws Exception {
