@@ -173,17 +173,17 @@
     -fx-border-width: 8;
     -fx-spacing: 10;
     -fx-alignment: CENTER;
-    -fx-background-color: rgba(103, 100, 100, 0.47);
+    -fx-background-color: rgba(151, 147, 147, 0.36);
     -fx-padding: 15;
     -fx-background-radius: 10;
 }
 
 .level-option-normal {
-    -fx-border-color: #06b517;
+    -fx-border-color: #11a118;
 }
 
 .level-option-challenge {
-    -fx-border-color: #FF69B4;
+    -fx-border-color: #da2828;
 }
 
 .level-option-title-image {

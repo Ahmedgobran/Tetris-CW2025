@@ -27,33 +27,34 @@
 
     <VBox spacing="10" styleClass="level-option-normal" alignment="CENTER">
         <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
-            <image>
-                <Image url="@Normal-mode.png"/>
-            </image>
+            <Image url="@Normal-mode.png"/>
         </ImageView>
         <Label text="Classic Tetris Experience" styleClass="level-option-description"/>
-        <Button fx:id="normalButton"
-                text="SELECT"
-                onAction="#onNormalClicked"
-                styleClass="menu-button"/>
+        <Button onAction="#onNormalClicked"
+                styleClass="image-button">
+            <graphic>
+                <ImageView fitWidth="120" fitHeight="40">
+                    <Image url="@Select-button.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </VBox>
 
     <VBox spacing="10" styleClass="level-option-challenge" alignment="CENTER">
         <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
-            <image>
-                <Image url="@Challenge-mode.png"/>
-            </image>
+            <Image url="@Challenge-mode.png"/>
         </ImageView>
-        <Label text="Coming Soon!" styleClass="level-option-description"/>
-        <Button fx:id="specialButton"
-                text="SELECT"
-                onAction="#onSpecialClicked"
-                styleClass="menu-button"/>
+        <Label text="The blocks disappear. Watch out!" styleClass="level-option-description"/>
+        <Button onAction="#onSpecialClicked"
+                styleClass="image-button">
+            <graphic>
+                <ImageView fitWidth="120" fitHeight="40">
+                    <Image url="@Select-button.png"/>
+                </ImageView>
+            </graphic>
+        </Button>
     </VBox>
 
-    <Button fx:id="backButton"
-            text="BACK"
-            onAction="#onBackClicked"
-            styleClass="menu-button"/>
+    <Button text="BACK" onAction="#onBackClicked" styleClass="menu-button"/>
 
 </VBox>
