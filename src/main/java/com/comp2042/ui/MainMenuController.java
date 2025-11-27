@@ -1,6 +1,5 @@
 package com.comp2042.ui;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -52,7 +51,7 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void onPlayClicked(ActionEvent event) {
+    private void onPlayClicked() {
         AudioManager.getInstance().playPlayPress();
         try {
             openLevelSelection();
@@ -63,7 +62,7 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void onControlsClicked(ActionEvent event) {
+    private void onControlsClicked() {
         AudioManager.getInstance().playButtonPress();
         if (controlsScrollPane != null) {
             boolean isVisible = controlsScrollPane.isVisible();
@@ -79,7 +78,7 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void onSettingsClicked(ActionEvent event) {
+    private void onSettingsClicked() {
         AudioManager.getInstance().playButtonPress();
         try {
             openSettings();
@@ -90,13 +89,13 @@ public class MainMenuController implements Initializable {
     }
 
     @FXML
-    private void onHighScoresClicked(ActionEvent event) {
+    private void onHighScoresClicked() {
         // TODO: Implement later
         System.out.println("do later");
     }
 
     @FXML
-    private void onExitClicked(ActionEvent event) {
+    private void onExitClicked() {
         AudioManager.getInstance().playButtonPress();
         AudioManager.getInstance().stopMusic();
         // Close the application
@@ -114,9 +113,7 @@ public class MainMenuController implements Initializable {
         Scene currentScene = stage.getScene();
 
         // Set callback to return to menu
-        levelSelectionController.setOnBackCallback(() -> {
-            stage.setScene(currentScene);
-        });
+        levelSelectionController.setOnBackCallback(() -> stage.setScene(currentScene)); // changed according to warning (lambda expression)
 
         levelSelectionController.setStage(stage);
 
@@ -135,9 +132,7 @@ public class MainMenuController implements Initializable {
         Scene currentScene = stage.getScene();
 
         // Set callback to return to menu
-        settingsController.setOnCloseCallback(() -> {
-            stage.setScene(currentScene);
-        });
+        settingsController.setOnCloseCallback(() -> stage.setScene(currentScene)); // changed according to warning (lambda expression)
 
         Scene settingsScene = new Scene(root, 440, 510); // adjust size of settings window size
         stage.setScene(settingsScene);
