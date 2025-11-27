@@ -1,150 +1,32 @@
 package com.comp2042.core;
 
-import com.comp2042.logic.bricks.Brick;
-import com.comp2042.logic.bricks.BrickGenerator;
-import com.comp2042.logic.bricks.RandomBrickGenerator;
-
-import java.awt.*;
-
-public class SimpleBoard implements Board {
-
-    private final int width;
-    private final int height;
-    private final BrickGenerator brickGenerator;
-    private final BrickRotator brickRotator;
-    private int[][] currentGameMatrix;
-    private Point currentOffset;
-    private final Score score;
+public class SimpleBoard extends AbstractBoard {
 
     public SimpleBoard(int height, int width) {
-        this.width = width;
-        this.height = height;
-        currentGameMatrix = new int[height][width];
-
-        brickGenerator = new RandomBrickGenerator();
-        brickRotator = new BrickRotator();
-        score = new Score();
-    }
-
-    @Override
-    public boolean moveBrickDown() {
-        Point p = new Point(currentOffset);
-        p.translate(0, 1);
-        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
-        if (conflict) {
-            return false;
-        } else {
-            currentOffset = p;
-            return true;
-        }
-    }
-
-    @Override
-    public boolean moveBrickLeft() {
-        Point p = new Point(currentOffset);
-        p.translate(-1, 0);
-        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
-        if (conflict) {
-            return false;
-        } else {
-            currentOffset = p;
-            return true;
-        }
-    }
-
-    @Override
-    public boolean moveBrickRight() {
-        Point p = new Point(currentOffset);
-        p.translate(1, 0);
-        boolean conflict = MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) p.getX(), (int) p.getY());
-        if (conflict) {
-            return false;
-        } else {
-            currentOffset = p;
-            return true;
-        }
-    }
-
-    @Override
-    public boolean rotateLeftBrick() {
-        NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(currentGameMatrix, nextShape.getShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-        if (conflict) {
-            return false;
-        } else {
-            brickRotator.setCurrentShape(nextShape.getPosition());
-            return true;
-        }
-    }
-
-    @Override
-    public boolean createNewBrick() {
-        Brick currentBrick = brickGenerator.getBrick();
-        brickRotator.setBrick(currentBrick);
-        // FIXED: Spawning at middle (now spawns at top) & centring based on board width
-        currentOffset = new Point((width / 2) - 2, 0);  //decides where bricks will spawn
-        return MatrixOperations.intersect(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        super(height, width);
     }
 
     @Override
     public int[][] getBoardMatrix() {
-        return currentGameMatrix;
+        return boardMatrix;
     }
 
     @Override
-    public ViewData getViewData() { // added getShadowYPosition
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().get(0), getShadowYPosition());    }
-
-    @Override
     public void mergeBrickToBackground() {
-        currentGameMatrix = MatrixOperations.merge(currentGameMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        boardMatrix = MatrixOperations.merge(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
     @Override
     public ClearRow clearRows() {
-        ClearRow clearRow = MatrixOperations.checkRemoving(currentGameMatrix);
-        currentGameMatrix = clearRow.getNewMatrix();
+        ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
+        boardMatrix = clearRow.getNewMatrix();
         return clearRow;
     }
 
     @Override
-    public Score getScore() {
-        return score;
-    }
-
-    @Override
     public void newGame() {
-        currentGameMatrix = new int[height][width];
+        boardMatrix = new int[height][width];
         score.reset();
         createNewBrick();
-    }
-
-    @Override
-    public int getShadowYPosition() {
-        int shadowY = (int) currentOffset.getY();
-        int[][] currentShape = brickRotator.getCurrentShape();
-        int currentX = (int) currentOffset.getX();
-
-        // fix this now copies matrix once outside the loop (perform improvement)
-        int[][] currentMatrix = MatrixOperations.copy(currentGameMatrix);
-        // simulate dropping the brick until it hits something
-        while (true) {
-            int testY = shadowY + 1;
-            boolean conflict = MatrixOperations.intersect(currentMatrix, currentShape, currentX, testY);
-            if (conflict) {
-                break; // if found the landing position
-            }
-            shadowY = testY;
-        }
-        return shadowY;
-    }
-
-    @Override
-    public int hardDrop() {
-        int rowsDropped = 0;
-        while (moveBrickDown()) {
-            rowsDropped++;
-        }
-        return rowsDropped;
     }
 }
