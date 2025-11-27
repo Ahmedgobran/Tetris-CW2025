@@ -117,7 +117,7 @@ public class MainMenuController implements Initializable {
 
         levelSelectionController.setStage(stage);
 
-        Scene levelSelectionScene = new Scene(root, 455, 540);
+        Scene levelSelectionScene = new Scene(root, 455, 570); // adjust size of level selection window size
         stage.setScene(levelSelectionScene);
     }
 

@@ -32,7 +32,7 @@ public class GameControllerChallenge implements InputEventListener {
             return processBrickLanding();
         } else {
             if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(1);
+                board.getScore().add(2);
             }
             /*there was a prob occuring where only refreshes if blocks touch fix:
              Force the UI to refresh the background board on every tick this triggers board.getBoardMatrix(), which checks the timer
@@ -47,7 +47,7 @@ public class GameControllerChallenge implements InputEventListener {
     public DownData onHardDropEvent() {
         int rowsDropped = board.hardDrop();
         if (rowsDropped > 0) {
-            board.getScore().add(rowsDropped * 2);
+            board.getScore().add(rowsDropped * 4);
         }
         return processBrickLanding();
     }
@@ -57,7 +57,7 @@ public class GameControllerChallenge implements InputEventListener {
         ClearRow clearRow = board.clearRows();
 
         if (clearRow.getLinesRemoved() > 0) {
-            board.getScore().add(clearRow.getScoreBonus());
+            board.getScore().add(clearRow.getScoreBonus() *2);
         }
 
         if (board.createNewBrick()) {

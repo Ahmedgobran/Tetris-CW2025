@@ -44,7 +44,8 @@
         <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
             <Image url="@Challenge-mode.png"/>
         </ImageView>
-        <Label text="The blocks disappear. Watch out!" styleClass="level-option-description"/>
+        <Label text="The blocks disappear. Watch out! " styleClass="level-option-description"/>
+        <Label text="(X2 POINTS!)" styleClass="level-option-minidescription"  />
         <Button onAction="#onSpecialClicked"
                 styleClass="image-button">
             <graphic>

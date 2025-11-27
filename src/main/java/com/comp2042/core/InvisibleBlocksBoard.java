@@ -6,8 +6,8 @@ public class InvisibleBlocksBoard extends AbstractBoard {
 
     private boolean revealActive = false;
     private long revealStartTime = 0;
-    private static final long REVEAL_DURATION = 2000; // 2 seconds
-    private static final long REVEAL_INTERVAL = 10000; // 10 seconds
+    private static final long REVEAL_DURATION = 4000; // 2 seconds
+    private static final long REVEAL_INTERVAL = 12000; // 10 seconds
     private long nextRevealTime;
     private volatile boolean gameActive = true;
     private int lastCountdown = 0;
@@ -96,13 +96,12 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     }
     // calculates the number of seconds left until the next block appears
     public String getCountdown() {
-        // If blocks are already visible, no countdown needed
-        if (revealActive) {
+        // Only show countdown during reveal
+        if (!revealActive) {
             lastCountdown = 0;
             return null;
         }
-
-        long timeLeft = nextRevealTime - System.currentTimeMillis();
+        long timeLeft = (revealStartTime + REVEAL_DURATION) - System.currentTimeMillis();
         int secondsLeft = (int) Math.ceil(timeLeft / 1000.0);
 
         // If within the 3-second window (3, 2, or 1)
