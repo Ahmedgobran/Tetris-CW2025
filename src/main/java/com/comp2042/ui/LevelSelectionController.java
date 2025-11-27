@@ -6,18 +6,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import com.comp2042.core.GameController;
+import com.comp2042.core.GameControllerChallenge;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class LevelSelectionController implements Initializable {
 
-    @FXML private Button normalButton;
-    @FXML private Button specialButton;
-    @FXML private Button backButton;
 
     private Stage stage;
     private Runnable onBackCallback;
@@ -49,8 +46,12 @@ public class LevelSelectionController implements Initializable {
     @FXML
     private void onSpecialClicked(ActionEvent event) {
         AudioManager.getInstance().playPlayPress();
-        // TODO: Implement special level game start
-        System.out.println("Special level coming soon!");
+        try {
+            startChallengeGame();
+        } catch (Exception e) {
+            System.err.println("Error starting challenge game: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -75,5 +76,19 @@ public class LevelSelectionController implements Initializable {
         stage.show();
 
         new GameController(guiController);
+    }
+
+    private void startChallengeGame() throws Exception {
+        URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root = fxmlLoader.load();
+        GuiController guiController = fxmlLoader.getController();
+
+        stage.setTitle("TetrisJFX - Challenge Mode ");
+        Scene scene = new Scene(root, 435, 510);
+        stage.setScene(scene);
+        stage.show();
+
+        new GameControllerChallenge(guiController);
     }
 }
