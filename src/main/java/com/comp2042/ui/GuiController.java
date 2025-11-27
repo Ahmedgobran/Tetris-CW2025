@@ -205,6 +205,20 @@ public class GuiController implements Initializable {
         }
     }
 
+    public void showNotification(String message) {
+        NotificationPanel notificationPanel = new NotificationPanel(message);
+        groupNotification.getChildren().add(notificationPanel);
+
+        // Check if it's a countdown number (length 1 or 2)
+        if (message.length() <= 2) {
+            // Use the new method for countdowns
+            notificationPanel.showCountdown(groupNotification.getChildren());
+        } else {
+            // Use the original method for scores
+            notificationPanel.showScore(groupNotification.getChildren());
+        }
+    }
+
     public void setEventListener(InputEventListener eventListener) {
         this.eventListener = eventListener;
     }

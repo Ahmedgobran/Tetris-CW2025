@@ -21,7 +21,6 @@ public class LevelSelectionController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Initialization logic can go here if needed
     }
 
     public void setStage(Stage stage) {
@@ -31,7 +30,7 @@ public class LevelSelectionController implements Initializable {
     public void setOnBackCallback(Runnable callback) {
         this.onBackCallback = callback;
     }
-
+    // Event handler for the normal mode button
     @FXML
     private void onNormalClicked(ActionEvent event) {
         AudioManager.getInstance().playPlayPress();
@@ -42,7 +41,7 @@ public class LevelSelectionController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    // Event handler for the special mode button
     @FXML
     private void onSpecialClicked(ActionEvent event) {
         AudioManager.getInstance().playPlayPress();
@@ -53,7 +52,7 @@ public class LevelSelectionController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    // Event handler for the back button
     @FXML
     private void onBackClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
@@ -63,7 +62,7 @@ public class LevelSelectionController implements Initializable {
             stage.close();
         }
     }
-
+    // Sets up the scene for normal mode where blocks are visible
     private void startNormalGame() throws Exception {
         URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -77,7 +76,7 @@ public class LevelSelectionController implements Initializable {
 
         new GameController(guiController);
     }
-
+    // Sets up the scene for challenge mode where blocks are invisible
     private void startChallengeGame() throws Exception {
         URL location = getClass().getClassLoader().getResource("gameLayout.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);

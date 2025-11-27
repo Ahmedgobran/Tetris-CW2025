@@ -24,6 +24,10 @@ public class GameControllerChallenge implements InputEventListener {
     @Override
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
+        String countdown = board.getCountdown();
+        if (countdown != null) {
+            viewGuiController.showNotification(countdown);
+        }
         if (!canMove) {
             return processBrickLanding();
         } else {

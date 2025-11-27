@@ -6,10 +6,11 @@ public class InvisibleBlocksBoard extends AbstractBoard {
 
     private boolean revealActive = false;
     private long revealStartTime = 0;
-    private static final long REVEAL_DURATION = 2000;
-    private static final long REVEAL_INTERVAL = 7000;
+    private static final long REVEAL_DURATION = 2000; // 2 seconds
+    private static final long REVEAL_INTERVAL = 10000; // 10 seconds
     private long nextRevealTime;
     private volatile boolean gameActive = true;
+    private int lastCountdown = 0;
 
     public InvisibleBlocksBoard(int height, int width) {
         super(height, width);
@@ -50,7 +51,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         }
         return clearRow;
     }
-
+// Resets the board and game state
     @Override
     public void newGame() {
         boardMatrix = new int[height][width];
@@ -64,7 +65,8 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     public void stopGame() {
         gameActive = false;
     }
-
+    /* Checks the system time to toggle the visibility of the blocks
+    if reveal interval passed blocks become visible and if reveal duration ends it hides the blocks again */
     private synchronized void updateRevealState() {
         long currentTime = System.currentTimeMillis();
         if (!revealActive && currentTime >= nextRevealTime) {
@@ -83,12 +85,36 @@ public class InvisibleBlocksBoard extends AbstractBoard {
             System.arraycopy(source[i], 0, destination[i], 0, source[i].length);
         }
     }
-
+    /* Clears the render board by setting all cells to 0 making the locked blocks invisible
+    to the player while preserving them in the logical board */
     private void hideLockedBlocks() {
         for (int i = 0; i < renderBoard.length; i++) {
             for (int j = 0; j < renderBoard[i].length; j++) {
                 renderBoard[i][j] = 0;
             }
         }
+    }
+    // calculates the number of seconds left until the next block appears
+    public String getCountdown() {
+        // If blocks are already visible, no countdown needed
+        if (revealActive) {
+            lastCountdown = 0;
+            return null;
+        }
+
+        long timeLeft = nextRevealTime - System.currentTimeMillis();
+        int secondsLeft = (int) Math.ceil(timeLeft / 1000.0);
+
+        // If within the 3-second window (3, 2, or 1)
+        if (secondsLeft <= 3 && secondsLeft > 0) {
+            // Only return if the number changed
+            if (secondsLeft != lastCountdown) {
+                lastCountdown = secondsLeft;
+                return String.valueOf(secondsLeft);
+            }
+        } else {
+            lastCountdown = 0;
+        }
+        return null;
     }
 }
