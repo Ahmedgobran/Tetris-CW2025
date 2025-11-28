@@ -173,7 +173,7 @@
     -fx-border-width: 6;
     -fx-spacing: 10;
     -fx-alignment: CENTER;
-    -fx-background-color: rgba(151, 147, 147, 0.36);
+    -fx-background-color: #2a2a2a;
     -fx-padding: 15;
     -fx-background-radius: 10;
 }
@@ -192,7 +192,7 @@
 
 .level-option-description {
     -fx-font-family: "Let's go Digital";
-    -fx-text-fill: #000000;
+    -fx-text-fill: #ffffff;
     -fx-font-size: 12;
     -fx-wrap-text: true;
     -fx-font-weight: bold;
@@ -201,7 +201,7 @@
 
 .level-option-minidescription {
     -fx-font-family: "Let's go Digital";
-    -fx-text-fill: #b10202;
+    -fx-text-fill: #d32828;
     -fx-font-size: 12;
     -fx-wrap-text: true;
     -fx-font-weight: bold;

@@ -6,8 +6,8 @@ public class InvisibleBlocksBoard extends AbstractBoard {
 
     private boolean revealActive = false;
     private long revealStartTime = 0;
-    private static final long REVEAL_DURATION = 4000; // 2 seconds
-    private static final long REVEAL_INTERVAL = 12000; // 10 seconds
+    private static final long REVEAL_DURATION = 4000; // 4 seconds
+    private static final long REVEAL_INTERVAL = 10000; // 10 seconds
     private long nextRevealTime;
     private volatile boolean gameActive = true;
     private int lastCountdown = 0;
