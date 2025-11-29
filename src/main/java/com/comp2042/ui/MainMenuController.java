@@ -1,10 +1,7 @@
 package com.comp2042.ui;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
@@ -54,7 +51,7 @@ public class MainMenuController implements Initializable {
     private void onPlayClicked() {
         AudioManager.getInstance().playPlayPress();
         try {
-            openLevelSelection();
+            SceneLoader.openLevelSelection(stage);
         } catch (Exception e) {
             System.err.println("Error opening level selection: " + e.getMessage());
             e.printStackTrace();
@@ -81,7 +78,7 @@ public class MainMenuController implements Initializable {
     private void onSettingsClicked() {
         AudioManager.getInstance().playButtonPress();
         try {
-            openSettings();
+            SceneLoader.openSettings(stage);
         } catch (Exception e) {
             System.err.println("Error opening settings: " + e.getMessage());
             e.printStackTrace();
@@ -103,38 +100,4 @@ public class MainMenuController implements Initializable {
         System.exit(0);
     }
 
-    private void openLevelSelection() throws Exception {
-        URL location = getClass().getClassLoader().getResource("levelSelection.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-        LevelSelectionController levelSelectionController = fxmlLoader.getController();
-
-        // Save current scene to return to
-        Scene currentScene = stage.getScene();
-
-        // Set callback to return to menu
-        levelSelectionController.setOnBackCallback(() -> stage.setScene(currentScene)); // changed according to warning (lambda expression)
-
-        levelSelectionController.setStage(stage);
-
-        Scene levelSelectionScene = new Scene(root, 455, 570); // adjust size of level selection window size
-        stage.setScene(levelSelectionScene);
-    }
-
-    private void openSettings() throws Exception {
-        URL location = getClass().getClassLoader().getResource("settingsPanel.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-
-        SettingsController settingsController = fxmlLoader.getController();
-
-        // Save current scene to return to
-        Scene currentScene = stage.getScene();
-
-        // Set callback to return to menu
-        settingsController.setOnCloseCallback(() -> stage.setScene(currentScene)); // changed according to warning (lambda expression)
-
-        Scene settingsScene = new Scene(root, 440, 510); // adjust size of settings window size
-        stage.setScene(settingsScene);
-    }
 }

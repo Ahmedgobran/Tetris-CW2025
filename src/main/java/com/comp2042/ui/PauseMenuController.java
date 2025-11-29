@@ -66,7 +66,7 @@ public class PauseMenuController implements Initializable {
     private void onSettingsClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
         try {
-            openSettings();
+            SceneLoader.openSettings(stage);
         } catch (Exception e) {
             System.err.println("Error opening settings: " + e.getMessage());
             e.printStackTrace();
@@ -77,40 +77,10 @@ public class PauseMenuController implements Initializable {
     private void onMainMenuClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
         try {
-            returnToMainMenu();
+            SceneLoader.openMainMenu(stage);
         } catch (Exception e) {
             System.err.println("Error returning to main menu: " + e.getMessage());
             e.printStackTrace();
         }
-    }
-
-    private void openSettings() throws Exception {
-        URL location = getClass().getClassLoader().getResource("settingsPanel.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-
-        SettingsController settingsController = fxmlLoader.getController();
-
-        // Save current pause scene to return to
-        Scene currentScene = stage.getScene();
-
-        // Set callback to return to pause menu
-        settingsController.setOnCloseCallback(() -> stage.setScene(currentScene));
-
-        Scene settingsScene = new Scene(root, 440, 510);
-        stage.setScene(settingsScene);
-    }
-
-    private void returnToMainMenu() throws Exception {
-        URL location = getClass().getClassLoader().getResource("mainMenu.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-
-        MainMenuController mainMenuController = fxmlLoader.getController();
-        mainMenuController.setStage(stage);
-
-        stage.setTitle("TetrisJFX");
-        Scene mainMenuScene = new Scene(root, 500, 600);
-        stage.setScene(mainMenuScene);
     }
 }
