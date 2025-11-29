@@ -73,7 +73,7 @@ public class LevelSelectionController implements Initializable {
         Scene scene = new Scene(root, 435, 510);
         stage.setScene(scene);
         stage.show();
-
+        guiController.setGameStage(stage);
         new GameController(guiController);
     }
     // Sets up the scene for challenge mode where blocks are invisible
@@ -87,7 +87,7 @@ public class LevelSelectionController implements Initializable {
         Scene scene = new Scene(root, 435, 510);
         stage.setScene(scene);
         stage.show();
-
+        guiController.setGameStage(stage);
         new GameControllerChallenge(guiController);
     }
 }

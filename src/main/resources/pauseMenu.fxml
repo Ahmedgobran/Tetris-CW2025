@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<BorderPane fx:controller="com.comp2042.ui.PauseMenuController"
+            xmlns:fx="http://javafx.com/fxml"
+            styleClass="pause-menu-container">
+
+    <stylesheets>
+        <URL value="@menu_style.css"/>
+    </stylesheets>
+
+    <center>
+        <VBox alignment="CENTER" spacing="20" styleClass="settings-section" maxWidth="380" maxHeight="280">
+            <Text text="GAME PAUSED" styleClass="pause-title"/>
+
+            <HBox alignment="CENTER" spacing="30">
+                <Button onAction="#onRestartClicked" styleClass="image-button">
+                    <graphic>
+                        <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+                            <Image url="@Restart-button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button onAction="#onMainMenuClicked" styleClass="image-button">
+                    <graphic>
+                        <ImageView fitWidth="125" fitHeight="125" preserveRatio="true">
+                            <Image url="@MM-button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button onAction="#onSettingsClicked" styleClass="image-button">
+                    <graphic>
+                        <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
+                            <Image url="@settP-button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <Button onAction="#onResumeClicked" styleClass="image-button">
+                <graphic>
+                    <ImageView fitWidth="360" fitHeight="100" preserveRatio="true">
+                        <Image url="@Resume-button.png"/>
+                    </ImageView>
+                </graphic>
+            </Button>
+
+        </VBox>
+    </center>
+
+</BorderPane>

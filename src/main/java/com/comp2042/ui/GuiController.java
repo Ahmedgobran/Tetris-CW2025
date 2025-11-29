@@ -11,12 +11,14 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
@@ -41,6 +43,7 @@ public class GuiController implements Initializable {
     private Timeline timeLine;
     private ShadowRender shadowRender;
     private LineClearAnimation lineClearAnimation;
+    private Stage gameStage;
 
     private final BrickColor colorMapper = new BrickColor();
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -250,10 +253,24 @@ public class GuiController implements Initializable {
         if (isPause.getValue() == Boolean.FALSE) {
             timeLine.pause();
             isPause.setValue(Boolean.TRUE);
-                 } else {
-            timeLine.play();
-            isPause.setValue(Boolean.FALSE);
+            // Show pause menu
+            try {
+                Scene gameScene = gameStage.getScene();
+                PauseMenuController.showPauseMenu(gameStage, this, gameScene);
+            } catch (Exception e) {
+                System.err.println("Error showing pause menu: " + e.getMessage());
+                e.printStackTrace();
+            }
                     }
+        gamePanel.requestFocus();
+    }
+
+    public void setGameStage(Stage stage) {
+        this.gameStage = stage;
+    }
+    public void resumeGameFromPause() {
+        timeLine.play();
+        isPause.setValue(Boolean.FALSE);
         gamePanel.requestFocus();
     }
 }

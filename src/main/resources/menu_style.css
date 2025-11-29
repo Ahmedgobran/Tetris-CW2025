@@ -206,3 +206,13 @@
     -fx-wrap-text: true;
     -fx-font-weight: bold;
 }
+
+.pause-menu-container {
+    -fx-background-image: url("main-menu-bg.png");
+}
+
+.pause-title {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-fill: #ffffff;
+}
