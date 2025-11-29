@@ -86,6 +86,14 @@ public class GuiController implements Initializable {
                 if (keyEvent.getCode() == KeyCode.P) {
                     pauseGame(null);
                 }
+                if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    timeLine.stop();
+                    try {
+                        SceneLoader.openMainMenu(gameStage);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
             }
         });
         gameOverPanel.setVisible(false);
