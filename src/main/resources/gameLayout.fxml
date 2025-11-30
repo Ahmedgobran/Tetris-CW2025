@@ -65,7 +65,7 @@
                 <graphic>
                     <!--moved logic from guicontroller to here since more simple-->
                     <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
-                        <Image url="@Restart-button.png"/>
+                        <Image url="@restart-button.png"/>
                     </ImageView>
                 </graphic>
             </Button>

@@ -24,6 +24,15 @@ public class GameController implements InputEventListener {
     @Override
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
+
+        // instant lock
+        if (canMove) {
+            ViewData currentView = board.getViewData();
+            if (currentView.getyPosition() == currentView.getShadowYPosition()) {
+                return processBrickLanding();
+            }
+        }
+
         if (!canMove) {
             return processBrickLanding(); // use helper method
         } else {

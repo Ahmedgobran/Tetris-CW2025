@@ -28,16 +28,22 @@ public class GameControllerChallenge implements InputEventListener {
         if (countdown != null) {
             viewGuiController.showNotification(countdown);
         }
+
+        // instant lock
+        if (canMove) {
+            ViewData currentView = board.getViewData();
+            if (currentView.getyPosition() == currentView.getShadowYPosition()) {
+                return processBrickLanding();
+            }
+        }
+
         if (!canMove) {
             return processBrickLanding();
         } else {
             if (event.getEventSource() == EventSource.USER) {
                 board.getScore().add(2);
             }
-            /*there was a prob occuring where only refreshes if blocks touch fix:
-             Force the UI to refresh the background board on every tick this triggers board.getBoardMatrix(), which checks the timer
-             and toggles invisibility even while the piece is still falling.
-            */
+            // Force refresh for invisible block mechanics
             viewGuiController.refreshGameBackground(board.getBoardMatrix());
             return new DownData(null, board.getViewData());
         }
