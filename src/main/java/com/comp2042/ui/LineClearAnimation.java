@@ -18,13 +18,15 @@ public class LineClearAnimation {
     private final BrickColor colorMapper;
     private final int brickSize;
     private final int brickArcSize;
+    private final int boardWidth;
     private static final int VISIBLE_ROWS_OFFSET = 2;
 
-    public LineClearAnimation(GridPane gamePanel, BrickColor colorMapper, int brickSize, int brickArcSize) {
+    public LineClearAnimation(GridPane gamePanel, BrickColor colorMapper, int brickSize, int brickArcSize, int boardWidth) {
         this.gamePanel = gamePanel;
         this.colorMapper = colorMapper;
         this.brickSize = brickSize;
         this.brickArcSize = brickArcSize;
+        this.boardWidth = boardWidth;
     }
 
     //Animate cleared rows with flash effect
@@ -44,7 +46,7 @@ public class LineClearAnimation {
             int displayRow = rowIndex - VISIBLE_ROWS_OFFSET;
             if (displayRow < 0) continue; // Skip hidden rows
 
-            for (int col = 0; col < 11; col++) { // 11 columns
+            for (int col = 0; col < boardWidth; col++) { // num of  columns
                 Rectangle flash = new Rectangle(brickSize, brickSize);
                 flash.setFill(Color.GHOSTWHITE);
                 flash.setArcHeight(brickArcSize);
