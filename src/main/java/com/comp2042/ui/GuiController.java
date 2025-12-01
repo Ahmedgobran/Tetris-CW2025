@@ -8,8 +8,10 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -20,6 +22,7 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.scene.layout.StackPane;
 
 public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
@@ -31,6 +34,7 @@ public class GuiController implements Initializable {
     @FXML private GridPane nextPiecePanel;
     @FXML private Label scoreLabel;
     @FXML private GameOverPanel gameOverPanel;
+    @FXML private StackPane rootContainer;
 
     private BoardRender boardRenderer;
     private InputEventListener eventListener;
@@ -41,6 +45,7 @@ public class GuiController implements Initializable {
     private ShadowRender shadowRender;
     private LineClearAnimation lineClearAnimation;
     private Stage gameStage;
+    private Parent pauseMenuRoot = null;
     private GameInputHandler inputHandler;
     private final BrickColor colorMapper = new BrickColor();
     private final BooleanProperty isPause = new SimpleBooleanProperty();
@@ -242,23 +247,38 @@ public class GuiController implements Initializable {
             isPause.setValue(Boolean.TRUE);
             // Show pause menu
             try {
-                Scene gameScene = gameStage.getScene();
-                PauseMenuController.showPauseMenu(gameStage, this, gameScene);
+                if (pauseMenuRoot == null) {
+                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("pauseMenu.fxml"));
+                    pauseMenuRoot = fxmlLoader.load();
+                    // Configure the controller
+                    PauseMenuController pauseController = fxmlLoader.getController();
+                    pauseController.setGuiController(this);
+                    pauseController.setStage(gameStage);
+                }
+                // Add the menu to the StackPane (Overlay on top of game)
+                rootContainer.getChildren().add(pauseMenuRoot);
             } catch (Exception e) {
                 System.err.println("Error showing pause menu: " + e.getMessage());
                 e.printStackTrace();
             }
                     }
-        gamePanel.requestFocus();
     }
-
-    public void setGameStage(Stage stage) {
-        this.gameStage = stage;
+    public void closePauseMenu() {
+        if (pauseMenuRoot != null) {
+            // Remove the overlay
+            rootContainer.getChildren().remove(pauseMenuRoot);
+            // Resume the game
+            resumeGameFromPause();
+        }
     }
+    // Update resumeGameFromPause to ensure focus returns to game
     public void resumeGameFromPause() {
         timeLine.play();
         isPause.setValue(Boolean.FALSE);
         gamePanel.requestFocus();
+    }
+    public void setGameStage(Stage stage) {
+        this.gameStage = stage;
     }
     public boolean isGameOver() {
         return isGameOver.getValue();

@@ -2,10 +2,7 @@ package com.comp2042.ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -15,7 +12,7 @@ public class PauseMenuController implements Initializable {
 
     private Stage stage;
     private GuiController guiController;
-    private Scene gameScene;
+    // Removed 'private Scene gameScene;' - no longer needed
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -30,45 +27,32 @@ public class PauseMenuController implements Initializable {
         this.guiController = guiController;
     }
 
-    public void setGameScene(Scene gameScene) {
-        this.gameScene = gameScene;
-    }
-
-    public static void showPauseMenu(Stage stage, GuiController guiController, Scene gameScene) throws Exception {
-        URL location = guiController.getClass().getClassLoader().getResource("pauseMenu.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        Parent root = fxmlLoader.load();
-
-        PauseMenuController pauseMenuController = fxmlLoader.getController();
-        pauseMenuController.setStage(stage);
-        pauseMenuController.setGuiController(guiController);
-        pauseMenuController.setGameScene(gameScene);
-
-        Scene pauseMenuScene = new Scene(root, 435, 510);
-        stage.setScene(pauseMenuScene);
-    }
+    // Removed the setGameScene method
+    // Removed the static showPauseMenu method (Logic moved to GuiController)
 
     @FXML
     private void onResumeClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
-        stage.setScene(gameScene);
-        guiController.resumeGameFromPause();
+        // Instead of switching scenes, we just close the overlay
+        guiController.closePauseMenu();
     }
 
     @FXML
     private void onRestartClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
-        stage.setScene(gameScene);
+        // Start new game
         guiController.newGame(null);
+        // Close the overlay
+        guiController.closePauseMenu();
     }
 
     @FXML
     private void onSettingsClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
         try {
+            // This still needs to switch scenes so we levae as is
             SceneLoader.openSettings(stage);
         } catch (Exception e) {
-            System.err.println("Error opening settings: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -77,9 +61,9 @@ public class PauseMenuController implements Initializable {
     private void onMainMenuClicked(ActionEvent event) {
         AudioManager.getInstance().playButtonPress();
         try {
+            // This still needs to switch scenes so we levae as is
             SceneLoader.openMainMenu(stage);
         } catch (Exception e) {
-            System.err.println("Error returning to main menu: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -5,10 +5,14 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.Group?>
 
-<HBox fx:controller="com.comp2042.ui.GuiController"
-      xmlns:fx="http://javafx.com/fxml"
-      styleClass="root">
-    <stylesheets>
+<StackPane fx:id="rootContainer"
+           fx:controller="com.comp2042.ui.GuiController"
+           xmlns:fx="http://javafx.com/fxml"
+           prefWidth="440" prefHeight="510">
+
+    <!-- Main Game Content -->
+    <HBox styleClass="root">
+        <stylesheets>
             <URL value="@window_style.css"/> <!--moved up (was prev below) wasnt refrenced properly-->
     </stylesheets>
     <Pane prefWidth="260" prefHeight="510">
@@ -74,3 +78,4 @@
     </VBox>
 
 </HBox>
+</StackPane>

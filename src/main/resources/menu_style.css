@@ -207,8 +207,8 @@
     -fx-font-weight: bold;
 }
 
-.pause-menu-container {
-    -fx-background-image: url("main-menu-bg.png");
+.pause-overlay {
+    -fx-background-color: rgba(0, 0, 0, 0.5); /* 50% transparent black */
 }
 
 .pause-title {
