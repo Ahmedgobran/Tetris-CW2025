@@ -25,7 +25,7 @@
                 <Button onAction="#onRestartClicked" styleClass="image-button">
                     <graphic>
                         <ImageView fitWidth="75" fitHeight="75" preserveRatio="true">
-                            <Image url="@restart-button.png"/>
+                            <Image url="@Images/restart-button.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -33,7 +33,7 @@
                 <Button onAction="#onMainMenuClicked" styleClass="image-button">
                     <graphic>
                         <ImageView fitWidth="100" fitHeight="100" preserveRatio="true">
-                            <Image url="@MM-button.png"/>
+                            <Image url="@Images/MM-button.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -41,7 +41,7 @@
                 <Button onAction="#onSettingsClicked" styleClass="image-button">
                     <graphic>
                         <ImageView fitWidth="75" fitHeight="75" preserveRatio="true">
-                            <Image url="@settP-button.png"/>
+                            <Image url="@Images/settP-button.png"/>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -50,7 +50,7 @@
             <Button onAction="#onResumeClicked" styleClass="image-button">
                 <graphic>
                     <ImageView fitWidth="260" fitHeight="70" preserveRatio="true">
-                        <Image url="@Resume-button.png"/>
+                        <Image url="@Images/Resume-button.png"/>
                     </ImageView>
                 </graphic>
             </Button>

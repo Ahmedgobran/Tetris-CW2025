@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<VBox fx:controller="com.comp2042.ui.ControlsController"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="15"
+      styleClass="settings-container">
+
+    <stylesheets>
+        <URL value="@menu_style.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" bottom="20" left="30" right="30"/>
+    </padding>
+
+    <Text text="CONTROLS" styleClass="settings-title"/>
+
+    <VBox alignment="CENTER" spacing="10" VBox.vgrow="ALWAYS" styleClass="settings-section">
+
+        <GridPane alignment="CENTER" hgap="20" vgap="12">
+            <columnConstraints>
+                <ColumnConstraints halignment="RIGHT" minWidth="120"/>
+                <ColumnConstraints halignment="LEFT" minWidth="150"/>
+            </columnConstraints>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="0" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/A-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Move Left" styleClass="controls-text" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="1" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/D-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Move Right" styleClass="controls-text" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/W-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Rotate" styleClass="controls-text" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="3" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/S-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Soft Drop" styleClass="controls-text" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="4" GridPane.columnIndex="0">
+                <ImageView fitWidth="90" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/Space-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Hard Drop" styleClass="controls-text" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="5" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/P-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Pause" styleClass="controls-text" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="6" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/N-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="New Game" styleClass="controls-text" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="7" GridPane.columnIndex="0">
+                <ImageView fitWidth="70" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/Esc-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Main Menu" styleClass="controls-text" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+        </GridPane>
+
+    </VBox>
+
+    <Button text="BACK"
+            onAction="#onBackClicked"
+            styleClass="menu-button"
+            prefWidth="100" prefHeight="35"/>
+
+</VBox>

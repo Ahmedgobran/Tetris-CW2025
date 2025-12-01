@@ -26,7 +26,7 @@
         <VBox.margin>
             <Insets top="50" bottom="10"/>
         </VBox.margin>
-        <Image url="@tetris-logo.png"/>
+        <Image url="@Images/tetris-logo.png"/>
     </ImageView>
 
     <!-- Buttons Container -->
@@ -37,7 +37,7 @@
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="180" fitHeight="40">
-                    <Image url="@play-button.png"/>
+                    <Image url="@Images/play-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -47,7 +47,7 @@
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="180" fitHeight="40">
-                    <Image url="@controls-button.png"/>
+                    <Image url="@Images/controls-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -58,7 +58,7 @@
                 disable="true">
             <graphic>
                 <ImageView fitWidth="180" fitHeight="40" opacity="0.5">
-                    <Image url="@high_scores-button.png"/>
+                    <Image url="@Images/high_scores-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -68,7 +68,7 @@
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="180" fitHeight="40" >
-                    <Image url="@settings-button.png"/>
+                    <Image url="@Images/settings-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -78,52 +78,12 @@
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="180" fitHeight="40">
-                    <Image url="@exit-button.png"/>
+                    <Image url="@Images/exit-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
 
-    </VBox>
-
-    <!-- Controls Panel with ScrollPane (hidden by default) -->
-    <ScrollPane fx:id="controlsScrollPane"
-                visible="false"
-                managed="false"
-                fitToWidth="true"
-                prefHeight="280"
-                styleClass="controls-scroll-pane">
-
-        <VBox alignment="TOP_CENTER"
-              spacing="5"
-              styleClass="controls-panel">
-
-            <Text text="CONTROLS" styleClass="controls-header"/>
-
-            <VBox styleClass="controls-list">
-                <Text text="LEFT ARROW / A      Move Left" styleClass="controls-text"/>
-                <Text text="RIGHT ARROW / D     Move Right" styleClass="controls-text"/>
-                <Text text="UP ARROW / W        Rotate" styleClass="controls-text"/>
-                <Text text="DOWN ARROW / S      Soft Drop" styleClass="controls-text"/>
-                <Text text="SPACE               Hard Drop" styleClass="controls-text"/>
-                <Text text="P                   Pause/Resume" styleClass="controls-text"/>
-                <Text text="N                   New Game" styleClass="controls-text"/>
-            </VBox>
-
-            <Text text=" " styleClass="controls-section-spacing"/>
-
-            <Text text="SCORING" styleClass="scoring-header"/>
-
-            <VBox styleClass="scoring-list">
-                <Text text="Soft Drop (per row):    +1 point" styleClass="scoring-text"/>
-                <Text text="Hard Drop (per row):    +2 points" styleClass="scoring-text"/>
-                <Text text="Clear 1 line:           +50 points" styleClass="scoring-text"/>
-                <Text text="Clear 2 lines:          +200 points" styleClass="scoring-text"/>
-                <Text text="Clear 3 lines:          +450 points" styleClass="scoring-text"/>
-                <Text text="Clear 4 lines (Tetris): +800 points" styleClass="scoring-text"/>
-            </VBox>
-
         </VBox>
-    </ScrollPane>
 
     <padding>
         <Insets top="10" bottom="10" left="20" right="20"/>

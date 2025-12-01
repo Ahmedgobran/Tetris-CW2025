@@ -66,4 +66,23 @@ public class SceneLoader {
         Scene levelSelectionScene = new Scene(root, 455, 570);
         stage.setScene(levelSelectionScene);
     }
+
+    public static void openControls(Stage stage) throws Exception {
+        URL location = SceneLoader.class.getClassLoader().getResource("controlsPanel.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root = fxmlLoader.load();
+
+        ControlsController controlsController = fxmlLoader.getController();
+
+        // Save current scene to return to
+        Scene currentScene = stage.getScene();
+
+        // Set callback to return to previous scene
+        controlsController.setOnCloseCallback(() -> stage.setScene(currentScene));
+        controlsController.setStage(stage);
+
+        Scene controlsScene = new Scene(root, 450, 550);
+        stage.setScene(controlsScene);
+    }
+
 }

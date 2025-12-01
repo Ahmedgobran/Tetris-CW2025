@@ -20,11 +20,6 @@ public class MainMenuController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Hide controls panel initially
-        if (controlsScrollPane != null) {
-            controlsScrollPane.setVisible(false);
-            controlsScrollPane.setManaged(false);
-        }
 
         // Enable settings button (was disabled)
         if (settingsButton != null) {
@@ -61,16 +56,12 @@ public class MainMenuController implements Initializable {
     @FXML
     private void onControlsClicked() {
         AudioManager.getInstance().playButtonPress();
-        if (controlsScrollPane != null) {
-            boolean isVisible = controlsScrollPane.isVisible();
-            controlsScrollPane.setVisible(!isVisible);
-            controlsScrollPane.setManaged(!isVisible);
-            // Adjust window size if controls panel is collapsed/expanded
-            if (!isVisible) {
-                stage.setHeight(670);
-            } else {
-                stage.setHeight(550);
-            }
+        try {
+            // Use the new scene loader we added in SceneLoader to open the controls screen
+            SceneLoader.openControls(stage);
+        } catch (Exception e) {
+            System.err.println("Error opening controls: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

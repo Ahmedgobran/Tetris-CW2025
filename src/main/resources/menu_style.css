@@ -2,7 +2,7 @@
 /*moved here from window_style*/
 
 .menu-container {
-    -fx-background-image: url("main-menu-bg.png");
+    -fx-background-image: url("Images/main-menu-bg.png");
     -fx-background-size: cover;
 }
 .menu-button {
@@ -27,31 +27,11 @@
 }
 
 
-.controls-scroll-pane {
-    -fx-background: transparent;
-    -fx-background-color: transparent;
-}
-
-.controls-panel {
-    -fx-background-color: #1a1a1a;
-    -fx-padding: 15;
-    -fx-border-color: #4a9eff;
-    -fx-border-width: 2;
-}
-
-.controls-header {
-    -fx-font-size: 20px;
-    -fx-font-weight: bold;
-    -fx-fill: #4a9eff;
-}
-
 .controls-text {
-    -fx-font-size: 11px;
+    -fx-font-family: "Let's go Digital";
+    -fx-font-size: 20px;
     -fx-fill: white;
-}
-
-.controls-section-spacing {
-    -fx-font-size: 5px;
+    fx-font-weight: bold;
 }
 
 .scoring-header {
@@ -65,11 +45,6 @@
     -fx-fill: #00ff00;
 }
 
-.controls-list {
-    -fx-spacing: 3;
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 20;
-}
 
 .scoring-list {
     -fx-spacing: 2;
@@ -99,7 +74,7 @@
 /* SETTINGS STYLES */
 
 .settings-container {
-    -fx-background-image: url("main-menu-bg.png");
+    -fx-background-image: url("Images/main-menu-bg.png");
     -fx-background-size: cover;
 }
 
@@ -163,7 +138,7 @@
 /* LEVEL SELECTION STYLES */
 
 .level-selection-container {
-    -fx-background-image: url("main-menu-bg.png");
+    -fx-background-image: url("Images/main-menu-bg.png");
     -fx-background-size: cover;
 }
 

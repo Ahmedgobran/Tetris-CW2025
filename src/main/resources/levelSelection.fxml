@@ -27,14 +27,14 @@
 
     <VBox spacing="10" styleClass="level-option-normal" alignment="CENTER">
         <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
-            <Image url="@Normal-mode.png"/>
+            <Image url="@Images/Normal-mode.png"/>
         </ImageView>
         <Label text="Classic Tetris Experience" styleClass="level-option-description"/>
         <Button onAction="#onNormalClicked"
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="120" fitHeight="40">
-                    <Image url="@Select-button.png"/>
+                    <Image url="@Images/Select-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
@@ -42,7 +42,7 @@
 
     <VBox spacing="10" styleClass="level-option-challenge" alignment="CENTER">
         <ImageView styleClass="level-option-title-image" fitWidth="250" fitHeight="200" preserveRatio="true">
-            <Image url="@Challenge-mode.png"/>
+            <Image url="@Images/Challenge-mode.png"/>
         </ImageView>
         <Label text="The blocks disappear. Watch out! " styleClass="level-option-description"/>
         <Label text="(X2 POINTS!)" styleClass="level-option-minidescription"  />
@@ -50,7 +50,7 @@
                 styleClass="image-button">
             <graphic>
                 <ImageView fitWidth="120" fitHeight="40">
-                    <Image url="@Select-button.png"/>
+                    <Image url="@Images/Select-button.png"/>
                 </ImageView>
             </graphic>
         </Button>
