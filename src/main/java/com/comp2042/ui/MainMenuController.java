@@ -78,8 +78,13 @@ public class MainMenuController implements Initializable {
 
     @FXML
     private void onHighScoresClicked() {
-        // TODO: Implement later
-        System.out.println("do later");
+        AudioManager.getInstance().playButtonPress();
+        try {
+            SceneLoader.openHighScores(stage);
+        } catch (Exception e) {
+            System.err.println("Error opening high scores: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML

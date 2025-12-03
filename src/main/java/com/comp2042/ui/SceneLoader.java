@@ -85,4 +85,18 @@ public class SceneLoader {
         stage.setScene(controlsScene);
     }
 
+    public static void openHighScores(Stage stage) throws Exception {
+        URL location = SceneLoader.class.getClassLoader().getResource("highScores.fxml");
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+        Parent root = fxmlLoader.load();
+
+        HighScoreController controller = fxmlLoader.getController();
+        Scene currentScene = stage.getScene();
+        controller.setOnCloseCallback(() -> stage.setScene(currentScene));
+        controller.setStage(stage);
+
+        Scene scene = new Scene(root, 440, 510);
+        stage.setScene(scene);
+    }
+
 }

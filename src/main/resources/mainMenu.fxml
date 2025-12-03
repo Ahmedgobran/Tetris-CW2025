@@ -54,10 +54,9 @@
 
         <!-- High Scores Button (disabled for now) -->
         <Button onAction="#onHighScoresClicked"
-                styleClass="image-button"
-                disable="true">
+                styleClass="image-button">
             <graphic>
-                <ImageView fitWidth="180" fitHeight="40" opacity="0.5">
+                <ImageView fitWidth="180" fitHeight="40" >
                     <Image url="@Images/high_scores-button.png"/>
                 </ImageView>
             </graphic>

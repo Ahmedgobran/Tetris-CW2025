@@ -1,6 +1,7 @@
 package com.comp2042.core;
 
 import com.comp2042.ui.GuiController;
+import com.comp2042.ui.HighScoreManager;
 
 public class GameController implements InputEventListener {
 
@@ -63,6 +64,7 @@ public class GameController implements InputEventListener {
 
         // This logic was duplicated in both methods
         if (board.createNewBrick()) {
+            HighScoreManager.getInstance().addScore(board.getScore().scoreProperty().get());
             viewGuiController.gameOver();
         }
 

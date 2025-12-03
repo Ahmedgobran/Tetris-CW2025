@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+
+<VBox fx:controller="com.comp2042.ui.HighScoreController"
+      xmlns:fx="http://javafx.com/fxml"
+      alignment="CENTER"
+      spacing="20"
+      styleClass="settings-container">
+
+    <stylesheets>
+        <URL value="@menu_style.css"/>
+    </stylesheets>
+
+    <padding>
+        <Insets top="20" bottom="20" left="30" right="30"/>
+    </padding>
+
+    <Text text="HIGH SCORES" styleClass="settings-title"/>
+
+    <VBox fx:id="scoreContainer"
+          alignment="TOP_CENTER"
+          spacing="10"
+          VBox.vgrow="ALWAYS"
+          styleClass="settings-section">
+
+    </VBox>
+
+    <Button text="BACK"
+            onAction="#onBackClicked"
+            styleClass="menu-button"
+            prefWidth="100" prefHeight="35"/>
+
+</VBox>
