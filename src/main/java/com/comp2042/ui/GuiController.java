@@ -12,17 +12,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.scene.layout.StackPane;
 
 public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
@@ -36,17 +34,21 @@ public class GuiController implements Initializable {
     @FXML private GameOverPanel gameOverPanel;
     @FXML private StackPane rootContainer;
 
+    // --- Renderers ---
     private BoardRender boardRenderer;
-    private InputEventListener eventListener;
-    private Rectangle[][] rectangles;
+    private ActivePieceRenderer activePieceRenderer; // NEW: Replaces Rectangle[][]
     private NextPieceRenderer nextPieceRenderer;
     private Group shadowGroup;
-    private Timeline timeLine;
     private ShadowRender shadowRender;
     private LineClearAnimation lineClearAnimation;
+
+    // --- Logic & Helpers ---
+    private InputEventListener eventListener;
+    private GameInputHandler inputHandler;
+    private Timeline timeLine;
     private Stage gameStage;
     private Parent pauseMenuRoot = null;
-    private GameInputHandler inputHandler;
+
     private final BrickColor colorMapper = new BrickColor();
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
@@ -67,17 +69,10 @@ public class GuiController implements Initializable {
         boardRenderer = new BoardRender(gamePanel, boardMatrix, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
         lineClearAnimation = new LineClearAnimation(gamePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE, boardMatrix[0].length);
 
-        rectangles = new Rectangle[brick.getBrickData().length][brick.getBrickData()[0].length];
-        for (int i = 0; i < brick.getBrickData().length; i++) {
-            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                Rectangle rectangle = new Rectangle(BRICK_SIZE, BRICK_SIZE);
-                rectangle.setFill(colorMapper.getFillColor(brick.getBrickData()[i][j])); //changed to colorMapper.getFillColor() (used Brick color class)
-                rectangles[i][j] = rectangle;
-                brickPanel.add(rectangle, j, i);
-            }
-        }
-        brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-        brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
+        /* Old code manually creating rectangles is gone
+        We now use the activepiecerenderer*/
+        activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
+        activePieceRenderer.initRectangles(brick.getBrickData());
 
 
         if (nextPiecePanel != null) {
@@ -95,12 +90,7 @@ public class GuiController implements Initializable {
         shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
         // check if ghost piece enabled before showing shadow
         if (GameSettings.getInstance().isGhostPieceEnabled()) {
-            shadowRender.updateShadow(
-                    brick,
-                    gamePanel.getLayoutX(),
-                    gamePanel.getLayoutY(),
-                    brickPanel.getVgap()
-            );
+            shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
         }
         timeLine = new Timeline(new KeyFrame(
                 Duration.millis(400),
@@ -112,14 +102,10 @@ public class GuiController implements Initializable {
 
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
-            brickPanel.setLayoutX(gamePanel.getLayoutX() + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * BRICK_SIZE);
-            brickPanel.setLayoutY(-42 + gamePanel.getLayoutY() + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * BRICK_SIZE);
-            for (int i = 0; i < brick.getBrickData().length; i++) {
-                for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                    setRectangleData(brick.getBrickData()[i][j], rectangles[i][j]);
-                }
-            }
-            // check if ghost piece enabled
+            // refactored
+            // Delegating drawing to the renderer
+            activePieceRenderer.update(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY());
+
             if (GameSettings.getInstance().isGhostPieceEnabled()) {
                 shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
             } else {
@@ -137,13 +123,7 @@ public class GuiController implements Initializable {
         boardRenderer.refresh(board);
     }
 
-    private void setRectangleData(int color, Rectangle rectangle) {
-        rectangle.setFill(colorMapper.getFillColor(color)); //changed to colorMapper.getFillColor() (used Brick color class)
-        rectangle.setArcHeight(9);
-        rectangle.setArcWidth(9);
-    }
-
-    // Public Actions (Called by GameInputHandler)
+    // --- Public Actions (Called by GameInputHandler) ---
     public void moveLeft() {
         refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
     }
@@ -214,16 +194,14 @@ public class GuiController implements Initializable {
         }
     }
 
-    public void setEventListener(InputEventListener eventListener) {
-        this.eventListener = eventListener;
-    }
+    // -- setters & getters --
+    public void setEventListener(InputEventListener eventListener) { this.eventListener = eventListener; }
+    public void bindScore(IntegerProperty integerProperty) { if (scoreLabel != null) scoreLabel.textProperty().bind(integerProperty.asString()); }
+    public void setGameStage(Stage stage) { this.gameStage = stage; }
+    public boolean isGameOver() { return isGameOver.getValue(); }
+    public boolean isGamePaused() { return isPause.getValue(); }
 
-    public void bindScore(IntegerProperty integerProperty) {
-        if (scoreLabel != null) {
-            scoreLabel.textProperty().bind(integerProperty.asString());
-        }
-    }
-
+    // --- Game Control Methods ---
     public void gameOver() {
         timeLine.stop();
         gameOverPanel.setVisible(true);
@@ -258,7 +236,6 @@ public class GuiController implements Initializable {
                 // Add the menu to the StackPane (Overlay on top of game)
                 rootContainer.getChildren().add(pauseMenuRoot);
             } catch (Exception e) {
-                System.err.println("Error showing pause menu: " + e.getMessage());
                 e.printStackTrace();
             }
                     }
@@ -276,14 +253,5 @@ public class GuiController implements Initializable {
         timeLine.play();
         isPause.setValue(Boolean.FALSE);
         gamePanel.requestFocus();
-    }
-    public void setGameStage(Stage stage) {
-        this.gameStage = stage;
-    }
-    public boolean isGameOver() {
-        return isGameOver.getValue();
-    }
-    public boolean isGamePaused() {
-        return isPause.getValue();
     }
 }
