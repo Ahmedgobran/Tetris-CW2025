@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<BorderPane fx:controller="com.comp2042.ui.PauseMenuController"
+<BorderPane fx:controller="com.comp2042.controller.PauseMenuController"
             xmlns:fx="http://javafx.com/fxml"
             styleClass="pause-overlay">
 

@@ -9,7 +9,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<VBox fx:controller="com.comp2042.ui.MainMenuController"
+<VBox fx:controller="com.comp2042.controller.MainMenuController"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="15"

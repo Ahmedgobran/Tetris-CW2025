@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<VBox fx:controller="com.comp2042.ui.ControlsController"
+<VBox fx:controller="com.comp2042.controller.ControlsController"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="15"

@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <?import java.net.URL?>
 
-<VBox fx:controller="com.comp2042.ui.LevelSelectionController"
+<VBox fx:controller="com.comp2042.controller.LevelSelectionController"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="30"

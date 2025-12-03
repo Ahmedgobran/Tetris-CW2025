@@ -1,4 +1,4 @@
-<?import com.comp2042.ui.GameOverPanel?>
+<?import com.comp2042.view.GameOverPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
@@ -6,7 +6,7 @@
 <?import javafx.scene.Group?>
 
 <StackPane fx:id="rootContainer"
-           fx:controller="com.comp2042.ui.GuiController"
+           fx:controller="com.comp2042.controller.GuiController"
            xmlns:fx="http://javafx.com/fxml"
            prefWidth="440" prefHeight="510">
 

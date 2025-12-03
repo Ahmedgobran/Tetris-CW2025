@@ -10,7 +10,7 @@
 <?import javafx.geometry.Insets?>
 <?import java.net.URL?>
 
-<VBox fx:controller="com.comp2042.ui.SettingsController"
+<VBox fx:controller="com.comp2042.controller.SettingsController"
       xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="20"
