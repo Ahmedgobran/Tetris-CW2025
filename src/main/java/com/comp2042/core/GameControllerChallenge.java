@@ -1,33 +1,23 @@
 package com.comp2042.core;
 
 import com.comp2042.ui.GuiController;
-import com.comp2042.ui.HighScoreManager;
 
-public class GameControllerChallenge implements InputEventListener {
-
-    private final InvisibleBlocksBoard board = new InvisibleBlocksBoard(25, 11);
-
-    private final GuiController viewGuiController;
+public class GameControllerChallenge extends AbstractGameController {
 
     public GameControllerChallenge(GuiController c) {
-        viewGuiController = c;
-        board.createNewBrick();
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
-    }
-
-    @Override
-    public int[][] getBoard() {
-        return board.getBoardMatrix();
+        super(c, new InvisibleBlocksBoard(25, 11));
     }
 
     @Override
     public DownData onDownEvent(MoveEvent event) {
         boolean canMove = board.moveBrickDown();
-        String countdown = board.getCountdown();
-        if (countdown != null) {
-            viewGuiController.showNotification(countdown);
+
+        // Check countdown for invisible blocks
+        if (board instanceof InvisibleBlocksBoard invisibleBoard) {
+            String countdown = invisibleBoard.getCountdown();
+            if (countdown != null) {
+                viewGuiController.showNotification(countdown);
+            }
         }
 
         // instant lock
@@ -42,10 +32,9 @@ public class GameControllerChallenge implements InputEventListener {
             return processBrickLanding();
         } else {
             if (event.getEventSource() == EventSource.USER) {
-                board.getScore().add(2);
+                board.getScore().add(2); //  Double Score
             }
-            // Force refresh for invisible block mechanics
-            viewGuiController.refreshGameBackground(board.getBoardMatrix());
+            refreshView(); //  Force refresh for invisible effect
             return new DownData(null, board.getViewData());
         }
     }
@@ -54,53 +43,21 @@ public class GameControllerChallenge implements InputEventListener {
     public DownData onHardDropEvent() {
         int rowsDropped = board.hardDrop();
         if (rowsDropped > 0) {
-            board.getScore().add(rowsDropped * 4);
+            board.getScore().add(rowsDropped * 4); // Double the Score
         }
         return processBrickLanding();
     }
 
-    private DownData processBrickLanding() {
-        board.mergeBrickToBackground();
-        ClearRow clearRow = board.clearRows();
+    @Override
+    protected int calculateScore(ClearRow clearRow) {
+        return clearRow.getScoreBonus() * 2; // Specific: Double Score
+    }
 
-        if (clearRow.getLinesRemoved() > 0) {
-            board.getScore().add(clearRow.getScoreBonus() *2);
+    @Override
+    protected void handleGameOver() {
+        if (board instanceof InvisibleBlocksBoard invisibleBoard) {
+            invisibleBoard.stopGame();
         }
-
-        if (board.createNewBrick()) {
-            board.stopGame();
-            HighScoreManager.getInstance().addScore(board.getScore().scoreProperty().get());
-            viewGuiController.gameOver();
-        }
-
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        return new DownData(clearRow, board.getViewData());
-    }
-
-    @Override
-    public ViewData onLeftEvent(MoveEvent event) {
-        board.moveBrickLeft();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        return board.getViewData();
-    }
-
-    @Override
-    public ViewData onRightEvent(MoveEvent event) {
-        board.moveBrickRight();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        return board.getViewData();
-    }
-
-    @Override
-    public ViewData onRotateEvent(MoveEvent event) {
-        board.rotateLeftBrick();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
-        return board.getViewData();
-    }
-
-    @Override
-    public void createNewGame() {
-        board.newGame();
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        super.handleGameOver();
     }
 }
