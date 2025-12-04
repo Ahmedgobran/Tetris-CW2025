@@ -1,8 +1,10 @@
-package com.comp2042.model;
+package com.comp2042.model.board;
 
-import com.comp2042.model.board.SimpleBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SimpleBoardTest {
@@ -95,9 +97,7 @@ class SimpleBoardTest {
         // manually fill the top row to force Game Over
         int[][] matrix = board.boardMatrix;
 
-        for (int x = 0; x < matrix[0].length; x++) {
-            matrix[0][x] = 1;
-        }
+        Arrays.fill(matrix[0], 1);
 
         // Try to spawn: should fail (Collision)
         boolean collisionDetected = board.createNewBrick();

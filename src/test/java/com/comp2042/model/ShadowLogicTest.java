@@ -43,8 +43,6 @@ class ShadowLogicTest {
 
     @Test
     void testShadowUpdatesAfterMove() {
-        // get init shadow
-        int initialShadow = board.getShadowYPosition();
 
         // Move the piece (Left or Right)
         // ee try moving right: if it hits a wall we try left to ensure it moved
