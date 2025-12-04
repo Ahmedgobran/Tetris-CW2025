@@ -1,6 +1,6 @@
 package com.comp2042.model;
 
-import com.comp2042.model.board.SimpleBoard;
+import com.comp2042.model.board.TetrisBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,11 +9,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ShadowLogicTest {
 
-    private SimpleBoard board;
+    private TetrisBoard board;
 
     @BeforeEach
     void setUp() {
-        board = new SimpleBoard(25, 11);
+        board = new TetrisBoard(25, 11);
         board.createNewBrick();
     }
 

@@ -2,7 +2,6 @@ package com.comp2042.controller;
 
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -93,13 +92,13 @@ public class SettingsController implements Initializable {
     }
 
     @FXML
-    private void onSaveClicked(ActionEvent event) {
+    private void onSaveClicked() {
         saveSettings();
         closeSettings();
     }
 
     @FXML
-    private void onBackClicked(ActionEvent event) {
+    private void onBackClicked() {
         // Revert any preview changes to original saved values
         GameSettings settings = GameSettings.getInstance();
 

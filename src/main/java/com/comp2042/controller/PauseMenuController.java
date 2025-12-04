@@ -33,23 +33,23 @@ public class PauseMenuController implements Initializable {
     // Removed the static showPauseMenu method (Logic moved to GuiController)
 
     @FXML
-    private void onResumeClicked(ActionEvent event) {
+    private void onResumeClicked() {
         AudioManager.getInstance().playButtonPress();
         // Instead of switching scenes, we just close the overlay
         guiController.closePauseMenu();
     }
 
     @FXML
-    private void onRestartClicked(ActionEvent event) {
+    private void onRestartClicked() {
         AudioManager.getInstance().playButtonPress();
         // Start new game
-        guiController.newGame(null);
+        guiController.newGame();
         // Close the overlay
         guiController.closePauseMenu();
     }
 
     @FXML
-    private void onSettingsClicked(ActionEvent event) {
+    private void onSettingsClicked() {
         AudioManager.getInstance().playButtonPress();
         try {
             // This still needs to switch scenes so we levae as is

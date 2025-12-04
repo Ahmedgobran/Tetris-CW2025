@@ -13,7 +13,7 @@ class InvisibleBoardTest {
 
     @BeforeEach
     void setUp() {
-        // Create the invisible board (Same dimensions as my SimpleBoard)
+        // Create the invisible board (Same dimensions as my TetrisBoard)
         board = new InvisibleBlocksBoard(25, 11);
         board.createNewBrick(); // Spawn the first brick
     }

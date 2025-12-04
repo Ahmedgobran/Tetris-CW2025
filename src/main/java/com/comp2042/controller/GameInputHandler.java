@@ -14,11 +14,11 @@ public class GameInputHandler {
     public void handle(KeyEvent event) {
         // Allow these keys even if paused/game over
         if (event.getCode() == KeyCode.N) {
-            controller.newGame(null);
+            controller.newGame();
             return;
         }
         if (event.getCode() == KeyCode.P) {
-            controller.pauseGame(null);
+            controller.pauseGame();
             return;
         }
         if (event.getCode() == KeyCode.ESCAPE) {

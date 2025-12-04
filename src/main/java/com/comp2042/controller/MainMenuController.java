@@ -15,8 +15,6 @@ import java.util.ResourceBundle;
 public class MainMenuController implements Initializable {
 
     @FXML
-    private ScrollPane controlsScrollPane;
-    @FXML
     private Button settingsButton;
 
     private Stage stage;

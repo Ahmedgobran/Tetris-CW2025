@@ -20,7 +20,6 @@ import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -39,6 +38,7 @@ import java.util.ResourceBundle;
 public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
     private static final int BRICK_ARC_SIZE = 9;
+    private static final int GAME_TICK_DURATION_MS = 400;
 
     @FXML private GridPane gamePanel;
     @FXML private Group groupNotification;
@@ -52,7 +52,6 @@ public class GuiController implements Initializable {
     private BoardRender boardRenderer;
     private ActivePieceRenderer activePieceRenderer; // NEW: Replaces Rectangle[][]
     private NextPieceRenderer nextPieceRenderer;
-    private Group shadowGroup;
     private ShadowRender shadowRender;
     private LineClearAnimation lineClearAnimation;
 
@@ -87,7 +86,7 @@ public class GuiController implements Initializable {
         We now use the activepiecerenderer*/
         activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
         activePieceRenderer.initRectangles(brick.brickData());
-        activePieceRenderer.update(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY());
+        activePieceRenderer.update(brick, getGamePanelX(), getGamePanelY());
         AudioManager.getInstance().playMusic("/music/game_music.mp3");
 
 
@@ -97,7 +96,7 @@ public class GuiController implements Initializable {
         }
 
         // Initialize shadow group
-        shadowGroup = new Group();
+        Group shadowGroup = new Group();
         if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
             parent.getChildren().add(shadowGroup);
             shadowGroup.toBack(); //shadow behind brick like earlier
@@ -106,24 +105,33 @@ public class GuiController implements Initializable {
         shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
         // check if ghost piece enabled before showing shadow
         if (GameSettings.getInstance().isGhostPieceEnabled()) {
-            shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
+            shadowRender.updateShadow(brick, getGamePanelX(), getGamePanelY(), brickPanel.getVgap());
         }
         timeLine = new Timeline(new KeyFrame(
-                Duration.millis(400),
-                ae -> moveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+                Duration.millis(GAME_TICK_DURATION_MS),
+                ae -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
         ));
         timeLine.setCycleCount(Timeline.INDEFINITE);
         timeLine.play();
     }
 
+    private double getGamePanelX() {
+        return gamePanel.getLayoutX();
+    }
+
+    private double getGamePanelY() {
+        return gamePanel.getLayoutY();
+    }
+
+
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             // refactored
             // Delegating drawing to the renderer
-            activePieceRenderer.update(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY());
+            activePieceRenderer.update(brick, getGamePanelX(), getGamePanelY());
 
             if (GameSettings.getInstance().isGhostPieceEnabled()) {
-                shadowRender.updateShadow(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY(), brickPanel.getVgap());
+                shadowRender.updateShadow(brick, getGamePanelX(), getGamePanelY(), brickPanel.getVgap());
             } else {
                 shadowRender.hide(); // Hide the shadow
             }
@@ -150,7 +158,7 @@ public class GuiController implements Initializable {
         refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
     }
     public void moveDown() {
-        moveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
+        processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
     }
     public void hardDrop() {
         if (isPause.getValue() == Boolean.FALSE) {
@@ -169,7 +177,7 @@ public class GuiController implements Initializable {
         }
     }
 
-    private void moveDown(MoveEvent event) {
+    private void processMoveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onDownEvent(event);
             showClearRowNotification(downData.clearRow());
@@ -178,7 +186,7 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
-    //added this method to prevent bcoz of duplicated code in moveDown() and hardDrop() methods
+    //added this method to prevent bcoz of duplicated code in processMoveDown() and hardDrop() methods
     private void showClearRowNotification(ClearRow clearRow) {
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             // Get the cleared row indices before the board updates
@@ -227,7 +235,7 @@ public class GuiController implements Initializable {
         isGameOver.setValue(Boolean.TRUE);
     }
 
-    public void newGame(ActionEvent actionEvent) {
+    public void newGame() {
         timeLine.stop();
         gameOverPanel.setVisible(false);
         eventListener.createNewGame();
@@ -239,7 +247,7 @@ public class GuiController implements Initializable {
     }
 //removed setupButtonIcons() method and replaced the logic into gameLayout.fxml
 
-    public void pauseGame(ActionEvent actionEvent) {
+    public void pauseGame() {
         if (isPause.getValue() == Boolean.FALSE) {
             timeLine.pause();
             isPause.setValue(Boolean.TRUE);

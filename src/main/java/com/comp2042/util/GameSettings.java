@@ -23,21 +23,13 @@ public class GameSettings {
 
     private GameSettings() {
         // Bind audio settings to AudioManager
-        musicVolume.addListener((obs, oldVal, newVal) -> {
-            AudioManager.getInstance().setMusicVolume(newVal.doubleValue());
-        });
+        musicVolume.addListener((obs, oldVal, newVal) -> AudioManager.getInstance().setMusicVolume(newVal.doubleValue()));
 
-        sfxVolume.addListener((obs, oldVal, newVal) -> {
-            AudioManager.getInstance().setSfxVolume(newVal.doubleValue());
-        });
+        sfxVolume.addListener((obs, oldVal, newVal) -> AudioManager.getInstance().setSfxVolume(newVal.doubleValue()));
 
-        musicEnabled.addListener((obs, oldVal, newVal) -> {
-            AudioManager.getInstance().setMusicEnabled(newVal);
-        });
+        musicEnabled.addListener((obs, oldVal, newVal) -> AudioManager.getInstance().setMusicEnabled(newVal));
 
-        sfxEnabled.addListener((obs, oldVal, newVal) -> {
-            AudioManager.getInstance().setSfxEnabled(newVal);
-        });
+        sfxEnabled.addListener((obs, oldVal, newVal) -> AudioManager.getInstance().setSfxEnabled(newVal));
     }
 
 

@@ -3,6 +3,8 @@ package com.comp2042.model.board;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.util.MatrixOperations;
 
+import java.util.Arrays;
+
 public class InvisibleBlocksBoard extends AbstractBoard {
 
     private int[][] renderBoard; // The "fake" board shown to the user
@@ -11,6 +13,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     private long revealStartTime = 0;
     private static final long REVEAL_DURATION = 4000; // 4 seconds
     private static final long REVEAL_INTERVAL = 10000; // 10 seconds
+    private static final int COUNTDOWN_SECONDS = 3;
     private long nextRevealTime;
     private volatile boolean gameActive = true;
     private int lastCountdown = 0;
@@ -91,10 +94,8 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     /* Clears the render board by setting all cells to 0 making the locked blocks invisible
     to the player while preserving them in the logical board */
     private void hideLockedBlocks() {
-        for (int i = 0; i < renderBoard.length; i++) {
-            for (int j = 0; j < renderBoard[i].length; j++) {
-                renderBoard[i][j] = 0;
-            }
+        for (int[] ints : renderBoard) {
+            Arrays.fill(ints, 0);
         }
     }
     // calculates the number of seconds left until the next block appears
@@ -108,7 +109,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         int secondsLeft = (int) Math.ceil(timeLeft / 1000.0);
 
         // If within the 3-second window (3, 2, or 1)
-        if (secondsLeft <= 3 && secondsLeft > 0) {
+        if (secondsLeft <= COUNTDOWN_SECONDS && secondsLeft > 0) {
             // Only return if the number changed
             if (secondsLeft != lastCountdown) {
                 lastCountdown = secondsLeft;

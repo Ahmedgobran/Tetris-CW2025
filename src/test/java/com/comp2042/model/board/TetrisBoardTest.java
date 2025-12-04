@@ -7,14 +7,14 @@ import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SimpleBoardTest {
+class TetrisBoardTest {
 
-    private SimpleBoard board;
+    private TetrisBoard board;
 
     @BeforeEach
     void setUp() {
         // Create a standard board
-        board = new SimpleBoard(25, 11);
+        board = new TetrisBoard(25, 11);
         board.createNewBrick(); // Spawn the first brick
     }
 

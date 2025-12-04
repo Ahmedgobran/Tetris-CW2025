@@ -3,9 +3,9 @@ package com.comp2042.model.board;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.util.MatrixOperations;
 
-public class SimpleBoard extends AbstractBoard {
+public class TetrisBoard extends AbstractBoard {
 
-    public SimpleBoard(int height, int width) {
+    public TetrisBoard(int height, int width) {
         super(height, width);
     }
 

@@ -1,7 +1,6 @@
 package com.comp2042.controller;
 
 import com.comp2042.util.AudioManager;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
@@ -20,7 +19,7 @@ public class ControlsController {
     }
 
     @FXML
-    private void onBackClicked(ActionEvent event) {
+    private void onBackClicked() {
         AudioManager.getInstance().playButtonPress();
         if (onCloseCallback != null) {
             onCloseCallback.run();

@@ -33,7 +33,7 @@ public class LevelSelectionController implements Initializable {
     }
     // Event handler for the normal mode button
     @FXML
-    private void onNormalClicked(ActionEvent event) {
+    private void onNormalClicked() {
         AudioManager.getInstance().playPlayPress();
         try {
             startNormalGame();
@@ -44,7 +44,7 @@ public class LevelSelectionController implements Initializable {
     }
     // Event handler for the special mode button
     @FXML
-    private void onSpecialClicked(ActionEvent event) {
+    private void onSpecialClicked() {
         AudioManager.getInstance().playPlayPress();
         try {
             startChallengeGame();

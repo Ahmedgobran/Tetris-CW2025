@@ -1,6 +1,6 @@
 package com.comp2042.model;
 
-import com.comp2042.model.board.SimpleBoard;
+import com.comp2042.model.board.TetrisBoard;
 import com.comp2042.model.state.ViewData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BoardStateTest {
 
-    private SimpleBoard board;
+    private TetrisBoard board;
 
     @BeforeEach
     void setUp() {
-        board = new SimpleBoard(20, 10);
+        board = new TetrisBoard(20, 10);
         board.createNewBrick();
     }
 
