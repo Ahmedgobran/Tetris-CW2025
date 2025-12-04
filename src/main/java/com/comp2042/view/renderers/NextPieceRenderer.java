@@ -1,5 +1,6 @@
-package com.comp2042.view;
+package com.comp2042.view.renderers;
 
+import com.comp2042.view.BrickColor;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;

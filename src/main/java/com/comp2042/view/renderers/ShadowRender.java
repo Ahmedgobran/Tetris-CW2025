@@ -1,6 +1,7 @@
-package com.comp2042.view;
+package com.comp2042.view.renderers;
 
 import com.comp2042.model.ViewData;
+import com.comp2042.view.BrickColor;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
 

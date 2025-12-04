@@ -1,10 +1,15 @@
 package com.comp2042.controller;
 
 import com.comp2042.model.*;
+import com.comp2042.model.InputEventListener;
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.SceneLoader;
 import com.comp2042.view.*;
+import com.comp2042.view.renderers.ActivePieceRenderer;
+import com.comp2042.view.renderers.BoardRender;
+import com.comp2042.view.renderers.NextPieceRenderer;
+import com.comp2042.view.renderers.ShadowRender;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;

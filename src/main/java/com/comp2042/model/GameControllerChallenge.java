@@ -31,7 +31,7 @@ public class GameControllerChallenge extends AbstractGameController {
         if (!canMove) {
             return processBrickLanding();
         } else {
-            if (event.getEventSource() == EventSource.USER) {
+            if (event.eventSource() == EventSource.USER) {
                 board.getScore().add(2); //  Double Score
             }
             refreshView(); //  Force refresh for invisible effect

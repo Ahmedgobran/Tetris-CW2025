@@ -24,7 +24,7 @@ public class GameController extends AbstractGameController {
         if (!canMove) {
             return processBrickLanding();
         } else {
-            if (event.getEventSource() == EventSource.USER) {
+            if (event.eventSource() == EventSource.USER) {
                 board.getScore().add(1); // Normal Score
             }
             return new DownData(null, board.getViewData());
