@@ -3,6 +3,8 @@ package com.comp2042.model;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** tests the Score model functionality ensuring points are added correctly and the score resets to zero */
+
 class ScoreTest {
 
     @Test //Test increasing the score

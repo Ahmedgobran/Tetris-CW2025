@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** tests the functionality of the standard mode board including dimentions spawn logic and basic movement */
+
 class SimpleBoardTest {
 
     private SimpleBoard board;

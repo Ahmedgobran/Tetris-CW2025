@@ -3,6 +3,8 @@ package com.comp2042.util;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** tests the singleton pattern implementation and ensures audio/visual settings are stored and retrieved correctly */
+
 class GameSettingsTest {
 
     @Test

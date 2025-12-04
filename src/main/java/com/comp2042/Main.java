@@ -15,8 +15,8 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         URL location = getClass().getClassLoader().getResource("mainMenu.fxml");
-        ResourceBundle resources = null;
-        FXMLLoader fxmlLoader = new FXMLLoader(location, resources);
+        // removed ResourceBundle resource since it was null
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
 
         MainMenuController menuController = fxmlLoader.getController();
@@ -25,6 +25,7 @@ public class Main extends Application {
         primaryStage.setTitle("Tetris - Main Menu");
         Scene scene = new Scene(root, 480, 510); //adjusts window size of main menu when launched
         primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

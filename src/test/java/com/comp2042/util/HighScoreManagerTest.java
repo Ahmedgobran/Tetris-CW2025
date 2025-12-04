@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** tests the high score logic ensuring scores are sorted in descending order and the list is capped at 10 */
+
 class HighScoreManagerTest {
 
     @Test

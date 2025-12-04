@@ -4,6 +4,8 @@ import com.comp2042.model.ClearRow;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/** tests methods for collision detection, boundary checks, and matrix manipulation */
+
 class MatrixOperationsTest {
 
     @Test
