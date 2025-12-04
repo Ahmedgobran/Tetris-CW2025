@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-/** tests the functionality of the standard mode board including dimentions spawn logic and basic movement */
-
 class SimpleBoardTest {
 
     private SimpleBoard board;
@@ -18,8 +16,8 @@ class SimpleBoardTest {
     }
 
     @Test
-    void testNewGame_ResetsScore() {
-        board.getScore().add(100);
+    void testScoreResetOnNewGame() {
+        board.getScore().add(500);
         board.newGame();
         assertEquals(0, board.getScore().scoreProperty().get(), "Score should reset to 0 on new game");
     }
@@ -30,16 +28,78 @@ class SimpleBoardTest {
         assertTrue(board.moveBrickDown(), "Should be able to move down into empty space");
     }
 
+
     @Test
-    void testMoveBrickLeft_ReturnsTrue_WhenPathIsClear() {
-        // Assuming spawn is centered, moving left should be valid
-        assertTrue(board.moveBrickLeft(), "Should be able to move left");
+    void testMoveRight_BlockedByWall() {
+        // attempt to move right 15 times (board is only 10 wide)
+        for (int i = 0; i < 15; i++) {
+            board.moveBrickRight();
+        }
+
+        int xAtWall = board.getViewData().getxPosition();
+
+        // try one more move
+        boolean moved = board.moveBrickRight();
+        int xAfter = board.getViewData().getxPosition();
+
+        assertFalse(moved, "Should return false when hitting the wall");
+        assertEquals(xAtWall, xAfter, "X position should not increase past the wall");
     }
 
     @Test
-    void testBoardMatrix_IsNotNull() {
-        assertNotNull(board.getBoardMatrix(), "Board matrix should be initialized");
-        assertEquals(11, board.getBoardMatrix()[0].length, "Board width should be 11");
-        assertEquals(25, board.getBoardMatrix().length, "Board height should be 25");
+    void testMoveLeft_BlockedByWall() {
+        // attempt to move left 15 times
+        for (int i = 0; i < 15; i++) {
+            board.moveBrickLeft();
+        }
+
+        int xAtWall = board.getViewData().getxPosition();
+
+        // Try one more move
+        boolean moved = board.moveBrickLeft();
+        int xAfter = board.getViewData().getxPosition();
+
+        assertFalse(moved, "Should return false when hitting the wall");
+        assertEquals(xAtWall, xAfter, "X position should not decrease past the wall");
+    }
+
+    @Test
+    void testRotate_Success() {
+        boolean rotated = board.rotateLeftBrick();
+        assertTrue(rotated, "Should be able to rotate in open space");
+    }
+
+    @Test
+    void testMergeBrick_UpdatesLogicalMatrix() {
+        board.hardDrop();
+        board.mergeBrickToBackground();
+
+        // Verify the internal matrix actually saved the blocks
+        int[][] matrix = board.getBoardMatrix();
+        boolean hasBlocks = false;
+
+        for (int[] row : matrix) {
+            for (int cell : row) {
+                if (cell != 0) {
+                    hasBlocks = true;
+                    break;
+                }
+            }
+        }
+        assertTrue(hasBlocks, "Merging should permanently write the brick to the board matrix");
+    }
+
+    @Test
+    void testGameOver_CollisionOnSpawn() {
+        // manually fill the top row to force Game Over
+        int[][] matrix = board.boardMatrix;
+
+        for (int x = 0; x < matrix[0].length; x++) {
+            matrix[0][x] = 1;
+        }
+
+        // Try to spawn: should fail (Collision)
+        boolean collisionDetected = board.createNewBrick();
+        assertTrue(collisionDetected, "Should detect collision (Game Over) if spawn area is blocked");
     }
 }
