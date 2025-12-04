@@ -77,6 +77,8 @@ public class GuiController implements Initializable {
         We now use the activepiecerenderer*/
         activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
         activePieceRenderer.initRectangles(brick.getBrickData());
+        activePieceRenderer.update(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY());
+        AudioManager.getInstance().playMusic("/music/game_music.mp3");
 
 
         if (nextPiecePanel != null) {
@@ -208,6 +210,9 @@ public class GuiController implements Initializable {
     // --- Game Control Methods ---
     public void gameOver() {
         timeLine.stop();
+        AudioManager.getInstance().stopMusic();
+        AudioManager.getInstance().playSFX("/sfx/negative_beeps.mp3");
+        AudioManager.getInstance().playSFX("/sfx/game_over.mp3");
         gameOverPanel.setVisible(true);
         isGameOver.setValue(Boolean.TRUE);
     }
@@ -217,6 +222,7 @@ public class GuiController implements Initializable {
         gameOverPanel.setVisible(false);
         eventListener.createNewGame();
         gamePanel.requestFocus();
+        AudioManager.getInstance().playMusic("/music/game_music.mp3");
         timeLine.play();
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
