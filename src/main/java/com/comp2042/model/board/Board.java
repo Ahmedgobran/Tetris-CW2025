@@ -1,4 +1,8 @@
-package com.comp2042.model;
+package com.comp2042.model.board;
+
+import com.comp2042.model.Score;
+import com.comp2042.model.state.ClearRow;
+import com.comp2042.model.state.ViewData;
 
 public interface Board {
 

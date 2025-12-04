@@ -1,5 +1,6 @@
 package com.comp2042.model;
 
+import com.comp2042.model.board.SimpleBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,11 +37,11 @@ class SimpleBoardTest {
             board.moveBrickRight();
         }
 
-        int xAtWall = board.getViewData().getxPosition();
+        int xAtWall = board.getViewData().xPosition();
 
         // try one more move
         boolean moved = board.moveBrickRight();
-        int xAfter = board.getViewData().getxPosition();
+        int xAfter = board.getViewData().xPosition();
 
         assertFalse(moved, "Should return false when hitting the wall");
         assertEquals(xAtWall, xAfter, "X position should not increase past the wall");
@@ -53,11 +54,11 @@ class SimpleBoardTest {
             board.moveBrickLeft();
         }
 
-        int xAtWall = board.getViewData().getxPosition();
+        int xAtWall = board.getViewData().xPosition();
 
         // Try one more move
         boolean moved = board.moveBrickLeft();
-        int xAfter = board.getViewData().getxPosition();
+        int xAfter = board.getViewData().xPosition();
 
         assertFalse(moved, "Should return false when hitting the wall");
         assertEquals(xAtWall, xAfter, "X position should not decrease past the wall");

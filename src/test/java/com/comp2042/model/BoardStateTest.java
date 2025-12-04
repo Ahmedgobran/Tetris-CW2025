@@ -1,5 +1,7 @@
 package com.comp2042.model;
 
+import com.comp2042.model.board.SimpleBoard;
+import com.comp2042.model.state.ViewData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -49,6 +51,6 @@ class BoardStateTest {
         // We can check if it moved by checking the Y position
         ViewData view = board.getViewData();
         // Since it dropped, Y should be > 0
-        assertTrue(view.getyPosition() > 0, "Brick should have moved down after hard drop");
+        assertTrue(view.yPosition() > 0, "Brick should have moved down after hard drop");
     }
 }

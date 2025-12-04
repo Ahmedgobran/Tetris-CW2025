@@ -1,4 +1,7 @@
-package com.comp2042.model;
+package com.comp2042.model.event;
+
+import com.comp2042.model.state.DownData;
+import com.comp2042.model.state.ViewData;
 
 public interface InputEventListener {
 

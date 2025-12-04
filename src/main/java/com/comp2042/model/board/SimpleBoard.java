@@ -1,5 +1,6 @@
-package com.comp2042.model;
+package com.comp2042.model.board;
 
+import com.comp2042.model.state.ClearRow;
 import com.comp2042.util.MatrixOperations;
 
 public class SimpleBoard extends AbstractBoard {
@@ -21,7 +22,7 @@ public class SimpleBoard extends AbstractBoard {
     @Override
     public ClearRow clearRows() {
         ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
-        boardMatrix = clearRow.getNewMatrix();
+        boardMatrix = clearRow.newMatrix();
         return clearRow;
     }
 

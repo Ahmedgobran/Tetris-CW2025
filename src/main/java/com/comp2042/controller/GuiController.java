@@ -1,7 +1,12 @@
 package com.comp2042.controller;
 
-import com.comp2042.model.*;
-import com.comp2042.model.InputEventListener;
+import com.comp2042.model.event.InputEventListener;
+import com.comp2042.model.event.EventSource;
+import com.comp2042.model.event.EventType;
+import com.comp2042.model.event.MoveEvent;
+import com.comp2042.model.state.ClearRow;
+import com.comp2042.model.state.DownData;
+import com.comp2042.model.state.ViewData;
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.SceneLoader;
@@ -81,14 +86,14 @@ public class GuiController implements Initializable {
         /* Old code manually creating rectangles is gone
         We now use the activepiecerenderer*/
         activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
-        activePieceRenderer.initRectangles(brick.getBrickData());
+        activePieceRenderer.initRectangles(brick.brickData());
         activePieceRenderer.update(brick, gamePanel.getLayoutX(), gamePanel.getLayoutY());
         AudioManager.getInstance().playMusic("/music/game_music.mp3");
 
 
         if (nextPiecePanel != null) {
             nextPieceRenderer = new NextPieceRenderer(nextPiecePanel, colorMapper, BRICK_SIZE,BRICK_ARC_SIZE );
-            nextPieceRenderer.update(brick.getNextBrickData());
+            nextPieceRenderer.update(brick.nextBrickData());
         }
 
         // Initialize shadow group
@@ -123,7 +128,7 @@ public class GuiController implements Initializable {
                 shadowRender.hide(); // Hide the shadow
             }
             if (nextPieceRenderer != null) {
-                nextPieceRenderer.update(brick.getNextBrickData());
+                nextPieceRenderer.update(brick.nextBrickData());
             }
         }
     }
@@ -150,8 +155,8 @@ public class GuiController implements Initializable {
     public void hardDrop() {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onHardDropEvent();
-            showClearRowNotification(downData.getClearRow());
-            refreshBrick(downData.getViewData());
+            showClearRowNotification(downData.clearRow());
+            refreshBrick(downData.viewData());
         }
         gamePanel.requestFocus();
     }
@@ -167,8 +172,8 @@ public class GuiController implements Initializable {
     private void moveDown(MoveEvent event) {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onDownEvent(event);
-            showClearRowNotification(downData.getClearRow());
-            refreshBrick(downData.getViewData());
+            showClearRowNotification(downData.clearRow());
+            refreshBrick(downData.viewData());
         }
         gamePanel.requestFocus();
     }
@@ -177,14 +182,14 @@ public class GuiController implements Initializable {
     private void showClearRowNotification(ClearRow clearRow) {
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             // Get the cleared row indices before the board updates
-            List<Integer> clearedRows = clearRow.getClearedRowIndices();
+            List<Integer> clearedRows = clearRow.clearedRowIndices();
             // play line clear sound effect
             AudioManager.getInstance().playSFX("/sfx/line-cleared.mp3");
             // Play animation on current board state
             lineClearAnimation.animateClearedRows(clearedRows, () -> {
                 refreshGameBackground(eventListener.getBoard());
                 //only show the score notification to appear if the hard drop actually clears a row
-                NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.getScoreBonus());
+                NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.scoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
             });

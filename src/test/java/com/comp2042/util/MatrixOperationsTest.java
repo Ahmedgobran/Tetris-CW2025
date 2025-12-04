@@ -1,6 +1,6 @@
 package com.comp2042.util;
 
-import com.comp2042.model.ClearRow;
+import com.comp2042.model.state.ClearRow;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,7 +57,7 @@ class MatrixOperationsTest {
 
         // Check if the board processed correctly (bottom row becomes empty or shifted)
         // The algorithm pushes empty lines to top, but here we just check if its cleared logic
-        assertNotNull(result.getNewMatrix(), "Should return a new matrix");
+        assertNotNull(result.newMatrix(), "Should return a new matrix");
     }
 
     @Test

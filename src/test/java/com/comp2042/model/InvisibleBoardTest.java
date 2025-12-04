@@ -1,5 +1,6 @@
 package com.comp2042.model;
 
+import com.comp2042.model.board.InvisibleBlocksBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;

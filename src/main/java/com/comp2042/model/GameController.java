@@ -1,6 +1,11 @@
 package com.comp2042.model;
 
 import com.comp2042.controller.GuiController;
+import com.comp2042.model.board.SimpleBoard;
+import com.comp2042.model.event.EventSource;
+import com.comp2042.model.event.MoveEvent;
+import com.comp2042.model.state.DownData;
+import com.comp2042.model.state.ViewData;
 
 public class GameController extends AbstractGameController {
 
@@ -16,7 +21,7 @@ public class GameController extends AbstractGameController {
         // instant lock
         if (canMove) {
             ViewData currentView = board.getViewData();
-            if (currentView.getyPosition() == currentView.getShadowYPosition()) {
+            if (currentView.yPosition() == currentView.shadowYPosition()) {
                 return processBrickLanding();
             }
         }

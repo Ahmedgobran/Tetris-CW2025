@@ -1,6 +1,6 @@
 package com.comp2042.util;
 
-import com.comp2042.model.ClearRow;
+import com.comp2042.model.state.ClearRow;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class MatrixOperations {
             tmp[i] = new int[matrix[0].length];
         }
         int scoreBonus = 50 * clearedRows.size() * clearedRows.size();
-        return new ClearRow(clearedRows.size(), tmp, scoreBonus,clearedRows);
+        return new ClearRow(tmp, scoreBonus,clearedRows);
     }
 
     //creates the list for the deep copy of 2D arrays

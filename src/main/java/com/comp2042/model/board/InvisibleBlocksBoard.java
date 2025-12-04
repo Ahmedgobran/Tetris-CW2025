@@ -1,5 +1,6 @@
-package com.comp2042.model;
+package com.comp2042.model.board;
 
+import com.comp2042.model.state.ClearRow;
 import com.comp2042.util.MatrixOperations;
 
 public class InvisibleBlocksBoard extends AbstractBoard {
@@ -43,7 +44,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     public ClearRow clearRows() {
         // Clear rows on the logical board
         ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
-        boardMatrix = clearRow.getNewMatrix();
+        boardMatrix = clearRow.newMatrix();
 
         // Sync the render board
         if (!revealActive) {

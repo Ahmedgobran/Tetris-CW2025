@@ -1,6 +1,6 @@
 package com.comp2042.view.renderers;
 
-import com.comp2042.model.ViewData;
+import com.comp2042.model.state.ViewData;
 import com.comp2042.view.BrickColor;
 import javafx.scene.Group;
 import javafx.scene.shape.Rectangle;
@@ -25,8 +25,8 @@ public class ShadowRender {
     public void updateShadow(ViewData brick, double gameLayoutX, double gameLayoutY, double gap) {
         shadowGroup.getChildren().clear();
 
-        int shadowY = brick.getShadowYPosition();
-        int currentY = brick.getyPosition();
+        int shadowY = brick.shadowYPosition();
+        int currentY = brick.yPosition();
 
         //only show shadow if diff from current position
         if (shadowY <= currentY) {
@@ -34,8 +34,8 @@ public class ShadowRender {
             return;
         }
 
-        int[][] brickData = brick.getBrickData();
-        double startX = gameLayoutX + brick.getxPosition() * gap + brick.getxPosition() * brickSize;
+        int[][] brickData = brick.brickData();
+        double startX = gameLayoutX + brick.xPosition() * gap + brick.xPosition() * brickSize;
         double startY = -42 + gameLayoutY + shadowY * gap + shadowY * brickSize;
 
         // create shadow rectangles

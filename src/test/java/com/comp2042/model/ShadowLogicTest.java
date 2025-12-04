@@ -1,5 +1,6 @@
 package com.comp2042.model;
 
+import com.comp2042.model.board.SimpleBoard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,7 @@ class ShadowLogicTest {
         board.hardDrop();
 
         // get the actual landing y position
-        int actualLandingY = board.getViewData().getyPosition();
+        int actualLandingY = board.getViewData().yPosition();
 
         // they should match perfectly
         assertEquals(predictedShadowY, actualLandingY, "The piece should land exactly where the shadow predicted");
@@ -34,7 +35,7 @@ class ShadowLogicTest {
     @Test
     void testShadowIsAlwaysBelowOrSameAsCurrent() {
         // The shadow should never be floating ABOVE the current piece
-        int currentY = board.getViewData().getyPosition();
+        int currentY = board.getViewData().yPosition();
         int shadowY = board.getShadowYPosition();
 
         assertTrue(shadowY >= currentY, "Shadow Y should be >= Current Y");
@@ -57,7 +58,7 @@ class ShadowLogicTest {
 
         // Force drop again to verify accuracy at the new position
         board.hardDrop();
-        int actualY = board.getViewData().getyPosition();
+        int actualY = board.getViewData().yPosition();
 
         assertEquals(newShadow, actualY, "Shadow should remain accurate after lateral movement");
     }

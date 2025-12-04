@@ -1,8 +1,13 @@
-package com.comp2042.model;
+package com.comp2042.model.board;
 
 import com.comp2042.logic.bricks.Brick;
 import com.comp2042.logic.bricks.BrickGenerator;
 import com.comp2042.logic.bricks.RandomBrickGenerator;
+import com.comp2042.model.BrickRotator;
+import com.comp2042.model.Score;
+import com.comp2042.model.state.ClearRow;
+import com.comp2042.model.state.NextShapeInfo;
+import com.comp2042.model.state.ViewData;
 import com.comp2042.util.MatrixOperations;
 
 import java.awt.Point;
@@ -61,11 +66,11 @@ public abstract class AbstractBoard implements Board {
     @Override
     public boolean rotateLeftBrick() {
         NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(boardMatrix, nextShape.getShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        boolean conflict = MatrixOperations.intersect(boardMatrix, nextShape.shape(), (int) currentOffset.getX(), (int) currentOffset.getY());
         if (conflict) {
             return false;
         } else {
-            brickRotator.setCurrentShape(nextShape.getPosition());
+            brickRotator.setCurrentShape(nextShape.position());
             return true;
         }
     }

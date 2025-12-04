@@ -27,7 +27,7 @@ public class HighScoreManager {
     public void addScore(int score) {
         scores.add(score);
         // Sort descending (High to Low)
-        Collections.sort(scores, Collections.reverseOrder());
+        scores.sort(Collections.reverseOrder());
 
         // Keep only top 10
         if (scores.size() > 10) {
@@ -48,7 +48,7 @@ public class HighScoreManager {
             scores = reader.lines()
                     .map(Integer::parseInt)
                     .collect(Collectors.toList());
-            Collections.sort(scores, Collections.reverseOrder());
+            scores.sort(Collections.reverseOrder());
         } catch (IOException | NumberFormatException e) {
             System.err.println("Could not load scores: " + e.getMessage());
             scores = new ArrayList<>();

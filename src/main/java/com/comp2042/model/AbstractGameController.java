@@ -1,6 +1,12 @@
 package com.comp2042.model;
 
 import com.comp2042.controller.GuiController;
+import com.comp2042.model.board.Board;
+import com.comp2042.model.event.InputEventListener;
+import com.comp2042.model.event.MoveEvent;
+import com.comp2042.model.state.ClearRow;
+import com.comp2042.model.state.DownData;
+import com.comp2042.model.state.ViewData;
 import com.comp2042.util.HighScoreManager;
 
 /**
@@ -95,6 +101,6 @@ public abstract class AbstractGameController implements InputEventListener {
     }
 
     protected int calculateScore(ClearRow clearRow) {
-        return clearRow.getScoreBonus();
+        return clearRow.scoreBonus();
     }
 }

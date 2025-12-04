@@ -1,6 +1,6 @@
 package com.comp2042.view.renderers;
 
-import com.comp2042.model.ViewData;
+import com.comp2042.model.state.ViewData;
 import com.comp2042.view.BrickColor;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
@@ -35,12 +35,12 @@ public class ActivePieceRenderer {
     // Update positions and colors (moved from refreshBrick)
     public void update(ViewData brick, double gameX, double gameY) {
         // Move the whole grid panel
-        brickPanel.setLayoutX(gameX + brick.getxPosition() * brickPanel.getVgap() + brick.getxPosition() * brickSize);
-        brickPanel.setLayoutY(-42 + gameY + brick.getyPosition() * brickPanel.getHgap() + brick.getyPosition() * brickSize);
+        brickPanel.setLayoutX(gameX + brick.xPosition() * brickPanel.getVgap() + brick.xPosition() * brickSize);
+        brickPanel.setLayoutY(-42 + gameY + brick.yPosition() * brickPanel.getHgap() + brick.yPosition() * brickSize);
         // Update individual rectangle colors
-        for (int i = 0; i < brick.getBrickData().length; i++) {
-            for (int j = 0; j < brick.getBrickData()[i].length; j++) {
-                int colorCode = brick.getBrickData()[i][j];
+        for (int i = 0; i < brick.brickData().length; i++) {
+            for (int j = 0; j < brick.brickData()[i].length; j++) {
+                int colorCode = brick.brickData()[i][j];
                 rectangles[i][j].setFill(colorMapper.getFillColor(colorCode));
             }
         }

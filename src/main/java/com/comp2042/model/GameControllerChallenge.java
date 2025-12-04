@@ -1,6 +1,12 @@
 package com.comp2042.model;
 
 import com.comp2042.controller.GuiController;
+import com.comp2042.model.board.InvisibleBlocksBoard;
+import com.comp2042.model.event.EventSource;
+import com.comp2042.model.event.MoveEvent;
+import com.comp2042.model.state.ClearRow;
+import com.comp2042.model.state.DownData;
+import com.comp2042.model.state.ViewData;
 
 public class GameControllerChallenge extends AbstractGameController {
 
@@ -23,7 +29,7 @@ public class GameControllerChallenge extends AbstractGameController {
         // instant lock
         if (canMove) {
             ViewData currentView = board.getViewData();
-            if (currentView.getyPosition() == currentView.getShadowYPosition()) {
+            if (currentView.yPosition() == currentView.shadowYPosition()) {
                 return processBrickLanding();
             }
         }
@@ -50,7 +56,7 @@ public class GameControllerChallenge extends AbstractGameController {
 
     @Override
     protected int calculateScore(ClearRow clearRow) {
-        return clearRow.getScoreBonus() * 2; // Specific: Double Score
+        return clearRow.scoreBonus() * 2; // Specific: Double Score
     }
 
     @Override
