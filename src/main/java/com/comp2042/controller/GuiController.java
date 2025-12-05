@@ -34,6 +34,8 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import com.comp2042.model.LevelManager;
+import javafx.scene.layout.VBox;
 
 public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
@@ -45,6 +47,8 @@ public class GuiController implements Initializable {
     @FXML private GridPane brickPanel;
     @FXML private GridPane nextPiecePanel;
     @FXML private Label scoreLabel;
+    @FXML private Label levelLabel;
+    @FXML private VBox levelBox;
     @FXML private GameOverPanel gameOverPanel;
     @FXML private StackPane rootContainer;
 
@@ -76,6 +80,11 @@ public class GuiController implements Initializable {
         // Delegate key events to the handler
         gamePanel.setOnKeyPressed(event -> inputHandler.handle(event));
         gameOverPanel.setVisible(false);
+        // Hide Level display by default (It stays hidden for Challenge Mode)
+        if (levelBox != null) {
+            levelBox.setVisible(false);
+            levelBox.setManaged(false);
+        }
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
@@ -221,6 +230,34 @@ public class GuiController implements Initializable {
     // -- setters & getters --
     public void setEventListener(InputEventListener eventListener) { this.eventListener = eventListener; }
     public void bindScore(IntegerProperty integerProperty) { if (scoreLabel != null) scoreLabel.textProperty().bind(integerProperty.asString()); }
+    public void bindLevel(LevelManager levelManager) {
+        if (levelBox != null) {
+            levelBox.setVisible(true);
+            levelBox.setManaged(true);
+
+        }
+        if (levelLabel != null) {
+            levelLabel.textProperty().bind(levelManager.levelProperty().asString());
+        }
+        // Listen for level changes to speed up the game
+        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> updateGameSpeed(levelManager.getCurrentDelay()));
+    }
+    private void updateGameSpeed(double delayMillis) {
+        if (timeLine != null) {
+            timeLine.stop();
+            // Recreate timeline with new speed
+            timeLine = new Timeline(new KeyFrame(
+                    Duration.millis(delayMillis),
+                    ae -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
+            ));
+            timeLine.setCycleCount(Timeline.INDEFINITE);
+
+            // Resume if game is playing
+            if (!isPause.getValue() && !isGameOver.getValue()) {
+                timeLine.play();
+            }
+        }
+    }
     public void setGameStage(Stage stage) { this.gameStage = stage; }
     public boolean isGameOver() { return isGameOver.getValue(); }
     public boolean isGamePaused() { return isPause.getValue(); }

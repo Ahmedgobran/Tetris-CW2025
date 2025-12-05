@@ -8,10 +8,15 @@ import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
 
 public class GameController extends AbstractGameController {
-
     public GameController(GuiController c) {
         // Pass the specific board type to the parent
-        super(c, new TetrisBoard(25, 11));
+        super(c, new TetrisBoard(26, 11));
+        // Initialize Level Logic
+        LevelManager levelManager = new LevelManager();
+        // Bind it to the score
+        levelManager.bindScore(board.getScore().scoreProperty());
+        // bind it to the gui
+        c.bindLevel(levelManager);
     }
 
     @Override
