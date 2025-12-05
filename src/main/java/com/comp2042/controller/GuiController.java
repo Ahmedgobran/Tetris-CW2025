@@ -1,5 +1,6 @@
 package com.comp2042.controller;
 
+import com.comp2042.model.GameStatus;
 import com.comp2042.model.LevelManager;
 import com.comp2042.model.event.EventSource;
 import com.comp2042.model.event.EventType;
@@ -15,9 +16,9 @@ import com.comp2042.util.GameSettings;
 import com.comp2042.util.SceneLoader;
 import com.comp2042.view.GameOverPanel;
 import com.comp2042.view.NotificationPanel;
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -55,8 +56,7 @@ public class GuiController implements Initializable {
     private Stage gameStage;
     private Parent pauseMenuRoot = null;
 
-    private final BooleanProperty isPause = new SimpleBooleanProperty();
-    private final BooleanProperty isGameOver = new SimpleBooleanProperty();
+    private final ObjectProperty<GameStatus> gameStatus = new SimpleObjectProperty<>(GameStatus.PLAYING);
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -88,11 +88,13 @@ public class GuiController implements Initializable {
         // Start Game Loop
         gameLoop = new GameLoop(400, (unused) -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD)));
         gameLoop.start();
+        // Ensure state is playing
+        gameStatus.set(GameStatus.PLAYING);
     }
 
 
     private void refreshBrick(ViewData brick) {
-        if (isPause.getValue() == Boolean.FALSE) {
+        if (gameStatus.get() == GameStatus.PLAYING) {
             // refactored
             gameRenderer.render(brick, GameSettings.getInstance().isGhostPieceEnabled());
         }
@@ -108,7 +110,7 @@ public class GuiController implements Initializable {
     public void moveDown() { processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER)); }
 
     public void hardDrop() {
-        if (isPause.getValue() == Boolean.FALSE) {
+        if (gameStatus.get() == GameStatus.PLAYING) {
             DownData downData = eventListener.onHardDropEvent();
             showClearRowNotification(downData.clearRow());
             refreshBrick(downData.viewData());
@@ -125,12 +127,11 @@ public class GuiController implements Initializable {
     }
 
     private void processMoveDown(MoveEvent event) {
-        if (isPause.getValue() == Boolean.FALSE) {
+        if (gameStatus.get() == GameStatus.PLAYING) {
             DownData downData = eventListener.onDownEvent(event);
             showClearRowNotification(downData.clearRow());
             refreshBrick(downData.viewData());
         }
-        gamePanel.requestFocus();
     }
 
     //added this method to prevent bcoz of duplicated code in processMoveDown() and hardDrop() methods
@@ -188,8 +189,8 @@ public class GuiController implements Initializable {
         }
     }
     public void setGameStage(Stage stage) { this.gameStage = stage; }
-    public boolean isGameOver() { return isGameOver.getValue(); }
-    public boolean isGamePaused() { return isPause.getValue(); }
+    public boolean isGameOver() { return gameStatus.get() == GameStatus.GAME_OVER; }
+    public boolean isGamePaused() { return gameStatus.get() == GameStatus.PAUSED; }
 
     // --- Game Control Methods ---
     public void gameOver() {
@@ -198,7 +199,7 @@ public class GuiController implements Initializable {
         AudioManager.getInstance().playSFX("/sfx/negative_beeps.mp3");
         AudioManager.getInstance().playSFX("/sfx/game_over.mp3");
         gameOverPanel.setVisible(true);
-        isGameOver.setValue(Boolean.TRUE);
+        gameStatus.set(GameStatus.GAME_OVER);
     }
 
     public void newGame() {
@@ -208,15 +209,14 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
         AudioManager.getInstance().playMusic("/music/game_music.mp3");
         if (gameLoop != null) gameLoop.start(); // Restart loop
-        isPause.setValue(Boolean.FALSE);
-        isGameOver.setValue(Boolean.FALSE);
+        gameStatus.set(GameStatus.PLAYING);
     }
 //removed setupButtonIcons() method and replaced the logic into gameLayout.fxml
 
     public void pauseGame() {
-        if (isPause.getValue() == Boolean.FALSE) {
+        if (gameStatus.get() == GameStatus.PLAYING) {
             if (gameLoop != null) gameLoop.pause(); // Pause loop
-            isPause.setValue(Boolean.TRUE);
+            gameStatus.set(GameStatus.PAUSED);
             // Show pause menu
             try {
                 if (pauseMenuRoot == null) {
@@ -245,7 +245,7 @@ public class GuiController implements Initializable {
     // Update resumeGameFromPause to ensure focus returns to game
     public void resumeGameFromPause() {
         if (gameLoop != null) gameLoop.start(); // Resume loop
-        isPause.setValue(Boolean.FALSE);
+        gameStatus.set(GameStatus.PLAYING);
         gamePanel.requestFocus();
     }
 }
