@@ -85,11 +85,18 @@
             <Text text="New Game" styleClass="controls-text" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
 
             <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="7" GridPane.columnIndex="0">
+                <ImageView fitWidth="45" fitHeight="45" preserveRatio="true">
+                    <Image url="@Images/H-key.png"/>
+                </ImageView>
+            </HBox>
+            <Text text="Hold Piece" styleClass="controls-text" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+            <HBox alignment="CENTER_RIGHT" GridPane.rowIndex="8" GridPane.columnIndex="0">
                 <ImageView fitWidth="70" fitHeight="45" preserveRatio="true">
                     <Image url="@Images/Esc-key.png"/>
                 </ImageView>
             </HBox>
-            <Text text="Main Menu" styleClass="controls-text" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+            <Text text="Main Menu" styleClass="controls-text" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
 
         </GridPane>
 

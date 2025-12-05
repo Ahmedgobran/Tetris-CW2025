@@ -82,7 +82,7 @@ public class SceneLoader {
         controlsController.setOnCloseCallback(() -> stage.setScene(currentScene));
         controlsController.setStage(stage);
 
-        Scene controlsScene = new Scene(root, 450, 550);
+        Scene controlsScene = new Scene(root, 470, 600);
         stage.setScene(controlsScene);
     }
 

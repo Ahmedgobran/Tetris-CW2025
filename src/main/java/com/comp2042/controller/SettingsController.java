@@ -94,6 +94,7 @@ public class SettingsController implements Initializable {
     @FXML
     private void onSaveClicked() {
         saveSettings();
+        AudioManager.getInstance().playButtonPress();
         closeSettings();
     }
 
@@ -101,6 +102,7 @@ public class SettingsController implements Initializable {
     private void onBackClicked() {
         // Revert any preview changes to original saved values
         GameSettings settings = GameSettings.getInstance();
+        AudioManager.getInstance().playButtonPress();
 
         // Revert audio settings to what was saved
         AudioManager.getInstance().setMusicVolume(settings.getMusicVolume());
