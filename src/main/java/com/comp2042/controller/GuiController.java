@@ -221,8 +221,11 @@ public class GuiController implements Initializable {
         if (message.length() <= 2) {
             // Use the new method for countdowns
             notificationPanel.showCountdown(groupNotification.getChildren());
+        } else if (message.startsWith("LEVEL")) {
+            // level up case
+            notificationPanel.showLevelUp(groupNotification.getChildren());
         } else {
-            // Use the original method for scores
+            // Score
             notificationPanel.showScore(groupNotification.getChildren());
         }
     }
@@ -239,8 +242,11 @@ public class GuiController implements Initializable {
         if (levelLabel != null) {
             levelLabel.textProperty().bind(levelManager.levelProperty().asString());
         }
-        // Listen for level changes to speed up the game
-        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> updateGameSpeed(levelManager.getCurrentDelay()));
+        levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
+            updateGameSpeed(levelManager.getCurrentDelay());
+            // Triggers the notification whenever level changes
+            showNotification("LEVEL " + newVal);
+        });
     }
     private void updateGameSpeed(double delayMillis) {
         if (timeLine != null) {

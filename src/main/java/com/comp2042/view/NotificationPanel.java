@@ -1,12 +1,7 @@
 package com.comp2042.view;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.Effect;
@@ -37,12 +32,7 @@ public class NotificationPanel extends BorderPane {
         ft.setFromValue(1);
         ft.setToValue(0);
         ParallelTransition transition = new ParallelTransition(tt, ft);
-        transition.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                list.remove(NotificationPanel.this);
-            }
-        });
+        transition.setOnFinished(event -> list.remove(NotificationPanel.this));
         transition.play();
     }
 
@@ -63,5 +53,27 @@ public class NotificationPanel extends BorderPane {
         ParallelTransition transition = new ParallelTransition(st, ft);
         transition.setOnFinished(event -> list.remove(NotificationPanel.this));
         transition.play();
+    }
+
+    public void showLevelUp(ObservableList<Node> list) {
+        scoreLabel.setTextFill(Color.GOLD); // Distinct Gold color
+        scoreLabel.setStyle("-fx-font-size: 45px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 2, 1, 0, 0);");
+
+        // 1. Zoom In (Pop effect)
+        ScaleTransition st = new ScaleTransition(Duration.millis(500), this);
+        st.setFromX(0.0);
+        st.setFromY(0.0);
+        st.setToX(1.0);
+        st.setToY(1.0);
+
+        // 2. Fade Out slowly
+        FadeTransition ft = new FadeTransition(Duration.millis(2000), this);
+        ft.setFromValue(1.0);
+        ft.setToValue(0.0);
+
+        // Play Zoom then Fade
+        SequentialTransition sequence = new SequentialTransition(st, ft);
+        sequence.setOnFinished(event -> list.remove(NotificationPanel.this));
+        sequence.play();
     }
 }
