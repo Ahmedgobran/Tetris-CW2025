@@ -9,17 +9,12 @@ import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
 import com.comp2042.util.AudioManager;
-import com.comp2042.util.GameLoop; // NEW IMPORT
+import com.comp2042.util.GameLoop;
+import com.comp2042.view.renderers.GameRenderer;
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.SceneLoader;
-import com.comp2042.view.BrickColor;
 import com.comp2042.view.GameOverPanel;
-import com.comp2042.view.LineClearAnimation;
 import com.comp2042.view.NotificationPanel;
-import com.comp2042.view.renderers.ActivePieceRenderer;
-import com.comp2042.view.renderers.BoardRender;
-import com.comp2042.view.renderers.NextPieceRenderer;
-import com.comp2042.view.renderers.ShadowRender;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -39,9 +34,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class GuiController implements Initializable {
-    private static final int BRICK_SIZE = 20;
-    private static final int BRICK_ARC_SIZE = 9;
-    private static final int GAME_TICK_DURATION_MS = 400;
 
     @FXML private GridPane gamePanel;
     @FXML private Group groupNotification;
@@ -53,12 +45,8 @@ public class GuiController implements Initializable {
     @FXML private GameOverPanel gameOverPanel;
     @FXML private StackPane rootContainer;
 
-    // --- Renderers ---
-    private BoardRender boardRenderer;
-    private ActivePieceRenderer activePieceRenderer;
-    private NextPieceRenderer nextPieceRenderer;
-    private ShadowRender shadowRender;
-    private LineClearAnimation lineClearAnimation;
+    // --- Renderers (created class to handle them) ---
+    private GameRenderer gameRenderer;
 
     // --- Logic & Helpers ---
     private InputEventListener eventListener;
@@ -67,7 +55,6 @@ public class GuiController implements Initializable {
     private Stage gameStage;
     private Parent pauseMenuRoot = null;
 
-    private final BrickColor colorMapper = new BrickColor();
     private final BooleanProperty isPause = new SimpleBooleanProperty();
     private final BooleanProperty isGameOver = new SimpleBooleanProperty();
 
@@ -89,66 +76,29 @@ public class GuiController implements Initializable {
     }
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
-        boardRenderer = new BoardRender(gamePanel, boardMatrix, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
-        lineClearAnimation = new LineClearAnimation(gamePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE, boardMatrix[0].length);
+        // Initialize the simplified Renderer
+        gameRenderer = new GameRenderer(gamePanel, brickPanel, nextPiecePanel, boardMatrix[0].length);
 
-        /* Old code manually creating rectangles is gone
-        We now use the activepiecerenderer*/
-        activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
-        activePieceRenderer.initRectangles(brick.brickData());
-        activePieceRenderer.update(brick, getGamePanelX(), getGamePanelY());
+        // Setup initial state
+        gameRenderer.refreshBackground(boardMatrix);
+        gameRenderer.initActivePiece(brick); // Handles rectangle creation and first draw
+
         AudioManager.getInstance().playMusic("/music/game_music.mp3");
 
-
-        if (nextPiecePanel != null) {
-            nextPieceRenderer = new NextPieceRenderer(nextPiecePanel, colorMapper, BRICK_SIZE,BRICK_ARC_SIZE );
-            nextPieceRenderer.update(brick.nextBrickData());
-        }
-
-        // Initialize shadow group
-        Group shadowGroup = new Group();
-        if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
-            parent.getChildren().add(shadowGroup);
-            shadowGroup.toBack();
-        }
-        // Create ShadowRender and use it
-        shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
-
-        if (GameSettings.getInstance().isGhostPieceEnabled()) {
-            shadowRender.updateShadow(brick, getGamePanelX(), getGamePanelY(), brickPanel.getVgap());
-        }
-
-        // refactored game loop
-        gameLoop = new GameLoop(GAME_TICK_DURATION_MS, (unused) -> {
-            processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD));
-        });
+        // Start Game Loop
+        gameLoop = new GameLoop(400, (unused) -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD)));
         gameLoop.start();
     }
 
-    private double getGamePanelX() { return gamePanel.getLayoutX(); }
-    private double getGamePanelY() { return gamePanel.getLayoutY(); }
 
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
             // refactored
-            // Delegating drawing to the renderer
-            activePieceRenderer.update(brick, getGamePanelX(), getGamePanelY());
-
-            if (GameSettings.getInstance().isGhostPieceEnabled()) {
-                shadowRender.updateShadow(brick, getGamePanelX(), getGamePanelY(), brickPanel.getVgap());
-            } else {
-                shadowRender.hide(); // Hide the shadow
-            }
-            if (nextPieceRenderer != null) {
-                nextPieceRenderer.update(brick.nextBrickData());
-            }
+            gameRenderer.render(brick, GameSettings.getInstance().isGhostPieceEnabled());
         }
     }
-
-    // deleted old updateShadow() method (now handled by ShadowRender)
-
     public void refreshGameBackground(int[][] board) {
-        boardRenderer.refresh(board);
+        gameRenderer.refreshBackground(board);
     }
 
     // --- Public Actions ---
@@ -186,14 +136,11 @@ public class GuiController implements Initializable {
     //added this method to prevent bcoz of duplicated code in processMoveDown() and hardDrop() methods
     private void showClearRowNotification(ClearRow clearRow) {
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
-            // Get the cleared row indices before the board updates
             List<Integer> clearedRows = clearRow.clearedRowIndices();
-            // play line clear sound effect
             AudioManager.getInstance().playSFX("/sfx/line-cleared.mp3");
-            // Play animation on current board state
-            lineClearAnimation.animateClearedRows(clearedRows, () -> {
+            // Access animation through the new game renderer class
+            gameRenderer.getLineClearAnimation().animateClearedRows(clearedRows, () -> {
                 refreshGameBackground(eventListener.getBoard());
-                //only show the score notification to appear if the hard drop actually clears a row
                 NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.scoreBonus());
                 groupNotification.getChildren().add(notificationPanel);
                 notificationPanel.showScore(groupNotification.getChildren());
