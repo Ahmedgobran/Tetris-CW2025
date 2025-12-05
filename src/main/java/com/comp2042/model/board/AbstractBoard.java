@@ -19,6 +19,8 @@ public abstract class AbstractBoard implements Board {
     protected final BrickGenerator brickGenerator;
     protected final BrickRotator brickRotator;
     protected final Score score;
+    private Brick heldBrick = null;
+    private boolean canHold = true;
 
     // This represents the "Real" game state (collision checks happen here)
     protected int[][] boardMatrix;
@@ -80,7 +82,29 @@ public abstract class AbstractBoard implements Board {
         Brick currentBrick = brickGenerator.getBrick();
         brickRotator.setBrick(currentBrick);
         currentOffset = new Point((width / 2) - 2, 0);
+        canHold = true; // Reset hold permission
         return MatrixOperations.intersect(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+    }
+
+    // hold logic
+    public void holdBrick() {
+        if (!canHold) return;
+
+        Brick currentBrick = brickRotator.getBrick(); // You might need to add getBrick() to BrickRotator class!
+
+        if (heldBrick == null) {
+            // First time holding: Store current, spawn next
+            heldBrick = currentBrick;
+            createNewBrick(); // This will pull the next brick from generator
+        } else {
+            // Swap: Store current, restore held
+            Brick temp = heldBrick;
+            heldBrick = currentBrick;
+            brickRotator.setBrick(temp); // This resets rotation to 0
+            currentOffset = new Point((width / 2) - 2, 0); // Reset position
+        }
+
+        canHold = false; // Disable holding until next piece spawns
     }
 
     @Override
@@ -116,7 +140,16 @@ public abstract class AbstractBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        return new ViewData(brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY(), brickGenerator.getNextBrick().getShapeMatrix().getFirst(), getShadowYPosition());
+        int[][] heldMatrix = (heldBrick != null) ? heldBrick.getShapeMatrix().get(0) : null;
+
+        return new ViewData(
+                brickRotator.getCurrentShape(),
+                (int) currentOffset.getX(),
+                (int) currentOffset.getY(),
+                brickGenerator.getNextBrick().getShapeMatrix().get(0),
+                getShadowYPosition(),
+                heldMatrix // Pass the held brick
+        );
     }
 
     // abstract methods (To be implemented by subclasses)

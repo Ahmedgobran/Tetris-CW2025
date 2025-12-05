@@ -51,6 +51,9 @@ public class GameInputHandler {
             case SPACE:
                 controller.hardDrop();
                 break;
+            case H:
+                controller.holdBrick();
+                break;
             default:
                 break;
         }

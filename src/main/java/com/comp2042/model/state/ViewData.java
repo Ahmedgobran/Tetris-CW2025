@@ -2,10 +2,12 @@ package com.comp2042.model.state;
 
 import com.comp2042.util.MatrixOperations;
 
-public record ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int shadowYPosition) {
+// Added int[][] heldBrickData
+public record ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int shadowYPosition, int[][] heldBrickData) {
 
-    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData) {
-        this(brickData, xPosition, yPosition, nextBrickData, yPosition);
+    // Update the constructor chain
+    public ViewData(int[][] brickData, int xPosition, int yPosition, int[][] nextBrickData, int[][] heldBrickData) {
+        this(brickData, xPosition, yPosition, nextBrickData, yPosition, heldBrickData);
     }
 
     @Override
@@ -16,5 +18,9 @@ public record ViewData(int[][] brickData, int xPosition, int yPosition, int[][] 
     @Override
     public int[][] nextBrickData() {
         return MatrixOperations.copy(nextBrickData);
+    }
+
+    public int[][] heldBrickData() {
+        return heldBrickData != null ? MatrixOperations.copy(heldBrickData) : null;
     }
 }

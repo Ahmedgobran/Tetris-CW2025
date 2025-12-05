@@ -1,6 +1,7 @@
 package com.comp2042.model;
 
 import com.comp2042.controller.GuiController;
+import com.comp2042.model.board.AbstractBoard;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.event.InputEventListener;
 import com.comp2042.model.event.MoveEvent;
@@ -54,6 +55,15 @@ public abstract class AbstractGameController implements InputEventListener {
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
         board.rotateLeftBrick();
+        refreshView();
+        return board.getViewData();
+    }
+
+    @Override
+    public ViewData onHoldEvent() {
+        if (board instanceof AbstractBoard ab) {
+            ab.holdBrick();
+        }
         refreshView();
         return board.getViewData();
     }

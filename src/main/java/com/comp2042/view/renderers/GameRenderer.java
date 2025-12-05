@@ -14,6 +14,7 @@ public class GameRenderer {
     private final NextPieceRenderer nextPieceRenderer;
     private final ShadowRender shadowRender;
     private final LineClearAnimation lineClearAnimation;
+    private final NextPieceRenderer holdPieceRenderer;
 
     // Layout references needed for positioning
     private final GridPane gamePanel;
@@ -22,7 +23,7 @@ public class GameRenderer {
     private static final int BRICK_SIZE = 20;
     private static final int BRICK_ARC_SIZE = 9;
 
-    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextPiecePanel, int boardWidth) {
+    public GameRenderer(GridPane gamePanel, GridPane brickPanel, GridPane nextPiecePanel, GridPane holdPiecePanel, int boardWidth) {
         this.gamePanel = gamePanel;
         this.brickPanel = brickPanel;
 
@@ -33,6 +34,8 @@ public class GameRenderer {
         this.activePieceRenderer = new ActivePieceRenderer(brickPanel, colorMapper, BRICK_SIZE);
         this.nextPieceRenderer = new NextPieceRenderer(nextPiecePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
         this.lineClearAnimation = new LineClearAnimation(gamePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE, boardWidth);
+        // Initialize Hold Renderer (using same logic as Next Piece)
+        this.holdPieceRenderer = new NextPieceRenderer(holdPiecePanel, colorMapper, BRICK_SIZE, BRICK_ARC_SIZE);
 
         // Setup Shadow Group
         Group shadowGroup = new Group();
@@ -58,9 +61,12 @@ public class GameRenderer {
         } else {
             shadowRender.hide();
         }
-
         // Update Next Piece
         nextPieceRenderer.update(brick.nextBrickData());
+        // Update Hold Piece
+        if (brick.heldBrickData() != null) {
+            holdPieceRenderer.update(brick.heldBrickData());
+        }
     }
 
     public void refreshBackground(int[][] board) {

@@ -18,4 +18,6 @@ public interface InputEventListener {
     DownData onHardDropEvent();
 
     int[][] getBoard();
+
+    ViewData onHoldEvent();
 }

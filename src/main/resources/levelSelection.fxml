@@ -30,6 +30,7 @@
             <Image url="@Images/Normal-mode.png"/>
         </ImageView>
         <Label text="Classic Tetris Experience" styleClass="level-option-description"/>
+        <Label text="(Speed increases every 1000 points!)" styleClass="level-option-description"/>
         <Button onAction="#onNormalClicked"
                 styleClass="image-button">
             <graphic>

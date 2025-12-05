@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
 <?import com.comp2042.view.GameOverPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -7,21 +9,34 @@
 
 <StackPane fx:id="rootContainer"
            fx:controller="com.comp2042.controller.GuiController"
-           xmlns:fx="http://javafx.com/fxml"
-           prefWidth="440" prefHeight="510">
+           xmlns:fx="http://javafx.com/fxml">
 
     <!-- Main Game Content -->
     <HBox styleClass="root">
         <stylesheets>
-            <URL value="@window_style.css"/> <!--moved up (was prev below) wasnt refrenced properly-->
-    </stylesheets>
-    <Pane prefWidth="260" prefHeight="510">
-        <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-        <BorderPane styleClass="gameBoard" >
-            <center>
-                <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
-            </center>
-        </BorderPane>
+            <URL value="@window_style.css"/> </stylesheets> <!--moved up (was prev below) wasnt refrenced properly-->
+
+        <VBox spacing="20"
+              style="-fx-background-color: #1a1a1a; -fx-padding: 20;"
+              prefWidth="180"
+              alignment="TOP_CENTER">
+
+            <!-- Hold piece panel -->
+            <VBox spacing="8" alignment="TOP_CENTER">
+                <Label text="HOLD" styleClass="nextBrickLabel"/>
+                <VBox styleClass="nextBrick" prefWidth="50" prefHeight="50" alignment="CENTER">
+                    <GridPane fx:id="holdPiecePanel" hgap="1" vgap="1" alignment="CENTER"/>
+                </VBox>
+            </VBox>
+        </VBox>
+
+        <Pane prefWidth="260" prefHeight="510">
+            <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
+            <BorderPane styleClass="gameBoard" >
+                <center>
+                    <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
+                </center>
+            </BorderPane>
 
         <Group fx:id="groupNotification">
             <VBox alignment="CENTER">

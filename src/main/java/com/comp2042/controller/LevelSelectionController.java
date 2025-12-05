@@ -71,7 +71,7 @@ public class LevelSelectionController implements Initializable {
         GuiController guiController = fxmlLoader.getController();
 
         stage.setTitle("TetrisJFX - Normal Mode");
-        Scene scene = new Scene(root, 435, 510);
+        Scene scene = new Scene(root, 600, 505);
         stage.setScene(scene);
         stage.show();
         guiController.setGameStage(stage);
@@ -85,7 +85,7 @@ public class LevelSelectionController implements Initializable {
         GuiController guiController = fxmlLoader.getController();
 
         stage.setTitle("TetrisJFX - Challenge Mode ");
-        Scene scene = new Scene(root, 435, 510);
+        Scene scene = new Scene(root, 600, 505);
         stage.setScene(scene);
         stage.show();
         guiController.setGameStage(stage);

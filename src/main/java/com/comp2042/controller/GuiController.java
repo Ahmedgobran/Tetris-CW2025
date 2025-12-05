@@ -45,6 +45,7 @@ public class GuiController implements Initializable {
     @FXML private VBox levelBox;
     @FXML private GameOverPanel gameOverPanel;
     @FXML private StackPane rootContainer;
+    @FXML private GridPane holdPiecePanel;
 
     // --- Renderers (created class to handle them) ---
     private GameRenderer gameRenderer;
@@ -77,7 +78,7 @@ public class GuiController implements Initializable {
 
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         // Initialize the simplified Renderer
-        gameRenderer = new GameRenderer(gamePanel, brickPanel, nextPiecePanel, boardMatrix[0].length);
+        gameRenderer = new GameRenderer(gamePanel, brickPanel, nextPiecePanel, holdPiecePanel, boardMatrix[0].length);
 
         // Setup initial state
         gameRenderer.refreshBackground(boardMatrix);
@@ -108,6 +109,7 @@ public class GuiController implements Initializable {
     public void moveRight() { refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER))); }
     public void rotate() { refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER))); }
     public void moveDown() { processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER)); }
+    public void holdBrick() {refreshBrick(eventListener.onHoldEvent());}
 
     public void hardDrop() {
         if (gameStatus.get() == GameStatus.PLAYING) {
