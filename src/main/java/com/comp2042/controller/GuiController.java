@@ -1,22 +1,25 @@
 package com.comp2042.controller;
 
-import com.comp2042.model.event.InputEventListener;
+import com.comp2042.model.LevelManager;
 import com.comp2042.model.event.EventSource;
 import com.comp2042.model.event.EventType;
+import com.comp2042.model.event.InputEventListener;
 import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
 import com.comp2042.util.AudioManager;
+import com.comp2042.util.GameLoop; // NEW IMPORT
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.SceneLoader;
-import com.comp2042.view.*;
+import com.comp2042.view.BrickColor;
+import com.comp2042.view.GameOverPanel;
+import com.comp2042.view.LineClearAnimation;
+import com.comp2042.view.NotificationPanel;
 import com.comp2042.view.renderers.ActivePieceRenderer;
 import com.comp2042.view.renderers.BoardRender;
 import com.comp2042.view.renderers.NextPieceRenderer;
 import com.comp2042.view.renderers.ShadowRender;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -28,14 +31,12 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import com.comp2042.model.LevelManager;
-import javafx.scene.layout.VBox;
 
 public class GuiController implements Initializable {
     private static final int BRICK_SIZE = 20;
@@ -54,7 +55,7 @@ public class GuiController implements Initializable {
 
     // --- Renderers ---
     private BoardRender boardRenderer;
-    private ActivePieceRenderer activePieceRenderer; // NEW: Replaces Rectangle[][]
+    private ActivePieceRenderer activePieceRenderer;
     private NextPieceRenderer nextPieceRenderer;
     private ShadowRender shadowRender;
     private LineClearAnimation lineClearAnimation;
@@ -62,7 +63,7 @@ public class GuiController implements Initializable {
     // --- Logic & Helpers ---
     private InputEventListener eventListener;
     private GameInputHandler inputHandler;
-    private Timeline timeLine;
+    private GameLoop gameLoop; // replaced timeline with GameLoop (which handles that now)
     private Stage gameStage;
     private Parent pauseMenuRoot = null;
 
@@ -108,30 +109,24 @@ public class GuiController implements Initializable {
         Group shadowGroup = new Group();
         if (brickPanel.getParent() instanceof javafx.scene.layout.Pane parent) {
             parent.getChildren().add(shadowGroup);
-            shadowGroup.toBack(); //shadow behind brick like earlier
+            shadowGroup.toBack();
         }
         // Create ShadowRender and use it
         shadowRender = new ShadowRender(shadowGroup, colorMapper, BRICK_SIZE);
-        // check if ghost piece enabled before showing shadow
+
         if (GameSettings.getInstance().isGhostPieceEnabled()) {
             shadowRender.updateShadow(brick, getGamePanelX(), getGamePanelY(), brickPanel.getVgap());
         }
-        timeLine = new Timeline(new KeyFrame(
-                Duration.millis(GAME_TICK_DURATION_MS),
-                ae -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
-        ));
-        timeLine.setCycleCount(Timeline.INDEFINITE);
-        timeLine.play();
+
+        // refactored game loop
+        gameLoop = new GameLoop(GAME_TICK_DURATION_MS, (unused) -> {
+            processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD));
+        });
+        gameLoop.start();
     }
 
-    private double getGamePanelX() {
-        return gamePanel.getLayoutX();
-    }
-
-    private double getGamePanelY() {
-        return gamePanel.getLayoutY();
-    }
-
+    private double getGamePanelX() { return gamePanel.getLayoutX(); }
+    private double getGamePanelY() { return gamePanel.getLayoutY(); }
 
     private void refreshBrick(ViewData brick) {
         if (isPause.getValue() == Boolean.FALSE) {
@@ -156,19 +151,12 @@ public class GuiController implements Initializable {
         boardRenderer.refresh(board);
     }
 
-    // --- Public Actions (Called by GameInputHandler) ---
-    public void moveLeft() {
-        refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER)));
-    }
-    public void moveRight() {
-        refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER)));
-    }
-    public void rotate() {
-        refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER)));
-    }
-    public void moveDown() {
-        processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER));
-    }
+    // --- Public Actions ---
+    public void moveLeft() { refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER))); }
+    public void moveRight() { refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER))); }
+    public void rotate() { refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER))); }
+    public void moveDown() { processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER)); }
+
     public void hardDrop() {
         if (isPause.getValue() == Boolean.FALSE) {
             DownData downData = eventListener.onHardDropEvent();
@@ -178,7 +166,7 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
     public void handleEscape() {
-        timeLine.stop();
+        if (gameLoop != null) gameLoop.stop(); // Stop loop
         try {
             SceneLoader.openMainMenu(gameStage);
         } catch (Exception e) {
@@ -237,7 +225,6 @@ public class GuiController implements Initializable {
         if (levelBox != null) {
             levelBox.setVisible(true);
             levelBox.setManaged(true);
-
         }
         if (levelLabel != null) {
             levelLabel.textProperty().bind(levelManager.levelProperty().asString());
@@ -249,19 +236,8 @@ public class GuiController implements Initializable {
         });
     }
     private void updateGameSpeed(double delayMillis) {
-        if (timeLine != null) {
-            timeLine.stop();
-            // Recreate timeline with new speed
-            timeLine = new Timeline(new KeyFrame(
-                    Duration.millis(delayMillis),
-                    ae -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD))
-            ));
-            timeLine.setCycleCount(Timeline.INDEFINITE);
-
-            // Resume if game is playing
-            if (!isPause.getValue() && !isGameOver.getValue()) {
-                timeLine.play();
-            }
+        if (gameLoop != null) {
+            gameLoop.setSpeed(delayMillis); // Much cleaner!
         }
     }
     public void setGameStage(Stage stage) { this.gameStage = stage; }
@@ -270,7 +246,7 @@ public class GuiController implements Initializable {
 
     // --- Game Control Methods ---
     public void gameOver() {
-        timeLine.stop();
+        if (gameLoop != null) gameLoop.stop(); // Stop loop
         AudioManager.getInstance().stopMusic();
         AudioManager.getInstance().playSFX("/sfx/negative_beeps.mp3");
         AudioManager.getInstance().playSFX("/sfx/game_over.mp3");
@@ -279,12 +255,12 @@ public class GuiController implements Initializable {
     }
 
     public void newGame() {
-        timeLine.stop();
+        if (gameLoop != null) gameLoop.stop(); // Stop loop
         gameOverPanel.setVisible(false);
         eventListener.createNewGame();
         gamePanel.requestFocus();
         AudioManager.getInstance().playMusic("/music/game_music.mp3");
-        timeLine.play();
+        if (gameLoop != null) gameLoop.start(); // Restart loop
         isPause.setValue(Boolean.FALSE);
         isGameOver.setValue(Boolean.FALSE);
     }
@@ -292,7 +268,7 @@ public class GuiController implements Initializable {
 
     public void pauseGame() {
         if (isPause.getValue() == Boolean.FALSE) {
-            timeLine.pause();
+            if (gameLoop != null) gameLoop.pause(); // Pause loop
             isPause.setValue(Boolean.TRUE);
             // Show pause menu
             try {
@@ -321,7 +297,7 @@ public class GuiController implements Initializable {
     }
     // Update resumeGameFromPause to ensure focus returns to game
     public void resumeGameFromPause() {
-        timeLine.play();
+        if (gameLoop != null) gameLoop.start(); // Resume loop
         isPause.setValue(Boolean.FALSE);
         gamePanel.requestFocus();
     }
