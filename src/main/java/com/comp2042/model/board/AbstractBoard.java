@@ -16,9 +16,10 @@ import java.awt.Point;
  * An abstract implementation of the {@link Board} interface, providing the core logic for
  * brick movement, collision detection, and rotation.
  * <p>
- * This class handles the shared mechanics (e.g., gravity, moving left/right) while
- * subclasses (like {@link TetrisBoard} and {@link InvisibleBlocksBoard}) are responsible for
- * managing the board matrix and specific game rules (e.g., merging blocks, clearing rows).
+ * This class uses the <strong>Template Method Design Pattern</strong> for board updates.
+ * The {@link #mergeBrickToBackground()} and {@link #clearRows()} methods define the standard
+ * algorithm for updating the board, while {@link #onAfterMerge()} and {@link #onAfterClear()}
+ * serve as "hooks" that subclasses can override to inject custom behavior (e.g., visual effects).
  * </p>
  */
 public abstract class AbstractBoard implements Board {
@@ -50,7 +51,63 @@ public abstract class AbstractBoard implements Board {
         this.score = new Score();
     }
 
-    // shared logic between the board classes (Movement & Collision)
+    // --- Template Methods (Refactored) ---
+
+    /**
+     * Locks the current active brick into the static board matrix.
+     * <p>
+     * <strong>Template Method:</strong> This method performs the standard merge operation
+     * and then calls the hook {@link #onAfterMerge()} for any subclass-specific post-processing.
+     * </p>
+     */
+    @Override
+    public void mergeBrickToBackground() {
+        // Common Logic: Merge into the logical board
+        boardMatrix = MatrixOperations.merge(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
+        // Hook for subclasses
+        onAfterMerge();
+    }
+
+    /**
+     * Scans the board for full rows, clears them, and shifts remaining blocks down.
+     * <p>
+     * <strong>Template Method:</strong> This method performs the standard row clearing check
+     * and then calls the hook {@link #onAfterClear()} for any subclass-specific post-processing.
+     * </p>
+     *
+     * @return A {@link ClearRow} object containing details about the cleared lines and updated board state.
+     */
+    @Override
+    public ClearRow clearRows() {
+        // Common Logic: Check and remove rows
+        ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
+        boardMatrix = clearRow.newMatrix();
+        // Hook for subclasses
+        onAfterClear();
+        return clearRow;
+    }
+
+    // --- Hooks ---
+
+    /**
+     * Hook method called immediately after a brick is merged into the background.
+     * <p>
+     * Subclasses can override this to perform additional actions (e.g., updating a secondary
+     * render board or triggering effects). The default implementation does nothing.
+     * </p>
+     */
+    protected void onAfterMerge() { }
+
+    /**
+     * Hook method called immediately after rows are cleared.
+     * <p>
+     * Subclasses can override this to perform additional actions (e.g., syncing a secondary
+     * render board). The default implementation does nothing.
+     * </p>
+     */
+    protected void onAfterClear() { }
+
+    // --- Shared Movement Logic ---
 
     /**
      * Attempts to move the current brick down by one row.
@@ -212,12 +269,6 @@ public abstract class AbstractBoard implements Board {
     // Abstract methods to be implemented by subclasses
     @Override
     public abstract int[][] getBoardMatrix();
-
-    @Override
-    public abstract void mergeBrickToBackground();
-
-    @Override
-    public abstract ClearRow clearRows();
 
     @Override
     public abstract void newGame();

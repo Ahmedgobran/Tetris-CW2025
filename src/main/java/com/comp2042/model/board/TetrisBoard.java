@@ -1,13 +1,11 @@
 package com.comp2042.model.board;
 
-import com.comp2042.model.state.ClearRow;
-import com.comp2042.util.MatrixOperations;
-
 /**
  * A standard implementation of the Tetris board.
  * <p>
- * This class uses standard rules for matrix manipulation: bricks are permanently merged
- * into the grid, and completed rows are cleared immediately.
+ * This class uses the standard behavior defined in {@link AbstractBoard}.
+ * Since standard Tetris rules for merging and clearing rows do not require extra
+ * processing (like hiding blocks), this class relies on the default hook implementations.
  * </p>
  */
 public class TetrisBoard extends AbstractBoard {
@@ -29,25 +27,6 @@ public class TetrisBoard extends AbstractBoard {
     @Override
     public int[][] getBoardMatrix() {
         return boardMatrix;
-    }
-
-    /**
-     * Merges the current active brick into the static background grid.
-     */
-    @Override
-    public void mergeBrickToBackground() {
-        boardMatrix = MatrixOperations.merge(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-    }
-
-    /**
-     * Checks for and removes any full rows, shifting the board down.
-     * @return A {@link ClearRow} object containing the new board state and number of cleared lines.
-     */
-    @Override
-    public ClearRow clearRows() {
-        ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
-        boardMatrix = clearRow.newMatrix();
-        return clearRow;
     }
 
     /**

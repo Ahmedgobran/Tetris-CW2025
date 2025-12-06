@@ -1,16 +1,13 @@
 package com.comp2042.model.board;
 
-import com.comp2042.model.state.ClearRow;
-import com.comp2042.util.MatrixOperations;
-
 import java.util.Arrays;
 
 /**
  * A specialized Board implementation for the Challenge Mode.
  * <p>
  * In this mode, blocks on the board become invisible (hidden) shortly after they are locked.
- * The board maintains two states: a 'logical' matrix for collision detection and a 'render'
- * matrix for display. The render matrix is periodically cleared or revealed based on a timer.
+ * This class overrides the {@link #onAfterMerge()} and {@link #onAfterClear()} hooks
+ * from {@link AbstractBoard} to synchronize the invisible "Render Board" with the logical board.
  * </p>
  */
 public class InvisibleBlocksBoard extends AbstractBoard {
@@ -23,7 +20,6 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     private static final long REVEAL_INTERVAL = 10000; // 10 seconds
     private static final int COUNTDOWN_SECONDS = 3;
     private long nextRevealTime;
-    private volatile boolean gameActive = true;
     private int lastCountdown = 0;
 
     /**
@@ -54,42 +50,36 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     }
 
     /**
-     * Locks the current active brick into the logical board and updates the render board.
+     * Updates the render board after a brick has been merged.
      * <p>
-     * If the board is currently in "invisible mode", the newly locked blocks will be hidden.
+     * This ensures that if the board is currently in "invisible mode", the newly locked
+     * blocks are immediately hidden from the player.
      * </p>
      */
     @Override
-    public void mergeBrickToBackground() {
-        //  Merge into the Logical board (superclass field 'boardMatrix')
-        boardMatrix = MatrixOperations.merge(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-
-        // Update the Render board
-        if (!revealActive) {
-            hideLockedBlocks();
-        } else {
-            copyBoard(boardMatrix, renderBoard);
-        }
+    protected void onAfterMerge() {
+        updateRenderBoard();
     }
 
     /**
-     * Clears completed rows from the logical board and synchronizes the render board.
-     *
-     * @return A {@link ClearRow} object containing the updated logical matrix and score info.
+     * Updates the render board after rows have been cleared.
+     * <p>
+     * This synchronizes the render board with the logical board state to ensure
+     * proper positioning of the remaining blocks (even if they are invisible).
+     * </p>
      */
     @Override
-    public ClearRow clearRows() {
-        // Clear rows on the logical board
-        ClearRow clearRow = MatrixOperations.checkRemoving(boardMatrix);
-        boardMatrix = clearRow.newMatrix();
+    protected void onAfterClear() {
+        updateRenderBoard();
+    }
 
-        // Sync the render board
+    // Helper to sync state
+    private void updateRenderBoard() {
         if (!revealActive) {
             hideLockedBlocks();
         } else {
             copyBoard(boardMatrix, renderBoard);
         }
-        return clearRow;
     }
 
     /**
@@ -109,11 +99,10 @@ public class InvisibleBlocksBoard extends AbstractBoard {
      * Stops the game logic processing.
      */
     public void stopGame() {
-        gameActive = false;
+        // gameActive logic handled by controller state but method kept for interface compatibility
     }
 
-    /* Checks the system time to toggle the visibility of the blocks
-    if reveal interval passed blocks become visible and if reveal duration ends it hides the blocks again */
+    /* Checks the system time to toggle the visibility of the blocks. */
     private synchronized void updateRevealState() {
         long currentTime = System.currentTimeMillis();
         if (!revealActive && currentTime >= nextRevealTime) {
@@ -133,8 +122,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         }
     }
 
-    /* Clears the render board by setting all cells to 0 making the locked blocks invisible
-    to the player while preserving them in the logical board */
+    /* Clears the render board by setting all cells to 0 making the locked blocks invisible. */
     private void hideLockedBlocks() {
         for (int[] ints : renderBoard) {
             Arrays.fill(ints, 0);
