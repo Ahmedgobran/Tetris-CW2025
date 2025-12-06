@@ -13,12 +13,12 @@ import com.comp2042.model.state.ViewData;
  * Controls the logic for the "Challenge Mode" game.
  * <p>
  * This controller implements specific rules for the Challenge Mode:
+ * </p>
  * <ul>
  * <li>Uses an {@link InvisibleBlocksBoard} where blocks disappear.</li>
  * <li>Implements a double-score multiplier for all actions.</li>
  * <li>Handles the countdown timer notifications for block reveals.</li>
  * </ul>
- * </p>
  */
 public class ChallengeModeController extends AbstractGameController {
 
