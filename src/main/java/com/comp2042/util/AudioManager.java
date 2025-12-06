@@ -4,8 +4,13 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import java.net.URL;
 
-// manages all audio for the game (music and sound effects)
-
+/**
+ * Singleton manager for all audio playback in the application.
+ * <p>
+ * Handles loading and playing of background music (looped) and sound effects (one-shot).
+ * Centralizes volume control and mute settings for the entire game.
+ * </p>
+ */
 public class AudioManager {
 
     private static AudioManager instance;
@@ -18,11 +23,13 @@ public class AudioManager {
     private boolean musicEnabled = true;
     private boolean sfxEnabled = true;
 
-    // Private constructor
     private AudioManager() {
     }
 
-
+    /**
+     * Retrieves the single instance of the AudioManager.
+     * @return The singleton instance.
+     */
     public static AudioManager getInstance() {
         if (instance == null) {
             instance = new AudioManager();
@@ -30,7 +37,12 @@ public class AudioManager {
         return instance;
     }
 
-    // Initialize and play background music
+    /**
+     * Plays a background music track in a loop.
+     * Stops any currently playing music before starting the new track.
+     *
+     * @param resourcePath The relative path to the music resource (e.g., "/music/track.mp3").
+     */
     public void playMusic(String resourcePath) {
         try {
             URL resource = getClass().getResource(resourcePath);
@@ -55,7 +67,11 @@ public class AudioManager {
         }
     }
 
-    //play a sound effect (doesn't loop)
+    /**
+     * Plays a short sound effect (SFX) once.
+     *
+     * @param resourcePath The relative path to the SFX resource.
+     */
     public void playSFX(String resourcePath) {
         if (!sfxEnabled) return;
 
@@ -78,7 +94,9 @@ public class AudioManager {
         }
     }
 
-    //Stop background music
+    /**
+     * Stops and disposes of the currently playing background music.
+     */
     public void stopMusic() {
         if (musicPlayer != null) {
             musicPlayer.stop();
@@ -90,6 +108,10 @@ public class AudioManager {
 
     // Volume Controls
 
+    /**
+     * Sets the volume for background music.
+     * @param volume A value between 0.0 (mute) and 1.0 (max).
+     */
     public void setMusicVolume(double volume) {
         this.musicVolume = Math.max(0.0, Math.min(1.0, volume));
         if (musicPlayer != null) {
@@ -97,14 +119,20 @@ public class AudioManager {
         }
     }
 
-
+    /**
+     * Sets the volume for sound effects.
+     * @param volume A value between 0.0 (mute) and 1.0 (max).
+     */
     public void setSfxVolume(double volume) {
         this.sfxVolume = Math.max(0.0, Math.min(1.0, volume));
     }
 
+    // Enable/Disable
 
-    //Enable/Disable
-
+    /**
+     * Enables or disables background music playback.
+     * @param enabled true to play music, false to mute.
+     */
     public void setMusicEnabled(boolean enabled) {
         this.musicEnabled = enabled;
         if (musicPlayer != null) {
@@ -116,14 +144,24 @@ public class AudioManager {
         }
     }
 
+    /**
+     * Enables or disables sound effects.
+     * @param enabled true to allow SFX, false to mute.
+     */
     public void setSfxEnabled(boolean enabled) {
         this.sfxEnabled = enabled;
     }
 
+    /**
+     * Helper method to play the standard button press sound.
+     */
     public void playButtonPress() {
         playSFX("/sfx/button-press.mp3");
     }
 
+    /**
+     * Helper method to play the 'Play' button start sound.
+     */
     public void playPlayPress() {
         playSFX("/sfx/play-press.mp3");
     }

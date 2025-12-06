@@ -5,6 +5,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Renders a preview of a brick (Next Piece or Hold Piece).
+ * <p>
+ * This class manages a small 4x4 grid and centers the given brick shape within it.
+ * </p>
+ */
 public class NextPieceRenderer {
 
     private static final int GRID_SIZE = 4;
@@ -12,6 +18,14 @@ public class NextPieceRenderer {
     private final BrickColor colorMapper;
     private final int brickArcSize;
 
+    /**
+     * Initializes the preview grid.
+     *
+     * @param nextPiecePanel The container for the preview.
+     * @param colorMapper    The color mapping utility.
+     * @param brickSize      The size of the preview blocks.
+     * @param brickArcSize   The corner radius.
+     */
     public NextPieceRenderer(GridPane nextPiecePanel, BrickColor colorMapper, int brickSize, int brickArcSize) {
         this.colorMapper = colorMapper;
         this.brickArcSize = brickArcSize;
@@ -28,6 +42,12 @@ public class NextPieceRenderer {
         }
     }
 
+    /**
+     * Updates the preview display with a new brick shape.
+     * Automatically centers the shape within the grid.
+     *
+     * @param nextBrickData The matrix representing the brick to display.
+     */
     public void update(int[][] nextBrickData) {
         // Clear all rectangles
         for (Rectangle[] row : panel) {

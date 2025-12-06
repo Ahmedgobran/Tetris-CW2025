@@ -9,14 +9,20 @@ import javafx.stage.Stage;
 import java.net.URL;
 
 /**
- * Utility class for loading and managing scenes throughout the application
- * Reduces code duplication across controllers
+ * Utility class for loading and managing scenes throughout the application.
+ * <p>
+ * Centralizes FXML loading logic and scene transitions (e.g., to Settings,
+ * High Scores, Game Levels) to reduce code duplication across controllers.
+ * </p>
  */
-
 public class SceneLoader {
 
-    // Opens the settings panel from any screen and returns to the current scene
-
+    /**
+     * Opens the Settings Panel, saving the current scene state to allow returning.
+     *
+     * @param stage The primary stage of the application.
+     * @throws Exception If the FXML file cannot be loaded.
+     */
     public static void openSettings(Stage stage) throws Exception {
         URL location = SceneLoader.class.getClassLoader().getResource("settingsPanel.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -34,7 +40,12 @@ public class SceneLoader {
         stage.setScene(settingsScene);
     }
 
-    // Opens the main menu
+    /**
+     * Transitions the application to the Main Menu screen.
+     *
+     * @param stage The primary stage.
+     * @throws Exception If the FXML file cannot be loaded.
+     */
     public static void openMainMenu(Stage stage) throws Exception {
         URL location = SceneLoader.class.getClassLoader().getResource("mainMenu.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -48,8 +59,12 @@ public class SceneLoader {
         stage.setScene(mainMenuScene);
     }
 
-    // Opens the level selection menu
-
+    /**
+     * Opens the Level Selection screen.
+     *
+     * @param stage The primary stage.
+     * @throws Exception If the FXML file cannot be loaded.
+     */
     public static void openLevelSelection(Stage stage) throws Exception {
         URL location = SceneLoader.class.getClassLoader().getResource("levelSelection.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -68,6 +83,12 @@ public class SceneLoader {
         stage.setScene(levelSelectionScene);
     }
 
+    /**
+     * Opens the Controls/Instructions screen.
+     *
+     * @param stage The primary stage.
+     * @throws Exception If the FXML file cannot be loaded.
+     */
     public static void openControls(Stage stage) throws Exception {
         URL location = SceneLoader.class.getClassLoader().getResource("controlsPanel.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -86,6 +107,12 @@ public class SceneLoader {
         stage.setScene(controlsScene);
     }
 
+    /**
+     * Opens the High Scores screen.
+     *
+     * @param stage The primary stage.
+     * @throws Exception If the FXML file cannot be loaded.
+     */
     public static void openHighScores(Stage stage) throws Exception {
         URL location = SceneLoader.class.getClassLoader().getResource("highScores.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -99,5 +126,4 @@ public class SceneLoader {
         Scene scene = new Scene(root, 440, 510);
         stage.setScene(scene);
     }
-
 }

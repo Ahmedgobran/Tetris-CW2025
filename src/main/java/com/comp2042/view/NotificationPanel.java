@@ -10,10 +10,23 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
+/**
+ * A custom UI component for displaying in-game notifications.
+ * <p>
+ * This panel handles various types of floating text notifications such as:
+ * score bonuses, countdown timers, and level-up alerts. It manages its own
+ * animations and self-removal from the UI scene graph.
+ * </p>
+ */
 public class NotificationPanel extends BorderPane {
 
-    private final Label scoreLabel; // Kept reference to change color later
+    private final Label scoreLabel;
 
+    /**
+     * Creates a new notification panel with the specified text.
+     *
+     * @param text The text to display in the notification.
+     */
     public NotificationPanel(String text) {
         setMinHeight(200);
         setMinWidth(220);
@@ -24,7 +37,13 @@ public class NotificationPanel extends BorderPane {
         scoreLabel.setTextFill(Color.WHITE); // Default to white
         setCenter(scoreLabel);
     }
-    // shows score then fades out
+
+    /**
+     * Animates the panel as a Score Notification (Fade out and float up).
+     * Used for standard points (+100, etc).
+     *
+     * @param list The parent list of nodes (used to remove itself after animation).
+     */
     public void showScore(ObservableList<Node> list) {
         FadeTransition ft = new FadeTransition(Duration.millis(2000), this);
         TranslateTransition tt = new TranslateTransition(Duration.millis(2500), this);
@@ -36,27 +55,41 @@ public class NotificationPanel extends BorderPane {
         transition.play();
     }
 
-    // new method for challenge mode for Countdown (3, 2, 1)
+    /**
+     * Animates the panel as a Countdown (Zoom out and fade).
+     * Used for the "3, 2, 1" countdown in Challenge Mode.
+     *
+     * @param list The parent list of nodes (used to remove itself after animation).
+     */
     public void showCountdown(ObservableList<Node> list) {
         scoreLabel.setTextFill(Color.RED);
-        scoreLabel.setStyle("-fx-font-size: 60px;"); // Optional: Make it bigger
-        //  Zoom out effect
+        scoreLabel.setStyle("-fx-font-size: 60px;");
+
+        // Zoom out effect
         ScaleTransition st = new ScaleTransition(Duration.millis(500), this);
         st.setFromX(2.0);
         st.setFromY(2.0);
         st.setToX(1.0);
         st.setToY(1.0);
-        // Fade out quickly (so it clears before the next number)
+
+        // Fade out quickly
         FadeTransition ft = new FadeTransition(Duration.millis(900), this);
         ft.setFromValue(1.0);
         ft.setToValue(0.0);
+
         ParallelTransition transition = new ParallelTransition(st, ft);
         transition.setOnFinished(event -> list.remove(NotificationPanel.this));
         transition.play();
     }
 
+    /**
+     * Animates the panel as a Level Up Alert (Pop in, Gold text, Fade out).
+     * Used when the player advances a level in Normal Mode.
+     *
+     * @param list The parent list of nodes (used to remove itself after animation).
+     */
     public void showLevelUp(ObservableList<Node> list) {
-        scoreLabel.setTextFill(Color.GOLD); // Distinct Gold color
+        scoreLabel.setTextFill(Color.GOLD);
         scoreLabel.setStyle("-fx-font-size: 45px; -fx-font-weight: bold; -fx-effect: dropshadow(gaussian, black, 2, 1, 0, 0);");
 
         // 1. Zoom In (Pop effect)

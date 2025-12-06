@@ -5,6 +5,14 @@ import com.comp2042.util.MatrixOperations;
 
 import java.util.Arrays;
 
+/**
+ * A specialized Board implementation for the Challenge Mode.
+ * <p>
+ * In this mode, blocks on the board become invisible (hidden) shortly after they are locked.
+ * The board maintains two states: a 'logical' matrix for collision detection and a 'render'
+ * matrix for display. The render matrix is periodically cleared or revealed based on a timer.
+ * </p>
+ */
 public class InvisibleBlocksBoard extends AbstractBoard {
 
     private int[][] renderBoard; // The "fake" board shown to the user
@@ -18,18 +26,39 @@ public class InvisibleBlocksBoard extends AbstractBoard {
     private volatile boolean gameActive = true;
     private int lastCountdown = 0;
 
+    /**
+     * Constructs a new InvisibleBlocksBoard with the specified dimensions.
+     *
+     * @param height The number of rows in the board.
+     * @param width  The number of columns in the board.
+     */
     public InvisibleBlocksBoard(int height, int width) {
         super(height, width);
         this.renderBoard = new int[height][width];
         this.nextRevealTime = System.currentTimeMillis() + REVEAL_INTERVAL;
     }
 
+    /**
+     * Retrieves the board matrix to be displayed to the user.
+     * <p>
+     * This method checks the internal timer to decide whether to return the actual blocks
+     * (revealed) or an empty grid (invisible).
+     * </p>
+     *
+     * @return A 2D integer array representing the visible state of the board.
+     */
     @Override
     public int[][] getBoardMatrix() {
         updateRevealState();
         return renderBoard;
     }
 
+    /**
+     * Locks the current active brick into the logical board and updates the render board.
+     * <p>
+     * If the board is currently in "invisible mode", the newly locked blocks will be hidden.
+     * </p>
+     */
     @Override
     public void mergeBrickToBackground() {
         //  Merge into the Logical board (superclass field 'boardMatrix')
@@ -43,6 +72,11 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         }
     }
 
+    /**
+     * Clears completed rows from the logical board and synchronizes the render board.
+     *
+     * @return A {@link ClearRow} object containing the updated logical matrix and score info.
+     */
     @Override
     public ClearRow clearRows() {
         // Clear rows on the logical board
@@ -57,7 +91,10 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         }
         return clearRow;
     }
-// Resets the board and game state
+
+    /**
+     * Resets the board state, score, and visibility timers for a new game.
+     */
     @Override
     public void newGame() {
         boardMatrix = new int[height][width];
@@ -68,9 +105,13 @@ public class InvisibleBlocksBoard extends AbstractBoard {
         createNewBrick();
     }
 
+    /**
+     * Stops the game logic processing.
+     */
     public void stopGame() {
         gameActive = false;
     }
+
     /* Checks the system time to toggle the visibility of the blocks
     if reveal interval passed blocks become visible and if reveal duration ends it hides the blocks again */
     private synchronized void updateRevealState() {
@@ -91,6 +132,7 @@ public class InvisibleBlocksBoard extends AbstractBoard {
             System.arraycopy(source[i], 0, destination[i], 0, source[i].length);
         }
     }
+
     /* Clears the render board by setting all cells to 0 making the locked blocks invisible
     to the player while preserving them in the logical board */
     private void hideLockedBlocks() {
@@ -98,7 +140,12 @@ public class InvisibleBlocksBoard extends AbstractBoard {
             Arrays.fill(ints, 0);
         }
     }
-    // calculates the number of seconds left until the next block appears
+
+    /**
+     * Calculates the remaining time for the reveal phase to display a countdown.
+     *
+     * @return A String representing the seconds left (3, 2, 1) if applicable, or null.
+     */
     public String getCountdown() {
         // Only show countdown during reveal
         if (!revealActive) {

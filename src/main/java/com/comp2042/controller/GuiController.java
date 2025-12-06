@@ -34,6 +34,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * The main controller class for the in-game UI.
+ * <p>
+ * This class manages the interaction between the user, the game model, and the view.
+ * It handles input events, manages the game loop, updates the UI (score, level),
+ * and coordinates rendering via the {@link GameRenderer}.
+ * </p>
+ */
 public class GuiController implements Initializable {
 
     @FXML private GridPane gamePanel;
@@ -59,6 +67,13 @@ public class GuiController implements Initializable {
 
     private final ObjectProperty<GameStatus> gameStatus = new SimpleObjectProperty<>(GameStatus.PLAYING);
 
+    /**
+     * Initializes the controller class. This method is automatically called
+     * after the fxml file has been loaded.
+     *
+     * @param location  The location used to resolve relative paths for the root object, or null if unknown.
+     * @param resources The resources used to localize the root object, or null if not found.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
@@ -76,6 +91,12 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Sets up the game view, renderers, and starts the game loop.
+     *
+     * @param boardMatrix The initial configuration of the board.
+     * @param brick       The initial active brick data.
+     */
     public void initGameView(int[][] boardMatrix, ViewData brick) {
         // Initialize the simplified Renderer
         gameRenderer = new GameRenderer(gamePanel, brickPanel, nextPiecePanel, holdPiecePanel, boardMatrix[0].length);
@@ -100,17 +121,46 @@ public class GuiController implements Initializable {
             gameRenderer.render(brick, GameSettings.getInstance().isGhostPieceEnabled());
         }
     }
+
+    /**
+     * Forces a full refresh of the static background board grid.
+     *
+     * @param board The 2D array representing the board state.
+     */
     public void refreshGameBackground(int[][] board) {
         gameRenderer.refreshBackground(board);
     }
 
     // --- Public Actions ---
+
+    /**
+     * Handles the request to move the active brick to the left.
+     */
     public void moveLeft() { refreshBrick(eventListener.onLeftEvent(new MoveEvent(EventType.LEFT, EventSource.USER))); }
+
+    /**
+     * Handles the request to move the active brick to the right.
+     */
     public void moveRight() { refreshBrick(eventListener.onRightEvent(new MoveEvent(EventType.RIGHT, EventSource.USER))); }
+
+    /**
+     * Handles the request to rotate the active brick.
+     */
     public void rotate() { refreshBrick(eventListener.onRotateEvent(new MoveEvent(EventType.ROTATE, EventSource.USER))); }
+
+    /**
+     * Handles the request to move the active brick down one step.
+     */
     public void moveDown() { processMoveDown(new MoveEvent(EventType.DOWN, EventSource.USER)); }
+
+    /**
+     * Handles the request to hold (swap) the current brick.
+     */
     public void holdBrick() {refreshBrick(eventListener.onHoldEvent());}
 
+    /**
+     * Performs a hard drop, instantly moving the brick to the bottom.
+     */
     public void hardDrop() {
         if (gameStatus.get() == GameStatus.PLAYING) {
             DownData downData = eventListener.onHardDropEvent();
@@ -119,6 +169,10 @@ public class GuiController implements Initializable {
         }
         gamePanel.requestFocus();
     }
+
+    /**
+     * Handles the Escape key action, stopping the game loop and returning to the main menu.
+     */
     public void handleEscape() {
         if (gameLoop != null) gameLoop.stop(); // Stop loop
         try {
@@ -151,6 +205,11 @@ public class GuiController implements Initializable {
         }
     }
 
+    /**
+     * Displays a temporary notification panel on the screen.
+     *
+     * @param message The text to display in the notification.
+     */
     public void showNotification(String message) {
         NotificationPanel notificationPanel = new NotificationPanel(message);
         groupNotification.getChildren().add(notificationPanel);
@@ -171,6 +230,12 @@ public class GuiController implements Initializable {
     // -- setters & getters --
     public void setEventListener(InputEventListener eventListener) { this.eventListener = eventListener; }
     public void bindScore(IntegerProperty integerProperty) { if (scoreLabel != null) scoreLabel.textProperty().bind(integerProperty.asString()); }
+
+    /**
+     * Binds the LevelManager to the GUI components to enable level updates and speed changes.
+     *
+     * @param levelManager The LevelManager instance handling game progression.
+     */
     public void bindLevel(LevelManager levelManager) {
         if (levelBox != null) {
             levelBox.setVisible(true);
@@ -194,7 +259,9 @@ public class GuiController implements Initializable {
     public boolean isGameOver() { return gameStatus.get() == GameStatus.GAME_OVER; }
     public boolean isGamePaused() { return gameStatus.get() == GameStatus.PAUSED; }
 
-    // --- Game Control Methods ---
+    /**
+     * Triggers the Game Over state, stops the game loop, and shows the Game Over panel.
+     */
     public void gameOver() {
         if (gameLoop != null) gameLoop.stop(); // Stop loop
         AudioManager.getInstance().stopMusic();
@@ -204,6 +271,9 @@ public class GuiController implements Initializable {
         gameStatus.set(GameStatus.GAME_OVER);
     }
 
+    /**
+     * Resets the game UI and starts a new game session.
+     */
     public void newGame() {
         if (gameLoop != null) gameLoop.stop(); // Stop loop
         gameOverPanel.setVisible(false);
@@ -215,6 +285,9 @@ public class GuiController implements Initializable {
     }
 //removed setupButtonIcons() method and replaced the logic into gameLayout.fxml
 
+    /**
+     * Pauses the game loop and displays the Pause Menu overlay.
+     */
     public void pauseGame() {
         if (gameStatus.get() == GameStatus.PLAYING) {
             if (gameLoop != null) gameLoop.pause(); // Pause loop
@@ -236,6 +309,10 @@ public class GuiController implements Initializable {
             }
                     }
     }
+
+    /**
+     * Closes the Pause Menu and resumes the game.
+     */
     public void closePauseMenu() {
         if (pauseMenuRoot != null) {
             // Remove the overlay
@@ -244,7 +321,10 @@ public class GuiController implements Initializable {
             resumeGameFromPause();
         }
     }
-    // Update resumeGameFromPause to ensure focus returns to game
+
+    /**
+     * Resumes the game loop and restores focus to the game panel.
+     */
     public void resumeGameFromPause() {
         if (gameLoop != null) gameLoop.start(); // Resume loop
         gameStatus.set(GameStatus.PLAYING);

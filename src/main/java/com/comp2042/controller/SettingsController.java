@@ -8,10 +8,17 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controls the Settings screen interactions.
+ * <p>
+ * Manages the configuration of Audio (Music/SFX volume and toggles) and
+ * Gameplay options (Ghost Piece toggle). Updates are applied in real-time for preview,
+ * but only saved permanently if the user clicks "Save".
+ * </p>
+ */
 public class SettingsController implements Initializable {
 
     @FXML private CheckBox musicEnabledCheckbox;
@@ -27,11 +34,15 @@ public class SettingsController implements Initializable {
     private Stage stage;
     private Runnable onCloseCallback;
 
+    /**
+     * Initializes the settings UI with the current values from {@link GameSettings}.
+     * Sets up listeners for sliders and checkboxes to provide real-time feedback.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         GameSettings settings = GameSettings.getInstance();
 
-        // Initialize audio controls from saved settings
+        // Initialize UI controls with saved values
         musicEnabledCheckbox.setSelected(settings.isMusicEnabled());
         musicVolumeSlider.setValue(settings.getMusicVolume());
         updateMusicVolumeLabel();
@@ -43,7 +54,7 @@ public class SettingsController implements Initializable {
         // Initialize game controls from saved settings
         ghostPieceCheckbox.setSelected(settings.isGhostPieceEnabled());
 
-        // Add listeners for real-time preview (doesn't save yet)
+        // listeners for real-time preview (doesn't save yet)
         musicVolumeSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
             updateMusicVolumeLabel();
             // Preview volume change immediately
@@ -68,7 +79,7 @@ public class SettingsController implements Initializable {
             AudioManager.getInstance().setSfxEnabled(newVal);
         });
 
-        // Disable sliders if audio is disabled
+        // Set initial disable state
         musicVolumeSlider.setDisable(!musicEnabledCheckbox.isSelected());
         sfxVolumeSlider.setDisable(!sfxEnabledCheckbox.isSelected());
     }
@@ -83,14 +94,29 @@ public class SettingsController implements Initializable {
         sfxVolumeLabel.setText(percent + "%");
     }
 
+    /**
+     * Sets the primary stage for this controller.
+     *
+     * @param stage The application window.
+     */
+
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    /**
+     * Sets the callback to execute when the settings screen is closed.
+     *
+     * @param callback The action to run (usually returning to the previous menu).
+     */
 
     public void setOnCloseCallback(Runnable callback) {
         this.onCloseCallback = callback;
     }
 
+    /**
+     * Saves the current UI state to the GameSettings singleton and closes the screen.
+     */
     @FXML
     private void onSaveClicked() {
         saveSettings();
@@ -98,6 +124,9 @@ public class SettingsController implements Initializable {
         closeSettings();
     }
 
+    /**
+     * Discards changes and reverts GameSettings to their previous state before closing.
+     */
     @FXML
     private void onBackClicked() {
         // Revert any preview changes to original saved values

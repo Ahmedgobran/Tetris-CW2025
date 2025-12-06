@@ -12,6 +12,13 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the visual effects for clearing lines on the game board.
+ * <p>
+ * This class creates temporary "flash" rectangles over the cleared rows and
+ * orchestrates a fade-in/fade-out animation sequence before the board updates.
+ * </p>
+ */
 public class LineClearAnimation {
 
     private final GridPane gamePanel;
@@ -21,6 +28,15 @@ public class LineClearAnimation {
     private final int boardWidth;
     private static final int VISIBLE_ROWS_OFFSET = 2;
 
+    /**
+     * Initializes the animation handler with board layout details.
+     *
+     * @param gamePanel    The GridPane where the animation overlay will be added.
+     * @param colorMapper  The utility for handling colors (not directly used for the flash, but part of render context).
+     * @param brickSize    The size of blocks in pixels.
+     * @param brickArcSize The corner radius for blocks.
+     * @param boardWidth   The number of columns in the board.
+     */
     public LineClearAnimation(GridPane gamePanel, BrickColor colorMapper, int brickSize, int brickArcSize, int boardWidth) {
         this.gamePanel = gamePanel;
         this.colorMapper = colorMapper;
@@ -29,8 +45,12 @@ public class LineClearAnimation {
         this.boardWidth = boardWidth;
     }
 
-    //Animate cleared rows with flash effect
-
+    /**
+     * Plays a flash animation on the specified rows.
+     *
+     * @param clearedRows The list of row indices (logical) that were cleared.
+     * @param onFinished  A callback Runnable to execute when the animation completes (usually to refresh the board).
+     */
     public void animateClearedRows(List<Integer> clearedRows, Runnable onFinished) {
         if (clearedRows == null || clearedRows.isEmpty()) {
             if (onFinished != null) {
@@ -97,5 +117,4 @@ public class LineClearAnimation {
 
         sequence.play();
     }
-
 }

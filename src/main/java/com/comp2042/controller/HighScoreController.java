@@ -7,17 +7,25 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Controls the logic for the High Scores display screen.
+ * <p>
+ * Loads the scores from the {@link HighScoreManager} and populates the UI list.
+ * </p>
+ */
 public class HighScoreController implements Initializable {
 
     @FXML private VBox scoreContainer;
     private Stage stage;
     private Runnable onCloseCallback;
 
+    /**
+     * Initializes the controller and populates the high score list.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         loadHighScores();

@@ -3,17 +3,23 @@ package com.comp2042.view;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-/*
- handles mapping of brick color codes to JavaFX Paint objects
- Separates color logic from GUI controller responsibilities to make code shorter and more readable
+/**
+ * Utility class responsible for mapping integer color codes to JavaFX Paint objects.
+ * <p>
+ * This class centralizes the color definitions for the game bricks, decoupling the
+ * logic model (which uses simple integers) from the UI rendering.
+ * </p>
  */
-
 public class BrickColor {
 
     private static final double SHADOW_OPACITY = 0.3;
 
-
-
+    /**
+     * Retrieves the main fill color associated with a specific brick ID.
+     *
+     * @param colorCode The integer ID representing the brick type (0-7).
+     * @return The JavaFX Paint object (Color) for the brick.
+     */
     public Paint getFillColor(int colorCode) {
         return switch (colorCode) {
             case 0 -> Color.TRANSPARENT;
@@ -28,6 +34,12 @@ public class BrickColor {
         };
     }
 
+    /**
+     * Generates a semi-transparent version of the brick's color for the Ghost Piece.
+     *
+     * @param colorCode The integer ID representing the brick type.
+     * @return A translucent Paint object matching the brick's base color.
+     */
     public Paint getShadowColor(int colorCode) {
         Paint basePaint = getFillColor(colorCode);
         if (basePaint instanceof Color baseColor) {

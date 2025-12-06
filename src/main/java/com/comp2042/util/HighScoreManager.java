@@ -6,6 +6,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Manages the persistence and retrieval of high scores using the Singleton Design Pattern.
+ * <p>
+ * Handles reading from and writing to a local text file ('highscores.txt').
+ * Ensures the score list is sorted in descending order and capped at a maximum size.
+ * </p>
+ */
 public class HighScoreManager {
 
     private static final String FILE_NAME = "highscores.txt";
@@ -17,6 +24,10 @@ public class HighScoreManager {
         loadScores();
     }
 
+    /**
+     * Retrieves the singleton instance of the HighScoreManager.
+     * @return The singleton instance.
+     */
     public static HighScoreManager getInstance() {
         if (instance == null) {
             instance = new HighScoreManager();
@@ -24,6 +35,15 @@ public class HighScoreManager {
         return instance;
     }
 
+    /**
+     * Adds a new score to the list.
+     * <p>
+     * The list is re-sorted in descending order, and if it exceeds 10 entries,
+     * the lowest score is removed. The list is then saved to the file.
+     * </p>
+     *
+     * @param score The score value to add.
+     */
     public void addScore(int score) {
         scores.add(score);
         // Sort descending (High to Low)
@@ -36,6 +56,10 @@ public class HighScoreManager {
         saveScores();
     }
 
+    /**
+     * Retrieves the current list of high scores.
+     * @return A list of integers representing the top scores.
+     */
     public List<Integer> getScores() {
         return scores;
     }

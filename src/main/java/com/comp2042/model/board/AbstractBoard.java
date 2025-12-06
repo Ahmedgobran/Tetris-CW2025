@@ -12,6 +12,15 @@ import com.comp2042.util.MatrixOperations;
 
 import java.awt.Point;
 
+/**
+ * An abstract implementation of the {@link Board} interface, providing the core logic for
+ * brick movement, collision detection, and rotation.
+ * <p>
+ * This class handles the shared mechanics (e.g., gravity, moving left/right) while
+ * subclasses (like {@link TetrisBoard} and {@link InvisibleBlocksBoard}) are responsible for
+ * managing the board matrix and specific game rules (e.g., merging blocks, clearing rows).
+ * </p>
+ */
 public abstract class AbstractBoard implements Board {
 
     protected final int width;
@@ -26,6 +35,12 @@ public abstract class AbstractBoard implements Board {
     protected int[][] boardMatrix;
     protected Point currentOffset;
 
+    /**
+     * Constructs a new Board with the specified dimensions.
+     *
+     * @param height The number of rows in the board grid.
+     * @param width  The number of columns in the board grid.
+     */
     public AbstractBoard(int height, int width) {
         this.width = width;
         this.height = height;
@@ -37,22 +52,40 @@ public abstract class AbstractBoard implements Board {
 
     // shared logic between the board classes (Movement & Collision)
 
+    /**
+     * Attempts to move the current brick down by one row.
+     * @return true if successful, false if blocked.
+     */
     @Override
     public boolean moveBrickDown() {
         return move(0, 1);
     }
 
+    /**
+     * Attempts to move the current brick left by one column.
+     * @return true if successful, false if blocked.
+     */
     @Override
     public boolean moveBrickLeft() {
         return move(-1, 0);
     }
 
+    /**
+     * Attempts to move the current brick right by one column.
+     * @return true if successful, false if blocked.
+     */
     @Override
     public boolean moveBrickRight() {
         return move(1, 0);
     }
 
-    // Helper method to reduce duplication in move methods
+    /**
+     * Helper method to move the brick by a specific offset.
+     *
+     * @param x The x-offset (horizontal).
+     * @param y The y-offset (vertical).
+     * @return true if the new position is valid (no collision), false otherwise.
+     */
     protected boolean move(int x, int y) {
         Point p = new Point(currentOffset);
         p.translate(x, y);
@@ -65,6 +98,10 @@ public abstract class AbstractBoard implements Board {
         }
     }
 
+    /**
+     * Rotates the current brick to the left (counter-clockwise).
+     * @return true if rotation is valid, false if blocked.
+     */
     @Override
     public boolean rotateLeftBrick() {
         NextShapeInfo nextShape = brickRotator.getNextShape();
@@ -77,6 +114,12 @@ public abstract class AbstractBoard implements Board {
         }
     }
 
+    /**
+     * Spawns a new brick from the generator and places it at the top center.
+     * Also resets the hold ability for the turn.
+     *
+     * @return true if spawn is successful, false if the spawn area is blocked (Game Over).
+     */
     @Override
     public boolean createNewBrick() {
         Brick currentBrick = brickGenerator.getBrick();
@@ -86,7 +129,13 @@ public abstract class AbstractBoard implements Board {
         return MatrixOperations.intersect(boardMatrix, brickRotator.getCurrentShape(), (int) currentOffset.getX(), (int) currentOffset.getY());
     }
 
-    // hold logic
+    /**
+     * Swaps the current active brick with the held brick.
+     * <p>
+     * This action is allowed only once per turn (until a piece locks).
+     * If no brick is held, the current brick is stored and a new one spawns.
+     * </p>
+     */
     public void holdBrick() {
         if (!canHold) return;
 
@@ -107,6 +156,10 @@ public abstract class AbstractBoard implements Board {
         canHold = false; // Disable holding until next piece spawns
     }
 
+    /**
+     * Instantly drops the brick to the lowest possible position.
+     * @return The number of rows dropped.
+     */
     @Override
     public int hardDrop() {
         int rowsDropped = 0;
@@ -116,6 +169,10 @@ public abstract class AbstractBoard implements Board {
         return rowsDropped;
     }
 
+    /**
+     * Calculates the shadow (ghost piece) Y position by simulating a drop.
+     * @return The Y-coordinate where the brick would land.
+     */
     @Override
     public int getShadowYPosition() {
         int shadowY = (int) currentOffset.getY();
@@ -152,8 +209,7 @@ public abstract class AbstractBoard implements Board {
         );
     }
 
-    // abstract methods (To be implemented by subclasses)
-    // These methods differ between Simpleboard.java and invisibleblocksboard.java
+    // Abstract methods to be implemented by subclasses
     @Override
     public abstract int[][] getBoardMatrix();
 
