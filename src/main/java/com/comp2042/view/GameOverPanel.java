@@ -6,8 +6,7 @@ import javafx.scene.layout.BorderPane;
 /**
  * A custom UI component representing the "Game Over" overlay screen.
  * <p>
- * This panel creates a semi-transparent dimming layer over the game board
- * and displays the "GAME OVER" text in the center.
+ * This panel displays the "GAME OVER" text in the center.
  * </p>
  */
 public class GameOverPanel extends BorderPane {
@@ -21,11 +20,7 @@ public class GameOverPanel extends BorderPane {
         gameOverLabel.getStyleClass().add("gameOverStyle");
 
         // Ensure the panel covers the specific dimensions of the game board
-        this.setPrefSize(260, 510);
-
-        // Apply a semi-transparent black background for the dimming effect
-        this.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);");
-
+        this.setPrefSize(270, 510);
         setCenter(gameOverLabel);
     }
 

@@ -25,8 +25,8 @@ public class LevelSelectionController implements Initializable {
 
     private Stage stage;
     private Runnable onBackCallback;
-    private static final int WINDOW_WIDTH = 600;
-    private static final int WINDOW_HEIGHT = 505;
+    private static final int WINDOW_WIDTH = 610;
+    private static final int WINDOW_HEIGHT = 515;
 
     /**
      * Initializes the controller class.

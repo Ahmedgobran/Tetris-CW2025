@@ -17,7 +17,7 @@
             <URL value="@window_style.css"/> </stylesheets> <!--moved up (was prev below) wasnt refrenced properly-->
 
         <VBox spacing="20"
-              style="-fx-background-color: #1a1a1a; -fx-padding: 20;"
+              style="-fx-background-color: transparent; -fx-padding: 20;"
               prefWidth="180"
               alignment="TOP_CENTER">
 
@@ -48,7 +48,7 @@
 
     <!-- Right side: New info panel -->
     <VBox spacing="20"
-          style="-fx-background-color: #1a1a1a; -fx-padding: 20;"
+          style="-fx-background-color: transparent; -fx-padding: 20;"
           prefWidth="180"
           alignment="TOP_CENTER">
 

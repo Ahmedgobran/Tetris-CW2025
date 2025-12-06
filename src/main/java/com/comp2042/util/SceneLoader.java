@@ -79,7 +79,7 @@ public class SceneLoader {
 
         levelSelectionController.setStage(stage);
 
-        Scene levelSelectionScene = new Scene(root, 455, 570);
+        Scene levelSelectionScene = new Scene(root, 500, 590);
         stage.setScene(levelSelectionScene);
     }
 
