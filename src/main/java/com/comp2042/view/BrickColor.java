@@ -1,37 +1,49 @@
 package com.comp2042.view;
 
+import com.comp2042.model.BrickType;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 /**
- * Utility class responsible for mapping integer color codes to JavaFX Paint objects.
+ * Utility class responsible for mapping BrickTypes to JavaFX Paint objects.
  * <p>
- * This class centralizes the color definitions for the game bricks, decoupling the
- * logic model (which uses simple integers) from the UI rendering.
+ * Refactored to use an EnumMap instead of a switch statement, improving
+ * maintainability and performance.
  * </p>
  */
 public class BrickColor {
 
     private static final double SHADOW_OPACITY = 0.3;
+    private final Map<BrickType, Color> colorMap;
+
+    public BrickColor() {
+        colorMap = new EnumMap<>(BrickType.class);
+        initializeColors();
+    }
+
+    private void initializeColors() {
+        colorMap.put(BrickType.EMPTY, Color.TRANSPARENT);
+        colorMap.put(BrickType.I, Color.AQUA);
+        colorMap.put(BrickType.J, Color.BLUEVIOLET);
+        colorMap.put(BrickType.L, Color.DARKGREEN);
+        colorMap.put(BrickType.O, Color.YELLOW);
+        colorMap.put(BrickType.S, Color.RED);
+        colorMap.put(BrickType.T, Color.BEIGE);
+        colorMap.put(BrickType.Z, Color.BURLYWOOD);
+    }
 
     /**
      * Retrieves the main fill color associated with a specific brick ID.
      *
-     * @param colorCode The integer ID representing the brick type (0-7).
+     * @param colorCode The integer ID representing the brick type.
      * @return The JavaFX Paint object (Color) for the brick.
      */
     public Paint getFillColor(int colorCode) {
-        return switch (colorCode) {
-            case 0 -> Color.TRANSPARENT;
-            case 1 -> Color.AQUA;
-            case 2 -> Color.BLUEVIOLET;
-            case 3 -> Color.DARKGREEN;
-            case 4 -> Color.YELLOW;
-            case 5 -> Color.RED;
-            case 6 -> Color.BEIGE;
-            case 7 -> Color.BURLYWOOD;
-            default -> Color.WHITE;
-        };
+        BrickType type = BrickType.fromID(colorCode);
+        return colorMap.getOrDefault(type, Color.WHITE);
     }
 
     /**

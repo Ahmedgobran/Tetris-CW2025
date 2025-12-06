@@ -1,5 +1,6 @@
 package com.comp2042.logic.bricks;
 
+import com.comp2042.model.BrickType;
 import com.comp2042.util.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,33 +9,32 @@ import java.util.List;
  * Represents the "I" shape Tetromino (Cyan).
  * <p>
  * Defined as a 4x4 matrix with 2 rotation states (Horizontal and Vertical).
- * This is the only piece capable of clearing 4 lines at once ("Tetris").
+ * Uses {@link BrickType#I} for its ID.
  * </p>
  */
 public final class IBrick implements Brick {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    /**
-     * Constructs a new I-Brick and initializes its rotation states.
-     * The shape uses color code 1 (Cyan).
-     */
     public IBrick() {
+        int id = BrickType.I.getID(); // Replace Magic Number "1"
+
         // Horizontal State
         brickMatrix.add(new int[][]{
                 {0, 0, 0, 0},
-                {1, 1, 1, 1},
+                {id, id, id, id},
                 {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         // Vertical State
         brickMatrix.add(new int[][]{
-                {0, 0, 1, 0},
-                {0, 0, 1, 0},
-                {0, 0, 1, 0},
-                {0, 0, 1, 0}
+                {0, 0, id, 0},
+                {0, 0, id, 0},
+                {0, 0, id, 0},
+                {0, 0, id, 0}
         });
     }
+
 
     /**
      * Retrieves the list of rotation states for this brick.

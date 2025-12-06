@@ -254,13 +254,13 @@ public abstract class AbstractBoard implements Board {
 
     @Override
     public ViewData getViewData() {
-        int[][] heldMatrix = (heldBrick != null) ? heldBrick.getShapeMatrix().get(0) : null;
+        int[][] heldMatrix = (heldBrick != null) ? heldBrick.getShapeMatrix().getFirst() : null;
 
         return new ViewData(
                 brickRotator.getCurrentShape(),
                 (int) currentOffset.getX(),
                 (int) currentOffset.getY(),
-                brickGenerator.getNextBrick().getShapeMatrix().get(0),
+                brickGenerator.getNextBrick().getShapeMatrix().getFirst(),
                 getShadowYPosition(),
                 heldMatrix // Pass the held brick
         );
