@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
  * </p>
  */
 public class ShadowRender {
+    private static final double VERTICAL_LAYOUT_OFFSET = -42.0;
 
     private final Group shadowGroup;
     private final BrickColor colorMapper;
@@ -54,7 +55,7 @@ public class ShadowRender {
 
         int[][] brickData = brick.brickData();
         double startX = gameLayoutX + brick.xPosition() * gap + brick.xPosition() * brickSize;
-        double startY = -42 + gameLayoutY + shadowY * gap + shadowY * brickSize;
+        double startY =  VERTICAL_LAYOUT_OFFSET + gameLayoutY + shadowY * gap + shadowY * brickSize;
 
         // Create shadow rectangles
         for (int i = 0; i < brickData.length; i++) {

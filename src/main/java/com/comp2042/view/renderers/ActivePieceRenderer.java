@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class ActivePieceRenderer {
 
+    private static final double VERTICAL_LAYOUT_OFFSET = -42.0;
     private final GridPane brickPanel;
     private final BrickColor colorMapper;
     private final int brickSize;
@@ -60,7 +61,7 @@ public class ActivePieceRenderer {
     public void update(ViewData brick, double gameX, double gameY) {
         // Move the whole grid panel to match the logic position
         brickPanel.setLayoutX(gameX + brick.xPosition() * brickPanel.getVgap() + brick.xPosition() * brickSize);
-        brickPanel.setLayoutY(-42 + gameY + brick.yPosition() * brickPanel.getHgap() + brick.yPosition() * brickSize);
+        brickPanel.setLayoutY(VERTICAL_LAYOUT_OFFSET + gameY + brick.yPosition() * brickPanel.getHgap() + brick.yPosition() * brickSize);
 
         // Update individual rectangle colors
         for (int i = 0; i < brick.brickData().length; i++) {

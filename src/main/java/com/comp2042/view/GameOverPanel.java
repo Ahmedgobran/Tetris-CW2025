@@ -11,6 +11,9 @@ import javafx.scene.layout.BorderPane;
  */
 public class GameOverPanel extends BorderPane {
 
+    private static final double PANEL_WIDTH = 270.0;
+    private static final double PANEL_HEIGHT = 510.0;
+
     /**
      * Constructs the Game Over panel.
      * Sets up the styling, size, and layout of the overlay.
@@ -20,7 +23,7 @@ public class GameOverPanel extends BorderPane {
         gameOverLabel.getStyleClass().add("gameOverStyle");
 
         // Ensure the panel covers the specific dimensions of the game board
-        this.setPrefSize(270, 510);
+        this.setPrefSize(PANEL_WIDTH, PANEL_HEIGHT);
         setCenter(gameOverLabel);
     }
 
