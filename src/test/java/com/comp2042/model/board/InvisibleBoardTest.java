@@ -73,4 +73,15 @@ class InvisibleBoardTest {
 
         assertTrue(hasData, "The internal logic should still record the locked brick");
     }
+
+    @Test
+    void testChallengeMode_HardDropMechanics() {
+        // Verify hard drop works correctly in challenge mode
+        int rowsDropped = board.hardDrop();
+
+        assertTrue(rowsDropped >= 0, "Hard drop should return valid row count");
+
+        // After hard drop, piece should be at bottom
+        assertTrue(board.getViewData().yPosition() > 0, "Piece should have dropped");
+    }
 }

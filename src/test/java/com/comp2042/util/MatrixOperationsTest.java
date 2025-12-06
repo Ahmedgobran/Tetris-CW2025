@@ -2,6 +2,9 @@ package com.comp2042.util;
 
 import com.comp2042.model.state.ClearRow;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /** tests methods for collision detection, boundary checks, and matrix manipulation */
@@ -69,5 +72,43 @@ class MatrixOperationsTest {
 
         assertEquals(1, newBoard[1][1], "Board should now contain the brick value");
         assertEquals(0, newBoard[0][0], "Other cells should remain empty");
+    }
+
+    @Test
+    void testClearRows_MultipleLines() {
+        // Setup: Fill bottom 2 rows
+        int[][] board = {
+                {0, 0, 0},
+                {1, 1, 1},  // Full row
+                {1, 1, 1}   // Full row
+        };
+
+        ClearRow result = MatrixOperations.checkRemoving(board);
+        assertEquals(2, result.getLinesRemoved(), "Should clear both full rows");
+    }
+
+    @Test
+    void testClearRows_NoFullRows() {
+        int[][] board = {
+                {0, 0, 0},
+                {1, 0, 1},  // Incomplete
+                {1, 1, 0}   // Incomplete
+        };
+
+        ClearRow result = MatrixOperations.checkRemoving(board);
+        assertEquals(0, result.getLinesRemoved(), "Should not clear incomplete rows");
+    }
+
+    @Test
+    void testScoreBonus_ForMultipleLines() {
+        // Fill 4 rows
+        int[][] board = new int[10][10];
+        for (int row = 6; row < 10; row++) {
+            Arrays.fill(board[row], 1);
+        }
+
+        ClearRow result = MatrixOperations.checkRemoving(board);
+        assertTrue(result.scoreBonus() > 0, "Should award points for clearing 4 lines");
+        assertEquals(4, result.getLinesRemoved(), "Should clear all 4 rows");
     }
 }

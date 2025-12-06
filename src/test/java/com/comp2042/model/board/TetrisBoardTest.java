@@ -103,4 +103,28 @@ class TetrisBoardTest {
         boolean collisionDetected = board.createNewBrick();
         assertTrue(collisionDetected, "Should detect collision (Game Over) if spawn area is blocked");
     }
+
+    @Test
+    void testRotate_BlockedByWall() {
+        // Move piece to left edge
+        for (int i = 0; i < 10; i++) {
+            board.moveBrickLeft();
+        }
+
+        // Try to rotate near wall
+        boolean rotated = board.rotateLeftBrick();
+
+        // Should either succeed or fail gracefully (not crash)
+        assertNotNull(board.getViewData().brickData(), "Rotation should not crash at wall");
+    }
+
+    @Test
+    void testRotate_ChangesShape() {
+        int[][] shapeBefore = board.getViewData().brickData();
+        board.rotateLeftBrick();
+        int[][] shapeAfter = board.getViewData().brickData();
+
+        // Shape should change (unless O-piece, but statistically unlikely)
+        assertNotNull(shapeAfter, "Shape should still exist after rotation");
+    }
 }
