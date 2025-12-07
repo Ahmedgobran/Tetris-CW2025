@@ -13,6 +13,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 
+/**
+ * The main entry point for the TetrisJFX application.
+ * <p>
+ * This class extends {@link Application} and is responsible for setting up the primary stage,
+ * initializing global service dependencies (Audio, Settings, High Scores), and loading
+ * the initial Main Menu scene.
+ * </p>
+ */
 public class Main extends Application {
 
     private static final String MAIN_MENU_FXML = "mainMenu.fxml";
@@ -22,6 +30,18 @@ public class Main extends Application {
     private GameSettings gameSettings;
     private HighScoreManager highScoreManager;
 
+
+    /**
+     * Starts the JavaFX application.
+     * <p>
+     * Initializes the core services ({@link AudioManager}, {@link GameSettings}, {@link HighScoreManager})
+     * and transitions the stage to the Main Menu.
+     * </p>
+     *
+     * @param primaryStage The primary stage for this application, onto which
+     * the application scene can be set.
+     * @throws IOException If the Main Menu FXML file cannot be loaded.
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
         // 1. Initialize Dependencies
@@ -59,7 +79,6 @@ public class Main extends Application {
 
         return root;
     }
-
     /**
      * The main method that launches the JavaFX application.
      *
