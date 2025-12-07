@@ -6,7 +6,6 @@ import com.comp2042.model.bricks.RandomBrickGenerator;
 import com.comp2042.model.bricks.BrickRotator;
 import com.comp2042.model.Score;
 import com.comp2042.model.state.ClearRow;
-import com.comp2042.model.state.NextShapeInfo;
 import com.comp2042.model.state.ViewData;
 import com.comp2042.util.MatrixOperations;
 
@@ -156,19 +155,35 @@ public abstract class AbstractBoard implements Board {
     }
 
     /**
-     * Rotates the current brick to the left (counter-clockwise).
-     * @return true if rotation is valid, false if blocked.
+     * Rotates the current active brick.
+     * Implements "Basic Wall Kicks" by trying to shift the piece if rotation is blocked.
+     *
+     * @return true if the rotation was successful (even if it required a kick).
      */
     @Override
     public boolean rotateLeftBrick() {
-        NextShapeInfo nextShape = brickRotator.getNextShape();
-        boolean conflict = MatrixOperations.intersect(boardMatrix, nextShape.shape(), (int) currentOffset.getX(), (int) currentOffset.getY());
-        if (conflict) {
-            return false;
-        } else {
-            brickRotator.setCurrentShape(nextShape.position());
-            return true;
+        // Get the shape the brick would have if we rotated
+        int[][] nextShape = brickRotator.getNextShape().shape();
+        int nextPosition = brickRotator.getNextShape().position();
+
+        int currentX = (int) currentOffset.getX();
+        int currentY = (int) currentOffset.getY();
+
+        //  Define the "Kicks" (Offsets) to try in order:
+        // {x, y} -> {0,0} Normal, {1,0} Kick Right, {-1,0} Kick Left, {0,-1} Floor Kick
+        int[][] tests = {{0, 0}, {1, 0}, {-1, 0}, {0, -1}};
+        // Loop through the tests
+        for (int[] offset : tests) {
+            int testX = currentX + offset[0];
+            int testY = currentY + offset[1];
+            if (!MatrixOperations.intersect(boardMatrix, nextShape, testX, testY)) {
+                brickRotator.setCurrentShape(nextPosition);
+                currentOffset.setLocation(testX, testY);
+                return true;
+            }
         }
+        // If we get here, ALL kicks failed. Rotation is impossible.
+        return false;
     }
 
     /**
