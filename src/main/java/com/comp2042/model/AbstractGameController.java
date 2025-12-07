@@ -1,7 +1,6 @@
 package com.comp2042.model;
 
 import com.comp2042.controller.GuiController;
-import com.comp2042.model.board.AbstractBoard;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.event.InputEventListener;
 import com.comp2042.model.event.MoveEvent;
@@ -13,26 +12,35 @@ import com.comp2042.util.HighScoreManager;
 /**
  * Abstract base class for all Game Controllers, implementing the Template Method Design Pattern.
  * <p>
- * This class centralizes the shared game loop logic (movement, rotation, view refreshing) while
- * delegating specific rules (like scoring multipliers and game over conditions) to its subclasses.
- * It acts as the bridge between the UI Controller and the Board Model.
+ * This class serves as the controller in the MVC architecture, mediating user input from the
+ * {@link GuiController} and game logic in the {@link Board}. It handles common actions like
+ * movement and view refreshing, while delegating specific scoring and game-over rules to subclasses.
+ * </p>
+ * <p>
+ * It utilizes Dependency Injection to manage the {@link HighScoreManager}, avoiding global state access.
  * </p>
  */
 public abstract class AbstractGameController implements InputEventListener {
 
     protected final Board board;
     protected final GuiController viewGuiController;
+    protected final HighScoreManager highScoreManager;
 
     /**
-     * Initializes the game controller with a specific UI and Board implementation.
+     * Initializes the game controller with necessary dependencies.
+     * <p>
+     * Sets up the initial game state, registers this controller as the input listener for the GUI,
+     * and binds the score property to the UI labels.
+     * </p>
      *
-     * @param c     The GUI Controller responsible for rendering the game.
-     * @param board The specific Board model (e.g., TetrisBoard or InvisibleBlocksBoard).
+     * @param c                 The GUI Controller responsible for rendering.
+     * @param board             The specific Board model (e.g., TetrisBoard or InvisibleBlocksBoard).
+     * @param highScoreManager  The injected service for saving high scores.
      */
-
-    public AbstractGameController(GuiController c, Board board) {
+    public AbstractGameController(GuiController c, Board board, HighScoreManager highScoreManager) {
         this.viewGuiController = c;
         this.board = board;
+        this.highScoreManager = highScoreManager;
 
         // Initialize common game setup
         board.createNewBrick();
@@ -44,9 +52,9 @@ public abstract class AbstractGameController implements InputEventListener {
     // Functionality (Identical in both modes -NormalModeController and ChallengeModeController)
 
     /**
-     * Retrieves the current board grid.
+     * Retrieves the current configuration of the game board.
      *
-     * @return A 2D array representing the board state.
+     * @return A 2D integer array representing the grid of blocks.
      */
     @Override
     public int[][] getBoard() {
@@ -54,10 +62,10 @@ public abstract class AbstractGameController implements InputEventListener {
     }
 
     /**
-     * Handles the logic when the user attempts to move the brick to the left.
+     * Handles the request to move the active brick to the left.
      *
-     * @param event The move event context.
-     * @return The updated view data after the move attempt.
+     * @param event The move event details.
+     * @return A {@link ViewData} object representing the updated state of the board.
      */
     @Override
     public ViewData onLeftEvent(MoveEvent event) {
@@ -67,10 +75,10 @@ public abstract class AbstractGameController implements InputEventListener {
     }
 
     /**
-     * Handles the logic when the user attempts to move the brick to the right.
+     * Handles the request to move the active brick to the right.
      *
-     * @param event The move event context.
-     * @return The updated view data after the move attempt.
+     * @param event The move event details.
+     * @return A {@link ViewData} object representing the updated state of the board.
      */
     @Override
     public ViewData onRightEvent(MoveEvent event) {
@@ -80,10 +88,10 @@ public abstract class AbstractGameController implements InputEventListener {
     }
 
     /**
-     * Handles the logic when the user attempts to rotate the brick.
+     * Handles the request to rotate the active brick.
      *
-     * @param event The move event context.
-     * @return The updated view data after the rotation attempt.
+     * @param event The move event details.
+     * @return A {@link ViewData} object representing the updated state of the board.
      */
     @Override
     public ViewData onRotateEvent(MoveEvent event) {
@@ -93,13 +101,14 @@ public abstract class AbstractGameController implements InputEventListener {
     }
 
     /**
-     * Handles the logic when the user attempts to hold (swap) the current brick.
+     * Handles the request to hold (swap) the current brick.
      *
-     * @return The updated view data containing the held brick and new active brick.
+     * @return A {@link ViewData} object containing the updated board state and held brick info.
      */
     @Override
     public ViewData onHoldEvent() {
-        if (board instanceof AbstractBoard ab) {
+        // If the holdBrick method was pulled up to AbstractBoard, we can cast freely
+        if (board instanceof com.comp2042.model.board.AbstractBoard ab) {
             ab.holdBrick();
         }
         refreshView();
@@ -115,32 +124,34 @@ public abstract class AbstractGameController implements InputEventListener {
         refreshView();
     }
 
+    // --- Helper Methods ---
+
     /**
-     * Helper to force a UI refresh.
-     * Useful because Challenge mode needs constant refreshing for invisible blocks.
+     * Helper method to force a UI refresh of the background grid.
      */
     protected void refreshView() {
         viewGuiController.refreshGameBackground(board.getBoardMatrix());
     }
 
     /**
-     * Handles the logic sequence when a brick lands on the stack.
+     * Orchestrates the logic sequence when a brick lands on the stack.
      * <p>
-     * This is a Template Method that defines the strict order of operations:
-     * 1. Merge brick to background.
-     * 2. Clear full rows.
-     * 3. Calculate Score (Hook method overridden by subclasses).
-     * 4. Check for Game Over.
+     * This method performs the following steps:
+     * <ol>
+     * <li>Merges the active brick into the background grid.</li>
+     * <li>Checks for and clears any full rows.</li>
+     * <li>Calculates and awards score points (via {@link #calculateScore(ClearRow)}).</li>
+     * <li>Checks if a new brick can be spawned; triggers Game Over if not.</li>
+     * </ol>
      * </p>
      *
-     * @return DownData containing the result of the landing event (cleared rows, new score).
+     * @return A {@link DownData} object containing the result of the landing event (cleared rows, new score).
      */
     protected DownData processBrickLanding() {
         board.mergeBrickToBackground();
         ClearRow clearRow = board.clearRows();
 
         if (clearRow.getLinesRemoved() > 0) {
-            // Use abstract method for scoring, or default to standard
             board.getScore().add(calculateScore(clearRow));
         }
 
@@ -152,20 +163,24 @@ public abstract class AbstractGameController implements InputEventListener {
         return new DownData(clearRow, board.getViewData());
     }
 
-    // --- Protected Hooks for Child Classes ---
-
     /**
      * Handles the Game Over state.
-     * Saves the current score to the high score manager and triggers the UI game over screen.
+     * <p>
+     * Saves the current score using the injected {@link HighScoreManager} and
+     * triggers the UI to display the Game Over screen.
+     * </p>
      */
     protected void handleGameOver() {
-        HighScoreManager.getInstance().addScore(board.getScore().scoreProperty().get());
+        highScoreManager.addScore(board.getScore().scoreProperty().get());
         viewGuiController.gameOver();
     }
 
     /**
      * Calculates the score to be awarded based on cleared rows.
-     * Subclasses can override this to implement different scoring rules (e.g., multipliers).
+     * <p>
+     * This is a hook method that subclasses can override to implement different
+     * scoring rules (e.g., score multipliers in Challenge Mode).
+     * </p>
      *
      * @param clearRow The result of the row clearing operation.
      * @return The score bonus to add.

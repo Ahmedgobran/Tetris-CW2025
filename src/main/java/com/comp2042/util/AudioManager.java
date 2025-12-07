@@ -13,8 +13,6 @@ import java.net.URL;
  */
 public class AudioManager {
 
-    private static AudioManager instance;
-
     private MediaPlayer musicPlayer;
     private MediaPlayer sfxPlayer;
 
@@ -23,18 +21,7 @@ public class AudioManager {
     private boolean musicEnabled = true;
     private boolean sfxEnabled = true;
 
-    private AudioManager() {
-    }
-
-    /**
-     * Retrieves the single instance of the AudioManager.
-     * @return The singleton instance.
-     */
-    public static AudioManager getInstance() {
-        if (instance == null) {
-            instance = new AudioManager();
-        }
-        return instance;
+    public AudioManager() {
     }
 
     /**
@@ -46,10 +33,7 @@ public class AudioManager {
     public void playMusic(String resourcePath) {
         try {
             URL resource = getClass().getResource(resourcePath);
-            if (resource == null) {
-                System.err.println("Music file not found: " + resourcePath);
-                return;
-            }
+            if (resource == null) return;
 
             // Stop existing music
             stopMusic();

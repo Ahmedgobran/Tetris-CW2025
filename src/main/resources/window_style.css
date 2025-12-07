@@ -52,8 +52,7 @@
 .bonusStyle {
     -fx-font-size: 40px;
     -fx-font-weight: bold;
-    /* White/Cyan Glow */
-    -fx-effect: dropshadow(gaussian, #00ff2a, 10, 0.5, 0, 0);
+
 }
 
 .gameOverStyle {

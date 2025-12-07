@@ -6,6 +6,8 @@ import com.comp2042.model.event.EventSource;
 import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
+import com.comp2042.util.HighScoreManager;
+
 
 /**
  * Controls the logic for the "Normal Mode" game.
@@ -22,14 +24,13 @@ public class NormalModeController extends AbstractGameController {
      *
      * @param c The GUI Controller.
      */
-    public NormalModeController(GuiController c) {
-        // Pass the specific board type to the parent
-        super(c, new TetrisBoard(25, 11));
-        // Initialize Level Logic
+    public NormalModeController(GuiController c, HighScoreManager highScoreManager) {
+
+        // Pass highScoreManager to parent
+        super(c, new TetrisBoard(25 ,11), highScoreManager);
+
         LevelManager levelManager = new LevelManager();
-        // Bind it to the score
         levelManager.bindScore(board.getScore().scoreProperty());
-        // bind it to the gui
         c.bindLevel(levelManager);
     }
 

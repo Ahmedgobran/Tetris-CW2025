@@ -7,39 +7,44 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Manages the persistence and retrieval of high scores using the Singleton Design Pattern.
+ * Manages the persistence and retrieval of high scores.
  * <p>
- * Handles reading from and writing to a local text file ('highscores.txt').
- * Ensures the score list is sorted in descending order and capped at a maximum size.
+ * This class handles reading from and writing to a local text file.
+ * It ensures the score list is always sorted in descending order and capped at a maximum size (Top 10).
  * </p>
  */
 public class HighScoreManager {
 
-    private static final String FILE_NAME = "highscores.txt";
-    private static HighScoreManager instance;
+    // Default file name for the main application
+    private static final String DEFAULT_FILE_NAME = "highscores.txt";
+
+    private final String fileName;
     private List<Integer> scores;
 
-    private HighScoreManager() {
-        scores = new ArrayList<>();
+    /**
+     * Default constructor for the main application.
+     * Uses "highscores.txt".
+     */
+    public HighScoreManager() {
+        this(DEFAULT_FILE_NAME);
+    }
+
+    /**
+     * Constructor for testing or custom files.
+     * * @param fileName The name of the file to store scores in.
+     */
+    public HighScoreManager(String fileName) {
+        this.fileName = fileName;
+        this.scores = new ArrayList<>();
         loadScores();
     }
 
     /**
-     * Retrieves the singleton instance of the HighScoreManager.
-     * @return The singleton instance.
-     */
-    public static HighScoreManager getInstance() {
-        if (instance == null) {
-            instance = new HighScoreManager();
-        }
-        return instance;
-    }
-
-    /**
-     * Adds a new score to the list.
+     * Adds a new score to the list and persists the updated list to the file.
      * <p>
-     * The list is re-sorted in descending order, and if it exceeds 10 entries,
-     * the lowest score is removed. The list is then saved to the file.
+     * The list is re-sorted in descending order (highest score first). If the list
+     * exceeds 10 entries after the addition, the lowest score is removed to maintain
+     * the "Top 10" limit.
      * </p>
      *
      * @param score The score value to add.
@@ -58,14 +63,15 @@ public class HighScoreManager {
 
     /**
      * Retrieves the current list of high scores.
-     * @return A list of integers representing the top scores.
+     *
+     * @return A list of integers representing the top scores, sorted descending.
      */
     public List<Integer> getScores() {
         return scores;
     }
 
     private void loadScores() {
-        File file = new File(FILE_NAME);
+        File file = new File(fileName);
         if (!file.exists()) return;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -80,7 +86,7 @@ public class HighScoreManager {
     }
 
     private void saveScores() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
             for (int score : scores) {
                 writer.write(score + "\n");
             }

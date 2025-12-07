@@ -7,6 +7,7 @@ import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
+import com.comp2042.util.HighScoreManager;
 
 
 /**
@@ -28,8 +29,9 @@ public class ChallengeModeController extends AbstractGameController {
      *
      * @param c The GUI Controller responsible for rendering.
      */
-    public ChallengeModeController(GuiController c) {
-        super(c, new InvisibleBlocksBoard(25, 11));
+    public ChallengeModeController(GuiController c, HighScoreManager highScoreManager) {
+        // Pass highScoreManager to parent
+        super(c, new InvisibleBlocksBoard(25, 11), highScoreManager);
     }
 
     /**

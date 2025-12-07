@@ -2,22 +2,22 @@ package com.comp2042.controller;
 
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
+import com.comp2042.util.HighScoreManager;
 import com.comp2042.util.SceneLoader;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
-
 import java.net.URL;
 import java.util.ResourceBundle;
 
 /**
  * Controls the interaction logic for the Main Menu screen.
  * <p>
- * This controller handles navigation to various parts of the application, including
- * the Level Selection, Settings, Controls, and High Scores screens. It also initializes
- * the global audio settings when the application starts.
+ * This controller serves as the central hub for the application, handling navigation to
+ * Level Selection, Settings, Controls, and High Scores. It is responsible for initializing
+ * and holding the core service dependencies (Audio, Settings, Scores) and passing them
+ * to later screens.
  * </p>
  */
 public class MainMenuController implements Initializable {
@@ -26,12 +26,16 @@ public class MainMenuController implements Initializable {
 
     private Stage stage;
 
+    // Dependencies
+    private AudioManager audioManager;
+    private GameSettings gameSettings;
+    private HighScoreManager highScoreManager;
+
     /**
-     * Initializes the controller class.
+     * Called to initialize a controller after its root element has been completely processed.
      * <p>
-     * This method runs automatically after the FXML file has been loaded. It ensures
-     * UI elements are in the correct state (e.g., hiding the controls panel) and applies
-     * saved audio preferences to the {@link AudioManager} before starting background music.
+     * Initializes UI state, such as enabling buttons that might be disabled by default.
+     * Note: Core dependencies are not available here; they are injected via {@link #initModel}.
      * </p>
      *
      * @param location  The location used to resolve relative paths for the root object, or null if unknown.
@@ -39,28 +43,36 @@ public class MainMenuController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
         // Enable settings button (was disabled)
         if (settingsButton != null) {
             settingsButton.setDisable(false);
         }
+    }
 
-        // Start background music with saved volume settings
-        GameSettings settings = GameSettings.getInstance();
-        AudioManager audioManager = AudioManager.getInstance();
+    /**
+     * Injects the required service dependencies and starts the background music.
+     * <p>
+     * This method must be called immediately after loading the controller to ensure
+     * proper functioning of audio and state management.
+     * </p>
+     *
+     * @param audioManager     The service responsible for playing music and SFX.
+     * @param gameSettings     The global game configuration settings.
+     * @param highScoreManager The manager handling high score persistence.
+     */
+    public void initModel(AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager) {
+        this.audioManager = audioManager;
+        this.gameSettings = gameSettings;
+        this.highScoreManager = highScoreManager;
 
-        // Apply saved settings to AudioManager
-        audioManager.setMusicVolume(settings.getMusicVolume());
-        audioManager.setSfxVolume(settings.getSfxVolume());
-        audioManager.setMusicEnabled(settings.isMusicEnabled());
-        audioManager.setSfxEnabled(settings.isSfxEnabled());
+        // Start music using the injected audio manager
         audioManager.playMusic("/music/background.mp3");
     }
 
     /**
      * Sets the primary stage for this controller.
      * <p>
-     * The stage reference is required to switch scenes (e.g., changing from the menu
+     * The stage reference is required to perform scene transitions (e.g., changing from the menu
      * to the game view).
      * </p>
      *
@@ -73,17 +85,17 @@ public class MainMenuController implements Initializable {
     /**
      * Handles the "Play" button click event.
      * <p>
-     * Plays a sound effect and navigates the user to the {@link LevelSelectionController}
-     * to choose a game mode.
+     * Plays a confirmation sound and navigates the user to the {@link LevelSelectionController},
+     * passing along all core dependencies.
      * </p>
      */
     @FXML
     private void onPlayClicked() {
-        AudioManager.getInstance().playPlayPress();
+        audioManager.playPlayPress();
         try {
-            SceneLoader.openLevelSelection(stage);
+            // Updated call: pass highScoreManager
+            SceneLoader.openLevelSelection(stage, audioManager, gameSettings, highScoreManager);
         } catch (Exception e) {
-            System.err.println("Error opening level selection: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -96,12 +108,11 @@ public class MainMenuController implements Initializable {
      */
     @FXML
     private void onControlsClicked() {
-        AudioManager.getInstance().playButtonPress();
+        audioManager.playButtonPress();
         try {
-            // Use the new scene loader we added in SceneLoader to open the controls screen
-            SceneLoader.openControls(stage);
+            // Controls screen doesn't need specific settings, just the stage
+            SceneLoader.openControls(stage, audioManager);
         } catch (Exception e) {
-            System.err.println("Error opening controls: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -115,11 +126,10 @@ public class MainMenuController implements Initializable {
      */
     @FXML
     private void onSettingsClicked() {
-        AudioManager.getInstance().playButtonPress();
+        audioManager.playButtonPress();
         try {
-            SceneLoader.openSettings(stage);
+            SceneLoader.openSettings(stage, gameSettings, audioManager);
         } catch (Exception e) {
-            System.err.println("Error opening settings: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -132,11 +142,10 @@ public class MainMenuController implements Initializable {
      */
     @FXML
     private void onHighScoresClicked() {
-        AudioManager.getInstance().playButtonPress();
+        audioManager.playButtonPress();
         try {
-            SceneLoader.openHighScores(stage);
+            SceneLoader.openHighScores(stage, highScoreManager, audioManager);
         } catch (Exception e) {
-            System.err.println("Error opening high scores: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -144,17 +153,14 @@ public class MainMenuController implements Initializable {
     /**
      * Handles the "Exit" button click event.
      * <p>
-     * Plays a button sound, stops any playing music, closes the application window,
-     * and terminates the Java Virtual Machine.
+     * Plays a button sound, stops the music service, and terminates the application.
      * </p>
      */
     @FXML
     private void onExitClicked() {
-        AudioManager.getInstance().playButtonPress();
-        AudioManager.getInstance().stopMusic();
-        // Close the application
+        audioManager.playButtonPress();
+        audioManager.stopMusic();
         stage.close();
         System.exit(0);
     }
-
 }

@@ -9,11 +9,8 @@ import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
-import com.comp2042.util.AudioManager;
-import com.comp2042.util.GameLoop;
+import com.comp2042.util.*;
 import com.comp2042.view.renderers.GameRenderer;
-import com.comp2042.util.GameSettings;
-import com.comp2042.util.SceneLoader;
 import com.comp2042.view.GameOverPanel;
 import com.comp2042.view.NotificationPanel;
 import javafx.beans.property.IntegerProperty;
@@ -32,6 +29,7 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.net.URL;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -64,6 +62,9 @@ public class GuiController implements Initializable {
     private GameLoop gameLoop; // replaced timeline with GameLoop (which handles that now)
     private Stage gameStage;
     private Parent pauseMenuRoot = null;
+    private AudioManager audioManager;
+    private GameSettings gameSettings;
+    private HighScoreManager highScoreManager;
 
     private final ObjectProperty<GameStatus> gameStatus = new SimpleObjectProperty<>(GameStatus.PLAYING);
 
@@ -76,7 +77,7 @@ public class GuiController implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Font.loadFont(getClass().getClassLoader().getResource("digital.ttf").toExternalForm(), 38);
+        Font.loadFont(Objects.requireNonNull(getClass().getClassLoader().getResource("digital.ttf")).toExternalForm(), 38);
         // Initialize the new Input Handler
         this.inputHandler = new GameInputHandler(this);
         gamePanel.setFocusTraversable(true);
@@ -89,6 +90,15 @@ public class GuiController implements Initializable {
             levelBox.setVisible(false);
             levelBox.setManaged(false);
         }
+    }
+
+    /**
+     * Injects the required dependencies.
+     */
+    public void initModel(AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager) {
+        this.audioManager = audioManager;
+        this.gameSettings = gameSettings;
+        this.highScoreManager = highScoreManager;
     }
 
     /**
@@ -105,8 +115,7 @@ public class GuiController implements Initializable {
         gameRenderer.refreshBackground(boardMatrix);
         gameRenderer.initActivePiece(brick); // Handles rectangle creation and first draw
 
-        AudioManager.getInstance().playMusic("/music/game_music.mp3");
-
+        audioManager.playMusic("/music/game_music.mp3");
         // Start Game Loop
         gameLoop = new GameLoop(400, (unused) -> processMoveDown(new MoveEvent(EventType.DOWN, EventSource.THREAD)));
         gameLoop.start();
@@ -118,7 +127,7 @@ public class GuiController implements Initializable {
     private void refreshBrick(ViewData brick) {
         if (gameStatus.get() == GameStatus.PLAYING) {
             // refactored
-            gameRenderer.render(brick, GameSettings.getInstance().isGhostPieceEnabled());
+            gameRenderer.render(brick, gameSettings.isGhostPieceEnabled());
         }
     }
 
@@ -176,7 +185,8 @@ public class GuiController implements Initializable {
     public void handleEscape() {
         if (gameLoop != null) gameLoop.stop(); // Stop loop
         try {
-            SceneLoader.openMainMenu(gameStage);
+            // Pass all dependencies back to Main Menu
+            SceneLoader.openMainMenu(gameStage, audioManager, gameSettings, highScoreManager);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -194,8 +204,7 @@ public class GuiController implements Initializable {
     private void showClearRowNotification(ClearRow clearRow) {
         if (clearRow != null && clearRow.getLinesRemoved() > 0) {
             List<Integer> clearedRows = clearRow.clearedRowIndices();
-            AudioManager.getInstance().playSFX("/sfx/line-cleared.mp3");
-            // Access animation through the new game renderer class
+            audioManager.playSFX("/sfx/line-cleared.mp3");
             gameRenderer.getLineClearAnimation().animateClearedRows(clearedRows, () -> {
                 refreshGameBackground(eventListener.getBoard());
                 NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.scoreBonus());
@@ -263,10 +272,10 @@ public class GuiController implements Initializable {
      * Triggers the Game Over state, stops the game loop, and shows the Game Over panel.
      */
     public void gameOver() {
-        if (gameLoop != null) gameLoop.stop(); // Stop loop
-        AudioManager.getInstance().stopMusic();
-        AudioManager.getInstance().playSFX("/sfx/negative_beeps.mp3");
-        AudioManager.getInstance().playSFX("/sfx/game_over.mp3");
+        if (gameLoop != null) gameLoop.stop();
+        audioManager.stopMusic();
+        audioManager.playSFX("/sfx/negative_beeps.mp3");
+        audioManager.playSFX("/sfx/game_over.mp3");
         gameOverPanel.setVisible(true);
         gameStatus.set(GameStatus.GAME_OVER);
     }
@@ -279,35 +288,34 @@ public class GuiController implements Initializable {
         gameOverPanel.setVisible(false);
         eventListener.createNewGame();
         gamePanel.requestFocus();
-        AudioManager.getInstance().playMusic("/music/game_music.mp3");
-        if (gameLoop != null) gameLoop.start(); // Restart loop
+        audioManager.playMusic("/music/game_music.mp3");
+        if (gameLoop != null) gameLoop.start();
         gameStatus.set(GameStatus.PLAYING);
     }
 //removed setupButtonIcons() method and replaced the logic into gameLayout.fxml
-
     /**
      * Pauses the game loop and displays the Pause Menu overlay.
      */
     public void pauseGame() {
         if (gameStatus.get() == GameStatus.PLAYING) {
-            if (gameLoop != null) gameLoop.pause(); // Pause loop
+            if (gameLoop != null) gameLoop.pause();
             gameStatus.set(GameStatus.PAUSED);
-            // Show pause menu
             try {
                 if (pauseMenuRoot == null) {
                     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("pauseMenu.fxml"));
                     pauseMenuRoot = fxmlLoader.load();
-                    // Configure the controller
+
                     PauseMenuController pauseController = fxmlLoader.getController();
                     pauseController.setGuiController(this);
                     pauseController.setStage(gameStage);
+                    // Inject dependencies so Pause Menu can navigate
+                    pauseController.initModel(audioManager, gameSettings, highScoreManager);
                 }
-                // Add the menu to the StackPane (Overlay on top of game)
                 rootContainer.getChildren().add(pauseMenuRoot);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-                    }
+        }
     }
 
     /**
