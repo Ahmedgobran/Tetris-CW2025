@@ -12,7 +12,6 @@ import com.comp2042.model.state.ViewData;
 import com.comp2042.view.GameUIManager;
 import com.comp2042.util.*;
 import com.comp2042.view.renderers.GameRenderer;
-import com.comp2042.view.GameOverPanel;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -47,7 +46,7 @@ public class GuiController implements Initializable {
     @FXML private Label scoreLabel;
     @FXML private Label levelLabel;
     @FXML private VBox levelBox;
-    @FXML private GameOverPanel gameOverPanel;
+    @FXML private StackPane gameOverPanel;
     @FXML private StackPane rootContainer;
     @FXML private GridPane holdPiecePanel;
 

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.comp2042.view.GameOverPanel?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.Group?>
+<?import javafx.scene.shape.Rectangle?>
 
 <StackPane fx:id="rootContainer"
            fx:controller="com.comp2042.controller.GuiController"
            xmlns:fx="http://javafx.com/fxml">
 
-    <!-- Main Game Content -->
-    <HBox styleClass="root">
         <stylesheets>
-            <URL value="@window_style.css"/> </stylesheets> <!--moved up (was prev below) wasnt refrenced properly-->
+            <URL value="@window_style.css"/>
+        </stylesheets> <!--moved up (was prev below) wasnt refrenced properly-->
+
+    <HBox styleClass="root">
 
         <VBox spacing="20"
               style="-fx-background-color: transparent; -fx-padding: 20;"
               prefWidth="180"
               alignment="TOP_CENTER">
 
-            <!-- Hold piece panel -->
             <VBox spacing="8" alignment="TOP_CENTER">
                 <Label text="HOLD" styleClass="nextBrickLabel"/>
                 <VBox styleClass="nextBrick" prefWidth="50" prefHeight="50" alignment="CENTER">
@@ -32,71 +32,94 @@
 
         <Pane prefWidth="260" prefHeight="510">
             <GridPane fx:id="brickPanel" vgap="1" hgap="1"/>
-            <BorderPane styleClass="gameBoard" >
+
+            <BorderPane styleClass="gameBoard">
                 <center>
                     <GridPane fx:id="gamePanel" hgap="1" vgap="1" layoutY="30" layoutX="40"/>
                 </center>
             </BorderPane>
 
-        <Group fx:id="groupNotification">
-            <VBox alignment="CENTER">
-                <GameOverPanel fx:id="gameOverPanel"/>
+            <Group fx:id="groupNotification">
+                <VBox alignment="CENTER">
+                </VBox>
+            </Group>
+        </Pane>
+
+        <VBox spacing="20"
+              style="-fx-background-color: transparent; -fx-padding: 20;"
+              prefWidth="180"
+              alignment="TOP_CENTER">
+
+            <VBox spacing="8" alignment="TOP_CENTER">
+                <Label text="NEXT" styleClass="nextBrickLabel"/>
+                <VBox styleClass="nextBrick" prefWidth="50" prefHeight="50" alignment="CENTER">
+                    <GridPane fx:id="nextPiecePanel" hgap="1" vgap="1" alignment="CENTER"/>
+                </VBox>
             </VBox>
-        </Group>
 
-    </Pane>
+            <VBox spacing="8" alignment="CENTER">
+                <Label text="SCORE"
+                       style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="scoreLabel" text="0" styleClass="scoreClass"/>
+            </VBox>
 
-    <!-- Right side: New info panel -->
-    <VBox spacing="20"
-          style="-fx-background-color: transparent; -fx-padding: 20;"
-          prefWidth="180"
-          alignment="TOP_CENTER">
+            <VBox fx:id="levelBox" spacing="8" alignment="CENTER">
+                <Label text="LEVEL" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
+                <Label fx:id="levelLabel" text="1" styleClass="scoreClass"/>
+            </VBox>
 
-        <!--right size for panel to show the block coming next -->
-        <VBox spacing="8" alignment="TOP_CENTER">
-            <Label text="NEXT" styleClass="nextBrickLabel"/>  <!-- refrenced nextBrickLabel & nextBrick from css  -->
-            <VBox styleClass="nextBrick" prefWidth="50" prefHeight="50" alignment="CENTER">
-                <GridPane fx:id="nextPiecePanel" hgap="1" vgap="1" alignment="CENTER"/>
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <VBox spacing="12" alignment="CENTER">
+                <Button onAction="#pauseGame" styleClass="button-icon">
+                    <graphic>
+                        <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
+                            <Image url="@Images/pause'resume-button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button onAction="#newGame" styleClass="button-icon">
+                    <graphic>
+                        <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
+                            <Image url="@Images/restart-button.png"/>
+                        </ImageView>
+                    </graphic>
+                </Button>
             </VBox>
         </VBox>
+    </HBox>
 
-        <!-- Score display -->
-        <VBox spacing="8" alignment="CENTER">
-            <Label text="SCORE"
-                   style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
-            <Label fx:id="scoreLabel" text="0" styleClass="scoreClass"/>  <!-- moved the styling to css-->
+    <StackPane fx:id="gameOverPanel" visible="false">
+        <Rectangle width="320" height="250" arcWidth="20" arcHeight="20" styleClass="game-over-box"/>
+
+        <VBox alignment="CENTER" spacing="30">
+            <Label text="GAME OVER" styleClass="gameOverStyle"/>
+
+            <HBox alignment="CENTER" spacing="40">
+                <Button onAction="#newGame" styleClass="button-icon">
+                    <graphic>
+                        <ImageView fitWidth="80" fitHeight="80" preserveRatio="true">
+                            <Image url="@Images/restart-button.png"/>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Restart Game"/>
+                    </tooltip>
+                </Button>
+
+                <Button onAction="#handleEscape" styleClass="button-icon">
+                    <graphic>
+                        <ImageView fitWidth="95" fitHeight="95" preserveRatio="true">
+                            <Image url="@Images/MM-button.png"/>
+                        </ImageView>
+                    </graphic>
+                    <tooltip>
+                        <Tooltip text="Main Menu"/>
+                    </tooltip>
+                </Button>
+            </HBox>
         </VBox>
+    </StackPane>
 
-        <!--Level display -->
-        <VBox fx:id="levelBox" spacing="8" alignment="CENTER">
-            <Label text="LEVEL" style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
-            <Label fx:id="levelLabel" text="1" styleClass="scoreClass"/>
-        </VBox>
-
-        <Region VBox.vgrow="ALWAYS"/>
-
-        <!-- control buttons -->
-        <VBox spacing="12" alignment="CENTER">
-            <Button onAction="#pauseGame" styleClass="button-icon">
-                <graphic>
-                    <!--moved logic from guicontroller to here since more simple-->
-                    <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
-                        <Image url="@Images/pause'resume-button.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-
-            <Button onAction="#newGame" styleClass="button-icon">
-                <graphic>
-                    <!--moved logic from guicontroller to here since more simple-->
-                    <ImageView fitWidth="70" fitHeight="70" preserveRatio="true">
-                        <Image url="@Images/restart-button.png"/>
-                    </ImageView>
-                </graphic>
-            </Button>
-        </VBox>
-
-    </VBox>
-
-</HBox>
 </StackPane>

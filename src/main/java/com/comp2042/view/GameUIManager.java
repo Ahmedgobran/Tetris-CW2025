@@ -26,7 +26,7 @@ public class GameUIManager {
 
     private final StackPane rootContainer;
     private final Group groupNotification;
-    private final GameOverPanel gameOverPanel;
+    private final Parent gameOverPanel;
     private final Stage gameStage;
     private final GuiController guiController;
 
@@ -38,9 +38,8 @@ public class GameUIManager {
     private final GameSettings gameSettings;
     private final HighScoreManager highScoreManager;
 
-    public GameUIManager(StackPane rootContainer, Group groupNotification, GameOverPanel gameOverPanel,
-                         Stage gameStage, GuiController guiController,
-                         AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager) {
+    public GameUIManager(StackPane rootContainer, Group groupNotification, Parent gameOverPanel, Stage gameStage, GuiController guiController, AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager)
+    {
         this.rootContainer = rootContainer;
         this.groupNotification = groupNotification;
         this.gameOverPanel = gameOverPanel;
