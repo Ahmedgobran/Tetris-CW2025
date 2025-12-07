@@ -44,9 +44,12 @@ public class PauseMenuController {
 
     /**
      * Sets the primary stage for this controller.
+     *
      * @param stage The application window.
      */
-    public void setStage(Stage stage) { this.stage = stage; }
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
 
     /**
      * Sets the reference to the main game controller.
@@ -57,7 +60,9 @@ public class PauseMenuController {
      *
      * @param guiController The active game controller.
      */
-    public void setGuiController(GuiController guiController) { this.guiController = guiController; }
+    public void setGuiController(GuiController guiController) {
+        this.guiController = guiController;
+    }
 
     /**
      * Handles the "Resume" button click.
@@ -65,7 +70,8 @@ public class PauseMenuController {
      * Closes the pause overlay and resumes the game loop.
      * </p>
      */
-    @FXML private void onResumeClicked() {
+    @FXML
+    private void onResumeClicked() {
         audioManager.playButtonPress();
         guiController.closePauseMenu();
     }
@@ -76,7 +82,8 @@ public class PauseMenuController {
      * Resets the current game session immediately and closes the pause overlay.
      * </p>
      */
-    @FXML private void onRestartClicked() {
+    @FXML
+    private void onRestartClicked() {
         audioManager.playButtonPress();
         guiController.newGame();
         guiController.closePauseMenu();
@@ -88,7 +95,8 @@ public class PauseMenuController {
      * Opens the settings panel, passing along the current game settings and audio manager.
      * </p>
      */
-    @FXML private void onSettingsClicked() {
+    @FXML
+    private void onSettingsClicked() {
         audioManager.playButtonPress();
         try {
             SceneLoader.openSettings(stage, gameSettings, audioManager);
@@ -103,8 +111,14 @@ public class PauseMenuController {
      * Aborts the current game and returns to the main menu screen, passing back all core dependencies.
      * </p>
      */
-    @FXML private void onMainMenuClicked() {
+    @FXML
+    private void onMainMenuClicked() {
         audioManager.playButtonPress();
+
+        // Stop the game loop before leaving!
+        if (guiController != null) {
+            guiController.stopGameLoop();
+        }
         try {
             SceneLoader.openMainMenu(stage, audioManager, gameSettings, highScoreManager);
         } catch (Exception e) {

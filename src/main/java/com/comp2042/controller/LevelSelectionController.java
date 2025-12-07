@@ -135,15 +135,16 @@ public class LevelSelectionController implements Initializable {
         Parent root = fxmlLoader.load();
 
         GuiController guiController = fxmlLoader.getController();
-        // Inject Dependencies into the Game UI Controller
-        guiController.initModel(audioManager, gameSettings, highScoreManager);
-        guiController.setGameStage(stage);
+
+        // fix Pass 'stage' here so it exists before GameUIManager is created
+        guiController.initModel(stage, audioManager, gameSettings, highScoreManager);
+
+        // removed guiController.setGameStage(stage); bcoz redundant
 
         stage.setTitle(isChallenge ? "TetrisJFX - Challenge Mode" : "TetrisJFX - Normal Mode");
         stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.show();
 
-        // Initialize the specific Game Logic Controller
         if (isChallenge) {
             new ChallengeModeController(guiController, highScoreManager);
         } else {

@@ -9,18 +9,16 @@ import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
+import com.comp2042.view.GameUIManager;
 import com.comp2042.util.*;
 import com.comp2042.view.renderers.GameRenderer;
 import com.comp2042.view.GameOverPanel;
-import com.comp2042.view.NotificationPanel;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Group;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
@@ -61,10 +59,10 @@ public class GuiController implements Initializable {
     private GameInputHandler inputHandler;
     private GameLoop gameLoop; // replaced timeline with GameLoop (which handles that now)
     private Stage gameStage;
-    private Parent pauseMenuRoot = null;
     private AudioManager audioManager;
     private GameSettings gameSettings;
     private HighScoreManager highScoreManager;
+    private GameUIManager uiManager;
 
     private final ObjectProperty<GameStatus> gameStatus = new SimpleObjectProperty<>(GameStatus.PLAYING);
 
@@ -95,10 +93,13 @@ public class GuiController implements Initializable {
     /**
      * Injects the required dependencies.
      */
-    public void initModel(AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager) {
+    public void initModel(Stage stage, AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager) {
+        this.gameStage = stage;
         this.audioManager = audioManager;
         this.gameSettings = gameSettings;
         this.highScoreManager = highScoreManager;
+        // Initialize UI Manager with dependencies
+        this.uiManager = new GameUIManager(rootContainer, groupNotification, gameOverPanel, gameStage, this, audioManager, gameSettings, highScoreManager);
     }
 
     /**
@@ -179,6 +180,11 @@ public class GuiController implements Initializable {
         gamePanel.requestFocus();
     }
 
+    /** Helper to stop the loop when leaving the scene */
+    public void stopGameLoop() {
+        if (gameLoop != null) gameLoop.stop();
+    }
+
     /**
      * Handles the Escape key action, stopping the game loop and returning to the main menu.
      */
@@ -207,33 +213,16 @@ public class GuiController implements Initializable {
             audioManager.playSFX("/sfx/line-cleared.mp3");
             gameRenderer.getLineClearAnimation().animateClearedRows(clearedRows, () -> {
                 refreshGameBackground(eventListener.getBoard());
-                NotificationPanel notificationPanel = new NotificationPanel("+" + clearRow.scoreBonus());
-                groupNotification.getChildren().add(notificationPanel);
-                notificationPanel.showScore(groupNotification.getChildren());
+                uiManager.showNotification("+" + clearRow.scoreBonus());
             });
         }
     }
 
     /**
-     * Displays a temporary notification panel on the screen.
-     *
-     * @param message The text to display in the notification.
+     * Delegate notification display to UI Manager.
      */
     public void showNotification(String message) {
-        NotificationPanel notificationPanel = new NotificationPanel(message);
-        groupNotification.getChildren().add(notificationPanel);
-
-        // Check if it's a countdown number (length 1 or 2)
-        if (message.length() <= 2) {
-            // Use the new method for countdowns
-            notificationPanel.showCountdown(groupNotification.getChildren());
-        } else if (message.startsWith("LEVEL")) {
-            // level up case
-            notificationPanel.showLevelUp(groupNotification.getChildren());
-        } else {
-            // Score
-            notificationPanel.showScore(groupNotification.getChildren());
-        }
+        uiManager.showNotification(message);
     }
 
     // -- setters & getters --
@@ -255,8 +244,7 @@ public class GuiController implements Initializable {
         }
         levelManager.levelProperty().addListener((obs, oldVal, newVal) -> {
             updateGameSpeed(levelManager.getCurrentDelay());
-            // Triggers the notification whenever level changes
-            showNotification("LEVEL " + newVal);
+            uiManager.showNotification("LEVEL " + newVal);
         });
     }
     private void updateGameSpeed(double delayMillis) {
@@ -264,7 +252,6 @@ public class GuiController implements Initializable {
             gameLoop.setSpeed(delayMillis); // Much cleaner!
         }
     }
-    public void setGameStage(Stage stage) { this.gameStage = stage; }
     public boolean isGameOver() { return gameStatus.get() == GameStatus.GAME_OVER; }
     public boolean isGamePaused() { return gameStatus.get() == GameStatus.PAUSED; }
 
@@ -276,7 +263,8 @@ public class GuiController implements Initializable {
         audioManager.stopMusic();
         audioManager.playSFX("/sfx/negative_beeps.mp3");
         audioManager.playSFX("/sfx/game_over.mp3");
-        gameOverPanel.setVisible(true);
+        // Delegate UI update
+        uiManager.showGameOver();
         gameStatus.set(GameStatus.GAME_OVER);
     }
 
@@ -284,8 +272,9 @@ public class GuiController implements Initializable {
      * Resets the game UI and starts a new game session.
      */
     public void newGame() {
-        if (gameLoop != null) gameLoop.stop(); // Stop loop
-        gameOverPanel.setVisible(false);
+        if (gameLoop != null) gameLoop.stop();
+        // Delegate UI update
+        uiManager.hideGameOver();
         eventListener.createNewGame();
         gamePanel.requestFocus();
         audioManager.playMusic("/music/game_music.mp3");
@@ -300,21 +289,8 @@ public class GuiController implements Initializable {
         if (gameStatus.get() == GameStatus.PLAYING) {
             if (gameLoop != null) gameLoop.pause();
             gameStatus.set(GameStatus.PAUSED);
-            try {
-                if (pauseMenuRoot == null) {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getClassLoader().getResource("pauseMenu.fxml"));
-                    pauseMenuRoot = fxmlLoader.load();
-
-                    PauseMenuController pauseController = fxmlLoader.getController();
-                    pauseController.setGuiController(this);
-                    pauseController.setStage(gameStage);
-                    // Inject dependencies so Pause Menu can navigate
-                    pauseController.initModel(audioManager, gameSettings, highScoreManager);
-                }
-                rootContainer.getChildren().add(pauseMenuRoot);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            // Delegate loading and showing pause menu
+            uiManager.showPauseMenu();
         }
     }
 
@@ -322,14 +298,10 @@ public class GuiController implements Initializable {
      * Closes the Pause Menu and resumes the game.
      */
     public void closePauseMenu() {
-        if (pauseMenuRoot != null) {
-            // Remove the overlay
-            rootContainer.getChildren().remove(pauseMenuRoot);
-            // Resume the game
-            resumeGameFromPause();
-        }
+        // Delegate hiding pause menu
+        uiManager.closePauseMenu();
+        resumeGameFromPause();
     }
-
     /**
      * Resumes the game loop and restores focus to the game panel.
      */
