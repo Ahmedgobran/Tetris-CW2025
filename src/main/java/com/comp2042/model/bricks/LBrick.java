@@ -1,46 +1,45 @@
-package com.comp2042.logic.bricks;
+package com.comp2042.model.bricks;
 
-import com.comp2042.model.BrickType;
 import com.comp2042.util.MatrixOperations;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents the "J" shape Tetromino (Blue).
+ * Represents the "L" shape Tetromino (Orange).
  * <p>
  * Defined as a 4x4 matrix with 4 rotation states.
- * Uses {@link BrickType#J} for its ID.
+ * Uses {@link BrickType#L} for its ID.
  * </p>
  */
-final class JBrick implements Brick {
+final class LBrick implements Brick {
 
     private final List<int[][]> brickMatrix = new ArrayList<>();
 
-    public JBrick() {
-        int id = BrickType.J.getID(); // Replace Magic Number "2"
+    public LBrick() {
+        int id = BrickType.L.getID(); // Replace Magic Number "3"
 
         brickMatrix.add(new int[][]{
-                {id, 0, 0, 0},
-                {id, id, id, 0},
-                {0, 0, 0, 0},
-                {0, 0, 0, 0}
-        });
-        brickMatrix.add(new int[][]{
-                {0, id, id, 0},
-                {0, id, 0, 0},
-                {0, id, 0, 0},
-                {0, 0, 0, 0}
-        });
-        brickMatrix.add(new int[][]{
-                {0, 0, 0, 0},
-                {id, id, id, 0},
                 {0, 0, id, 0},
+                {id, id, id, 0},
+                {0, 0, 0, 0},
                 {0, 0, 0, 0}
         });
         brickMatrix.add(new int[][]{
                 {0, id, 0, 0},
                 {0, id, 0, 0},
+                {0, id, id, 0},
+                {0, 0, 0, 0}
+        });
+        brickMatrix.add(new int[][]{
+                {0, 0, 0, 0},
+                {id, id, id, 0},
+                {id, 0, 0, 0},
+                {0, 0, 0, 0}
+        });
+        brickMatrix.add(new int[][]{
                 {id, id, 0, 0},
+                {0, id, 0, 0},
+                {0, id, 0, 0},
                 {0, 0, 0, 0}
         });
     }

@@ -1,6 +1,6 @@
 package com.comp2042.view;
 
-import com.comp2042.model.BrickType;
+import com.comp2042.model.bricks.BrickType;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 

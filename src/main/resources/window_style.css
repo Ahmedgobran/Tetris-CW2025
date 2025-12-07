@@ -21,7 +21,7 @@
 }
 
 .gameBoard {
-    -fx-background-color: rgba(54, 54, 74, 0.3);  /* Slightly transparent dark background */
+    -fx-background-color: rgba(54, 54, 74, 0.2);  /* Slightly transparent dark background */
     -fx-border-color: linear-gradient(#2A5058, #61a2b1);
     -fx-border-width: 9px;
     -fx-border-radius: 8px;

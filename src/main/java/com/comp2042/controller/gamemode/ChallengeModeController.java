@@ -1,6 +1,6 @@
-package com.comp2042.model;
+package com.comp2042.controller.gamemode;
 
-import com.comp2042.controller.GuiController;
+import com.comp2042.controller.GameViewController;
 import com.comp2042.model.board.InvisibleBlocksBoard;
 import com.comp2042.model.event.EventSource;
 import com.comp2042.model.event.MoveEvent;
@@ -29,7 +29,7 @@ public class ChallengeModeController extends AbstractGameController {
      *
      * @param c The GUI Controller responsible for rendering.
      */
-    public ChallengeModeController(GuiController c, HighScoreManager highScoreManager) {
+    public ChallengeModeController(GameViewController c, HighScoreManager highScoreManager) {
         // Pass highScoreManager to parent
         super(c, new InvisibleBlocksBoard(25, 11), highScoreManager);
     }
@@ -49,7 +49,7 @@ public class ChallengeModeController extends AbstractGameController {
         if (board instanceof InvisibleBlocksBoard invisibleBoard) {
             String countdown = invisibleBoard.getCountdown();
             if (countdown != null) {
-                viewGuiController.showNotification(countdown);
+                viewGameViewController.showNotification(countdown);
             }
         }
 

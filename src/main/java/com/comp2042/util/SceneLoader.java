@@ -96,7 +96,7 @@ public class SceneLoader {
         controller.setOnBackCallback(() -> stage.setScene(currentScene));
         controller.setStage(stage);
 
-        stage.setScene(new Scene(root, 500, 590));
+        stage.setScene(new Scene(root, 530, 600));
     }
 
     /**

@@ -7,20 +7,20 @@ import javafx.scene.input.KeyEvent;
  * Handles raw keyboard input events for the game scene.
  * <p>
  * This class interprets key presses (WASD, Arrows, Space, etc.) and translates
- * them into game actions by calling methods on the {@link GuiController}.
+ * them into game actions by calling methods on the {@link GameViewController}.
  * It also acts as a filter to prevent input when the game is paused or over.
  * </p>
  */
 public class GameInputHandler {
 
-    private final GuiController controller;
+    private final GameViewController controller;
 
     /**
      * Creates an input handler for the specified controller.
      *
      * @param controller The game controller receiving the commands.
      */
-    public GameInputHandler(GuiController controller) {
+    public GameInputHandler(GameViewController controller) {
         this.controller = controller;
     }
 

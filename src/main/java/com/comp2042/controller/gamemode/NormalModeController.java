@@ -1,6 +1,7 @@
-package com.comp2042.model;
+package com.comp2042.controller.gamemode;
 
-import com.comp2042.controller.GuiController;
+import com.comp2042.controller.GameViewController;
+import com.comp2042.model.LevelManager;
 import com.comp2042.model.board.TetrisBoard;
 import com.comp2042.model.event.EventSource;
 import com.comp2042.model.event.MoveEvent;
@@ -26,7 +27,7 @@ public class NormalModeController extends AbstractGameController {
      *
      * @param c The GUI Controller.
      */
-    public NormalModeController(GuiController c, HighScoreManager highScoreManager) {
+    public NormalModeController(GameViewController c, HighScoreManager highScoreManager) {
         // Pass highScoreManager to parent
         super(c, new TetrisBoard(25 ,11), highScoreManager);
         this.levelManager = new LevelManager();

@@ -1,7 +1,8 @@
 package com.comp2042.controller;
 
-import com.comp2042.model.NormalModeController;
-import com.comp2042.model.ChallengeModeController;
+import com.comp2042.controller.gamemode.AbstractGameController;
+import com.comp2042.controller.gamemode.NormalModeController;
+import com.comp2042.controller.gamemode.ChallengeModeController;
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.HighScoreManager;
@@ -19,7 +20,7 @@ import java.util.ResourceBundle;
  * <p>
  * This controller allows the user to choose between different game modes (Normal vs Challenge).
  * It is responsible for initializing the game environment, loading the game layout, and
- * injecting the necessary dependencies into the specific {@link com.comp2042.model.AbstractGameController}
+ * injecting the necessary dependencies into the specific {@link AbstractGameController}
  * subclass for the chosen mode.
  * </p>
  */
@@ -49,7 +50,7 @@ public class LevelSelectionController implements Initializable {
      * Initializes the controller with the required service dependencies.
      * <p>
      * These services are essential for the game loop and must be passed forward to the
-     * {@link GuiController} when a game starts.
+     * {@link GameViewController} when a game starts.
      * </p>
      *
      * @param audio      The AudioManager for game sounds and music.
@@ -122,7 +123,7 @@ public class LevelSelectionController implements Initializable {
     /**
      * Helper method to initialize and launch the game scene.
      * <p>
-     * Loads the common game layout, injects all dependencies into the {@link GuiController},
+     * Loads the common game layout, injects all dependencies into the {@link GameViewController},
      * and instantiates the specific Game Controller logic based on the selected mode.
      * </p>
      *
@@ -134,21 +135,21 @@ public class LevelSelectionController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(location);
         Parent root = fxmlLoader.load();
 
-        GuiController guiController = fxmlLoader.getController();
+        GameViewController gameViewController = fxmlLoader.getController();
 
         // fix Pass 'stage' here so it exists before GameUIManager is created
-        guiController.initModel(stage, audioManager, gameSettings, highScoreManager);
+        gameViewController.initModel(stage, audioManager, gameSettings, highScoreManager);
 
-        // removed guiController.setGameStage(stage); bcoz redundant
+        // removed gameViewController.setGameStage(stage); bcoz redundant
 
         stage.setTitle(isChallenge ? "TetrisJFX - Challenge Mode" : "TetrisJFX - Normal Mode");
         stage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
         stage.show();
 
         if (isChallenge) {
-            new ChallengeModeController(guiController, highScoreManager);
+            new ChallengeModeController(gameViewController, highScoreManager);
         } else {
-            new NormalModeController(guiController, highScoreManager);
+            new NormalModeController(gameViewController, highScoreManager);
         }
     }
 }

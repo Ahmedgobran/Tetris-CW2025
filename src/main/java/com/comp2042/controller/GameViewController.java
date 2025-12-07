@@ -37,7 +37,7 @@ import java.util.ResourceBundle;
  * and coordinates rendering via the {@link GameRenderer}.
  * </p>
  */
-public class GuiController implements Initializable {
+public class GameViewController implements Initializable {
 
     @FXML private GridPane gamePanel;
     @FXML private Group groupNotification;

@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 public class PauseMenuController {
 
     private Stage stage;
-    private GuiController guiController;
+    private GameViewController gameViewController;
 
     // Dependencies
     private AudioManager audioManager;
@@ -58,10 +58,10 @@ public class PauseMenuController {
      * directly on the running game loop.
      * </p>
      *
-     * @param guiController The active game controller.
+     * @param gameViewController The active game controller.
      */
-    public void setGuiController(GuiController guiController) {
-        this.guiController = guiController;
+    public void setGuiController(GameViewController gameViewController) {
+        this.gameViewController = gameViewController;
     }
 
     /**
@@ -73,7 +73,7 @@ public class PauseMenuController {
     @FXML
     private void onResumeClicked() {
         audioManager.playButtonPress();
-        guiController.closePauseMenu();
+        gameViewController.closePauseMenu();
     }
 
     /**
@@ -85,8 +85,8 @@ public class PauseMenuController {
     @FXML
     private void onRestartClicked() {
         audioManager.playButtonPress();
-        guiController.newGame();
-        guiController.closePauseMenu();
+        gameViewController.newGame();
+        gameViewController.closePauseMenu();
     }
 
     /**
@@ -116,8 +116,8 @@ public class PauseMenuController {
         audioManager.playButtonPress();
 
         // Stop the game loop before leaving!
-        if (guiController != null) {
-            guiController.stopGameLoop();
+        if (gameViewController != null) {
+            gameViewController.stopGameLoop();
         }
         try {
             SceneLoader.openMainMenu(stage, audioManager, gameSettings, highScoreManager);

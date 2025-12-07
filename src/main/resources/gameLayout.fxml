@@ -8,7 +8,7 @@
 <?import javafx.scene.shape.Rectangle?>
 
 <StackPane fx:id="rootContainer"
-           fx:controller="com.comp2042.controller.GuiController"
+           fx:controller="com.comp2042.controller.GameViewController"
            xmlns:fx="http://javafx.com/fxml">
 
         <stylesheets>
@@ -57,6 +57,7 @@
                 </VBox>
             </VBox>
 
+            <!--Score Label-->
             <VBox spacing="8" alignment="CENTER">
                 <Label text="SCORE"
                        style="-fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold;"/>
@@ -90,6 +91,7 @@
         </VBox>
     </HBox>
 
+    <!--Game Over Panel-->
     <StackPane fx:id="gameOverPanel" visible="false">
         <Rectangle width="320" height="250" arcWidth="20" arcHeight="20" styleClass="game-over-box"/>
 

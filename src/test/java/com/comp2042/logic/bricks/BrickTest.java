@@ -1,6 +1,7 @@
 package com.comp2042.logic.bricks;
 
 
+import com.comp2042.model.bricks.*;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 

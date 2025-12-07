@@ -1,9 +1,9 @@
 package com.comp2042.model.board;
 
-import com.comp2042.logic.bricks.Brick;
-import com.comp2042.logic.bricks.BrickGenerator;
-import com.comp2042.logic.bricks.RandomBrickGenerator;
-import com.comp2042.model.BrickRotator;
+import com.comp2042.model.bricks.Brick;
+import com.comp2042.model.bricks.BrickGenerator;
+import com.comp2042.model.bricks.RandomBrickGenerator;
+import com.comp2042.model.bricks.BrickRotator;
 import com.comp2042.model.Score;
 import com.comp2042.model.state.ClearRow;
 import com.comp2042.model.state.NextShapeInfo;

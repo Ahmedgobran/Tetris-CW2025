@@ -1,11 +1,12 @@
 package com.comp2042.model.state;
 
+import com.comp2042.model.bricks.BrickRotator;
 import com.comp2042.util.MatrixOperations;
 
 /**
  * A record holding the state of a brick after a rotation calculation.
  * <p>
- * Used by the {@link com.comp2042.model.BrickRotator} to return the calculated
+ * Used by the {@link BrickRotator} to return the calculated
  * matrix shape and the new rotation index.
  * </p>
  *

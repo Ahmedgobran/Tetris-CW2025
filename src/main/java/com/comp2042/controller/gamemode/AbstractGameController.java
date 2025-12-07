@@ -1,6 +1,6 @@
-package com.comp2042.model;
+package com.comp2042.controller.gamemode;
 
-import com.comp2042.controller.GuiController;
+import com.comp2042.controller.GameViewController;
 import com.comp2042.model.board.Board;
 import com.comp2042.model.event.InputEventListener;
 import com.comp2042.model.event.MoveEvent;
@@ -13,7 +13,7 @@ import com.comp2042.util.HighScoreManager;
  * Abstract base class for all Game Controllers, implementing the Template Method Design Pattern.
  * <p>
  * This class serves as the controller in the MVC architecture, mediating user input from the
- * {@link GuiController} and game logic in the {@link Board}. It handles common actions like
+ * {@link GameViewController} and game logic in the {@link Board}. It handles common actions like
  * movement and view refreshing, while delegating specific scoring and game-over rules to subclasses.
  * </p>
  * <p>
@@ -23,7 +23,7 @@ import com.comp2042.util.HighScoreManager;
 public abstract class AbstractGameController implements InputEventListener {
 
     protected final Board board;
-    protected final GuiController viewGuiController;
+    protected final GameViewController viewGameViewController;
     protected final HighScoreManager highScoreManager;
 
     /**
@@ -37,16 +37,16 @@ public abstract class AbstractGameController implements InputEventListener {
      * @param board             The specific Board model (e.g., TetrisBoard or InvisibleBlocksBoard).
      * @param highScoreManager  The injected service for saving high scores.
      */
-    public AbstractGameController(GuiController c, Board board, HighScoreManager highScoreManager) {
-        this.viewGuiController = c;
+    public AbstractGameController(GameViewController c, Board board, HighScoreManager highScoreManager) {
+        this.viewGameViewController = c;
         this.board = board;
         this.highScoreManager = highScoreManager;
 
         // Initialize common game setup
         board.createNewBrick();
-        viewGuiController.setEventListener(this);
-        viewGuiController.initGameView(board.getBoardMatrix(), board.getViewData());
-        viewGuiController.bindScore(board.getScore().scoreProperty());
+        viewGameViewController.setEventListener(this);
+        viewGameViewController.initGameView(board.getBoardMatrix(), board.getViewData());
+        viewGameViewController.bindScore(board.getScore().scoreProperty());
     }
 
     // Functionality (Identical in both modes -NormalModeController and ChallengeModeController)
@@ -130,7 +130,7 @@ public abstract class AbstractGameController implements InputEventListener {
      * Helper method to force a UI refresh of the background grid.
      */
     protected void refreshView() {
-        viewGuiController.refreshGameBackground(board.getBoardMatrix());
+        viewGameViewController.refreshGameBackground(board.getBoardMatrix());
     }
 
     /**
@@ -172,7 +172,7 @@ public abstract class AbstractGameController implements InputEventListener {
      */
     protected void handleGameOver() {
         highScoreManager.addScore(board.getScore().scoreProperty().get());
-        viewGuiController.gameOver();
+        viewGameViewController.gameOver();
     }
 
     /**

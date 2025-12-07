@@ -1,4 +1,4 @@
-package com.comp2042.model;
+package com.comp2042.model.bricks;
 
 import java.util.Arrays;
 

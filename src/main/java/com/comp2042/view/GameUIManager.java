@@ -1,6 +1,6 @@
 package com.comp2042.view;
 
-import com.comp2042.controller.GuiController;
+import com.comp2042.controller.GameViewController;
 import com.comp2042.controller.PauseMenuController;
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
@@ -17,7 +17,7 @@ import java.io.IOException;
  * Manages the UI overlays and notifications for the game.
  * <p>
  * This class extracts the responsibility of handling the Pause Menu, Game Over screen,
- * and floating notifications from the main {@link GuiController}, adhering to the
+ * and floating notifications from the main {@link GameViewController}, adhering to the
  * Single Responsibility Principle.
  * </p>
  */
@@ -27,7 +27,7 @@ public class GameUIManager {
     private final Group groupNotification;
     private final Parent gameOverPanel;
     private final Stage gameStage;
-    private final GuiController guiController;
+    private final GameViewController gameViewController;
 
     // State for the Pause Menu
     private Parent pauseMenuRoot;
@@ -37,13 +37,13 @@ public class GameUIManager {
     private final GameSettings gameSettings;
     private final HighScoreManager highScoreManager;
 
-    public GameUIManager(StackPane rootContainer, Group groupNotification, Parent gameOverPanel, Stage gameStage, GuiController guiController, AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager)
+    public GameUIManager(StackPane rootContainer, Group groupNotification, Parent gameOverPanel, Stage gameStage, GameViewController gameViewController, AudioManager audioManager, GameSettings gameSettings, HighScoreManager highScoreManager)
     {
         this.rootContainer = rootContainer;
         this.groupNotification = groupNotification;
         this.gameOverPanel = gameOverPanel;
         this.gameStage = gameStage;
-        this.guiController = guiController;
+        this.gameViewController = gameViewController;
         this.audioManager = audioManager;
         this.gameSettings = gameSettings;
         this.highScoreManager = highScoreManager;
@@ -59,7 +59,7 @@ public class GameUIManager {
                 pauseMenuRoot = fxmlLoader.load();
 
                 PauseMenuController pauseController = fxmlLoader.getController();
-                pauseController.setGuiController(guiController);
+                pauseController.setGuiController(gameViewController);
                 pauseController.setStage(gameStage);
                 // Inject dependencies
                 pauseController.initModel(audioManager, gameSettings, highScoreManager);

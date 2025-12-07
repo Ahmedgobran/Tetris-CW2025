@@ -1,6 +1,5 @@
-package com.comp2042.model;
+package com.comp2042.model.bricks;
 
-import com.comp2042.logic.bricks.Brick;
 import com.comp2042.model.state.NextShapeInfo;
 
 /**
