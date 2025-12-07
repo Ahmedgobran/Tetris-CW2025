@@ -137,13 +137,13 @@ public abstract class AbstractGameController implements InputEventListener {
      * Orchestrates the logic sequence when a brick lands on the stack.
      * <p>
      * This method performs the following steps:
+     * </p>
      * <ol>
      * <li>Merges the active brick into the background grid.</li>
      * <li>Checks for and clears any full rows.</li>
      * <li>Calculates and awards score points (via {@link #calculateScore(ClearRow)}).</li>
      * <li>Checks if a new brick can be spawned; triggers Game Over if not.</li>
      * </ol>
-     * </p>
      *
      * @return A {@link DownData} object containing the result of the landing event (cleared rows, new score).
      */
