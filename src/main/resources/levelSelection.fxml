@@ -30,7 +30,8 @@
             <Image url="@Images/Normal-mode.png"/>
         </ImageView>
         <Label text="Classic Tetris Experience" styleClass="level-option-description"/>
-        <Label text="(Speed increases every 1000 points!)" styleClass="level-option-description"/>
+        <Label text="Speed increases every 1000 points!" styleClass="level-option-description"/>
+        <Label text="(Higher Levels = Bigger Scores!)" styleClass="level-option-score-description"/>
         <Button onAction="#onNormalClicked"
                 styleClass="image-button">
             <graphic>
@@ -46,7 +47,7 @@
             <Image url="@Images/Challenge-mode.png"/>
         </ImageView>
         <Label text="The blocks disappear. Watch out! " styleClass="level-option-description"/>
-        <Label text="(X2 POINTS!)" styleClass="level-option-minidescription"  />
+        <Label text="(X2 POINTS!)" styleClass="level-option-score-description"  />
         <Button onAction="#onSpecialClicked"
                 styleClass="image-button">
             <graphic>

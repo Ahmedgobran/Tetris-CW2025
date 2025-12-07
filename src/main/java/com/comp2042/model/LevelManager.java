@@ -13,8 +13,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class LevelManager {
 
     private static final int POINTS_PER_LEVEL = 1000; // decides how many points u need to proceed to next level
-    private static final double INITIAL_DELAY = 400.0;
-    private static final double SPEED_MULTIPLIER = 0.85; // controls speed multiplier per level
+    private static final double INITIAL_DELAY = 700.0;
+    private static final double SPEED_MULTIPLIER = 0.7; // controls speed multiplier per level
 
     private final IntegerProperty level = new SimpleIntegerProperty(1);
 
@@ -43,8 +43,8 @@ public class LevelManager {
     /**
      * Calculates the game loop delay (falling speed) for the current level.
      * <p>
-     * The speed increases (delay decreases) by 15% for each level gained.
-     * Formula: {@code Initial_Delay * (0.85 ^ (Level - 1))}
+     * The speed increases (delay decreases) by X% for each level gained.
+     * Formula: {@code Initial_Delay * (SPEED_MULTIPLIER ^ (Level - 1))}
      * </p>
      *
      * @return The delay in milliseconds between game ticks.
@@ -63,5 +63,19 @@ public class LevelManager {
      */
     public IntegerProperty levelProperty() {
         return level;
+    }
+
+
+    /**
+     * Retrieves the current level as a primitive integer.
+     * <p>
+     * This is a convenience method to access the level value directly without
+     * needing to call {@code levelProperty().get()}.
+     * </p>
+     *
+     * @return The current game level (starts at 1).
+     */
+    public int getCurrentLevel() {
+        return levelProperty().get();
     }
 }

@@ -7,6 +7,7 @@ import com.comp2042.model.event.MoveEvent;
 import com.comp2042.model.state.DownData;
 import com.comp2042.model.state.ViewData;
 import com.comp2042.util.HighScoreManager;
+import com.comp2042.model.state.ClearRow;
 
 
 /**
@@ -18,6 +19,7 @@ import com.comp2042.util.HighScoreManager;
  */
 public class NormalModeController extends AbstractGameController {
 
+    private final LevelManager levelManager;
     /**
      * Initializes the Normal Mode controller.
      * Sets up the {@link LevelManager} and binds it to the GUI for speed updates.
@@ -25,12 +27,10 @@ public class NormalModeController extends AbstractGameController {
      * @param c The GUI Controller.
      */
     public NormalModeController(GuiController c, HighScoreManager highScoreManager) {
-
         // Pass highScoreManager to parent
         super(c, new TetrisBoard(25 ,11), highScoreManager);
-
-        LevelManager levelManager = new LevelManager();
-        levelManager.bindScore(board.getScore().scoreProperty());
+        this.levelManager = new LevelManager();
+        this.levelManager.bindScore(board.getScore().scoreProperty());
         c.bindLevel(levelManager);
     }
 
@@ -52,13 +52,12 @@ public class NormalModeController extends AbstractGameController {
                 return processBrickLanding();
             }
         }
-
         if (!canMove) {
             return processBrickLanding();
         } else {
             // Standard scoring for soft drop
             if (event.eventSource() == EventSource.USER) {
-                board.getScore().add(1); // Normal mode Score
+                board.getScore().add(levelManager.getCurrentLevel());
             }
             return new DownData(null, board.getViewData());
         }
@@ -77,5 +76,25 @@ public class NormalModeController extends AbstractGameController {
             board.getScore().add(rowsDropped * 2); // Normal mode Score
         }
         return processBrickLanding();
+    }
+
+    /**
+     * Calculates the score for cleared rows with a level-based multiplier.
+     * <p>
+     * Overrides the default scoring logic to reward players for surviving at higher speeds.
+     * The formula used is: {@code Base_Score * Current_Level}.
+     * For example, clearing a line (100 pts) at Level 5 awards 500 points.
+     * </p>
+     *
+     * @param clearRow The result of the row clearing operation containing lines removed.
+     * @return The total score to be added to the player's current score.
+     */
+    @Override
+    protected int calculateScore(ClearRow clearRow) {
+        // Get the standard score (e.g., 100, 300, 1200)
+        int baseScore = super.calculateScore(clearRow);
+        // Get the multiplier (Level 1 = 1x, Level 5 = 5x)
+        int currentLevel = levelManager.levelProperty().get();
+        return baseScore * currentLevel;
     }
 }

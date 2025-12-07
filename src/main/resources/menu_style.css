@@ -174,9 +174,9 @@
 
 }
 
-.level-option-minidescription {
+.level-option-score-description {
     -fx-font-family: "Let's go Digital";
-    -fx-text-fill: #d32828;
+    -fx-text-fill: #80c83c;
     -fx-font-size: 12;
     -fx-wrap-text: true;
     -fx-font-weight: bold;

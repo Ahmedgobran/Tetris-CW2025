@@ -5,7 +5,6 @@ import com.comp2042.controller.PauseMenuController;
 import com.comp2042.util.AudioManager;
 import com.comp2042.util.GameSettings;
 import com.comp2042.util.HighScoreManager;
-import com.comp2042.util.SceneLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
